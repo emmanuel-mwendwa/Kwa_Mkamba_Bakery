@@ -1,14 +1,23 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Length, Regexp, Email
+from ..models import User
 
 
 class SignUpForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Regexp('^[A-Za-z][A-Za-z0-9]._', 0, 'Username must only contain letters, numbers, dots or underscores.')])
+    username = StringField('Username', validators=[DataRequired(), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Username must only contain letters, numbers, dots or underscores.')])
     email = StringField('Email', validators=[DataRequired(), Length(1, 128), Email()])
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match')])
     password2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField('Sign Up')
+
+    def validate_username(self, field):
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError('Username already exists')
+    
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('Email already exists')
 
 
 class LogInForm(FlaskForm):

@@ -12,7 +12,13 @@
 
     {% block navbar %} {% endblock %}
 
-    {% block content %} {% endblock %}
+    {% block content %}
+    
+    {% for messages in get_flashed_messages() %}
+        <p>{{ messages }}</p>
+    {% endfor %}
+
+    {% endblock %}
     
 </body>
 </html>
