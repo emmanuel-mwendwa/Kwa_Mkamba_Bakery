@@ -7,10 +7,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 <body>
 
-    {% block navbar %} {% endblock %}
+    {% block navbar %} 
+    
+    <div id="page" class="site">
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="#" id="home"><span>Home</span><i class="ri-home-line"></i></a></li>
+                    <li><a href="#" id="drop"><span>Drop</span><i class="ri-contrast-drop-2-line"></i></a></li>
+                    <li><a href="#" id="store"><span>Store</span><i class="ri-store-2-line"></i></a></li>
+                    <li><a href="#" id="wishlist"><span>Wishlist</span><i class="ri-hearts-line"></i></a></li>
+                    <li><a href="#" id="cart"><span>Cart</span><i class="ri-shopping-cart-line"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    {% endblock %}
 
     {% block content %}
     
