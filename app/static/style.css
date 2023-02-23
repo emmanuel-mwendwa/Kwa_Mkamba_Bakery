@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400');
+
 :root {
     --main-color: #5352ed;
     --lighter-color: #f7f7ff;
@@ -9,6 +10,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -35,7 +40,7 @@ ul {
 
 nav {
     position: fixed;
-    bottom: 10%;
+    bottom: 0;
     width: 456px;
     background-color: var(--lighter-color);
     left: 50%;
@@ -43,6 +48,7 @@ nav {
     padding: 0 2em;
     border-radius: 40px;
     box-shadow: rgb(50 50 93 / 25%) 0 50px 100px -20px, rgb(0 0 0 / 30%) 0 30px 60px -30px;
+    overflow: hidden;
 }
 
 nav ul {
@@ -64,4 +70,75 @@ nav ul li a {
     line-height: 1.4;
     width: 80px;
     height: 80px;
+    -webkit-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+}
+
+nav ul li a:hover {
+    color: var(--main-color);
+}
+
+nav ul li a span {
+    font-size: 10px;
+}
+
+/* animation  */
+nav li::before, nav li::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 30px;
+    top: 25px;
+    transition: top .3s;
+}
+
+nav li a::before, nav li a::after {
+    content: '';
+    position: absolute;
+    background-color: var(--main-color);
+    z-index: -1;
+    border-radius: 10px 10px 0 0;
+    transform: translateY(15px);
+    -webkit-transform: translateY(15px);
+    transition: transform .3s, border-radius .3s;
+    -webkit-transition: transform .3s, border-radius .3s;
+}
+
+nav li.active a::before, nav li.active a::after {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+}
+
+nav li.active::before {
+    left: -20px;
+    border-radius: 0 0 30px 0;
+}
+
+nav li.active::after {
+    right: -20px;
+    border-radius: 0 0 0 30px;
+}
+
+nav li.active::before, nav li.active::after {
+    background-color: var(--lighter-color);
+    top: 1px;
+}
+
+nav li.active a::before {
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: 100%;
+    border-radius: 30px 30px 0 0;
+}
+
+nav li.active a::after {
+    left: -10px;
+    bottom: 0;
+    width: 100px;
+    height: 40px;
+}
+
+nav li.active a {
+    color: var(--lighter-color);
 }

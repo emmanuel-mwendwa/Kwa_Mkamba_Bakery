@@ -1,4 +1,3 @@
-{% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 <!DOCTYPE html>
 <html lang="en">
@@ -20,11 +19,12 @@
         <div class="container">
             <nav>
                 <ul>
-                    <li><a href="#" id="home"><span>Home</span><i class="ri-home-line"></i></a></li>
-                    <li><a href="#" id="drop"><span>Drop</span><i class="ri-contrast-drop-2-line"></i></a></li>
-                    <li><a href="#" id="store"><span>Store</span><i class="ri-store-2-line"></i></a></li>
-                    <li><a href="#" id="wishlist"><span>Wishlist</span><i class="ri-hearts-line"></i></a></li>
-                    <li><a href="#" id="cart"><span>Cart</span><i class="ri-shopping-cart-line"></i></a></li>
+                    <li><a href="{{ url_for('main.stocks') }}"><span>Stocks</span><i class="ri-shopping-cart-line"></i></a></li>
+                    <li><a href="{{ url_for('main.products') }}"><span>Products</span><i class="ri-contrast-drop-2-line"></i></a></li>
+                    <li class="active"><a href=" {{ url_for('main.index') }}"><span>Home</span><i class="ri-home-line"></i></a></li>
+                    <li><a href="{{ url_for('main.point_of_sale') }}"><span>POS</span><i class="ri-store-2-line"></i></a></li>
+                    <li><a href="{{ url_for('main.sales') }}"><span>Sales</span><i class="ri-hearts-line"></i></a></li>
+                    
                 </ul>
             </nav>
         </div>
@@ -39,6 +39,8 @@
     {% endfor %}
 
     {% endblock %}
+
+    <script src="{{ url_for('static', filename='script.js')}}"></script>
     
 </body>
 </html>
