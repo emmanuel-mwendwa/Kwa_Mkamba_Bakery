@@ -39,7 +39,7 @@ def login():
 def logout():
     logout_user()
     flash('You have been logged out successfully!!')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('auth.login'))
 
 @auth.route('/confirm/<token>')
 @login_required

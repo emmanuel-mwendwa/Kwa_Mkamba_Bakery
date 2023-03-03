@@ -5,11 +5,11 @@ from ..models import User
 
 
 class SignUpForm(FlaskForm):
-    fullname = StringField('Fullname', validators=[DataRequired(), Regexp('^[A-Za-z ]*$', 0, 'Name must only contain letters.')])
-    username = StringField('Username', validators=[DataRequired(), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Username must only contain letters, numbers, dots or underscores.')])
-    email = StringField('Email', validators=[DataRequired(), Length(1, 128), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match')])
-    password2 = PasswordField('Confirm Password', validators=[DataRequired()])
+    fullname = StringField('Fullname', validators=[DataRequired(), Regexp('^[A-Za-z ]*$', 0, 'Name must only contain letters.')], render_kw={"placeholder":"Fullname"})
+    username = StringField('Username', validators=[DataRequired(), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Username must only contain letters, numbers, dots or underscores.')], render_kw={"placeholder":"Username"})
+    email = StringField('Email', validators=[DataRequired(), Length(1, 128), Email()], render_kw={"placeholder":"Email"})
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match')], render_kw={"placeholder":"Password"})
+    password2 = PasswordField('Confirm Password', validators=[DataRequired()], render_kw={"placeholder":"Confirm Password"})
     submit = SubmitField('Sign Up')
 
     def validate_username(self, field):
@@ -22,7 +22,7 @@ class SignUpForm(FlaskForm):
 
 
 class LogInForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 128), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('', validators=[DataRequired(), Length(1, 128), Email()], render_kw={"placeholder": "Email"})
+    password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Log In')

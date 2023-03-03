@@ -5,28 +5,30 @@
 {% block content %}
 
 {{ super() }}
-<form action="" method="POST">
-    {{ wtf.quick_form(form) }}
-</form>
 
 <div class="center">
     <img src="../../static/image/logo.png" alt="" width="310" height="310">
     <form action="" method="POST">
+        {{ form.hidden_tag() }}
         <div class="txt_field">
-            <input type="email" placeholder="email" required>
+            <!-- <input type="email" placeholder="email" required> -->
+            {{ form.email(placeholder="Email") }}
         </div>
         <div class="txt_field">
-            <input type="password" name="" id="" placeholder="password" required>
+            <!-- <input type="password" name="" id="" placeholder="password" required> -->
+            {{ form.password(placeholder="Password") }}
         </div>
-        <div class="txt_field">
-            <input type="checkbox" name="" id="" >
-            <label for="">Keep me logged in</label>
+        <div class="checkbox_field">
+            <!-- <input type="checkbox" name="" id="" >
+            <label for="">Keep me logged in</label> -->
+            {{ form.remember_me() }} {{ form.remember_me.label }}
         </div>
+        <!-- <input type="submit" value="Log In"> -->
+            {{ form.submit()}}
         <div class="pass">Forgot Password?</div>
-        <input type="submit" value="Log In">
-        <div class="signup_link">
-            <a href="{{ url_for('auth.sign_up')}}">Sign Up</a>
-        </div>
+    </form>
+    <form action="{{ url_for('auth.sign_up') }}">
+        <input type="submit" value="Sign Up">
     </form>
 </div>
 
