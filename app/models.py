@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, index=True)
     email = db.Column(db.String(128), unique=True)
     password_hash = db.Column(db.String(128))
-    confirmed = db.Column(db.Boolean, default=True)
+    confirmed = db.Column(db.Boolean, default=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     @property
@@ -39,11 +39,12 @@ class User(UserMixin, db.Model):
     def generate_confirmation_token(self, expiration=3600):
         confirmation_token = jwt.encode({
             'confirm': self.id,
-            'exp': datetime.datetime.utcnow + datetime.timedelta(seconds=expiration)
+            'exp': datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(seconds=expiration)
         },
         current_app.config['SECRET_KEY'],
         algorithm='HS256'
         )
+        return confirmation_token
 
     def confirm(self, token):
         try:
