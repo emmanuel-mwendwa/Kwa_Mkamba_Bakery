@@ -5,6 +5,7 @@ from ..models import User
 
 
 class SignUpForm(FlaskForm):
+    fullname = StringField('Fullname', validators=[DataRequired(), Regexp('^[A-Za-z]*$', 0, 'Name must only contain letters.')])
     username = StringField('Username', validators=[DataRequired(), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Username must only contain letters, numbers, dots or underscores.')])
     email = StringField('Email', validators=[DataRequired(), Length(1, 128), Email()])
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match')])

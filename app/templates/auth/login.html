@@ -1,15 +1,33 @@
-{% extends "base_template.html" %}
+{% extends "auth_base.html" %}
 
-{% block navbar %} {{ super() }} {% endblock %}
+{% block title %} Log In {% endblock %}
 
 {% block content %}
 
-<p>Log In</p>
-
 {{ super() }}
-
 <form action="" method="POST">
     {{ wtf.quick_form(form) }}
 </form>
+
+<div class="center">
+    <img src="../../static/image/logo.png" alt="" width="310" height="310">
+    <form action="" method="POST">
+        <div class="txt_field">
+            <input type="email" placeholder="email" required>
+        </div>
+        <div class="txt_field">
+            <input type="password" name="" id="" placeholder="password" required>
+        </div>
+        <div class="txt_field">
+            <input type="checkbox" name="" id="" >
+            <label for="">Keep me logged in</label>
+        </div>
+        <div class="pass">Forgot Password?</div>
+        <input type="submit" value="Log In">
+        <div class="signup_link">
+            <a href="{{ url_for('auth.sign_up')}}">Sign Up</a>
+        </div>
+    </form>
+</div>
 
 {% endblock %}
