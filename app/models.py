@@ -3,6 +3,7 @@ from . import db, login_manager
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
+import time
 import jwt
 
 
@@ -65,3 +66,27 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Product(db.Model):
+    __tablename__ = 'products'
+
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(13), unique=True)
+    name = db.Column(db.String(20), unique=True)
+    description = db.Column(db.String(56))
+    price = db.Column(db.Integer)
+    date_created = db.Column(db.DateTime,  default=datetime.datetime.utcnow())
+    date_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
+    production = db.relationship('Production', backref='product', lazy='dynamic')
+
+
+class Production(db.Model):
+    __tablename__ = 'production'
+
+    id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    date_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    
