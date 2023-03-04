@@ -68,6 +68,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+# Table to store products
 class Product(db.Model):
     __tablename__ = 'products'
 
@@ -81,6 +82,7 @@ class Product(db.Model):
     production = db.relationship('Production', backref='product', lazy='dynamic')
 
 
+# Table to store daily production
 class Production(db.Model):
     __tablename__ = 'production'
 

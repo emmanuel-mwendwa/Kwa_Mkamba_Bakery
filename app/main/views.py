@@ -12,6 +12,7 @@ def index():
     products = Product.query.all()
     return render_template('index.html', products=products)
 
+# Add new products to the database
 @main.route('/production', methods=["GET", "POST"])
 @login_required
 def production():
@@ -22,6 +23,13 @@ def production():
         db.session.commit()
         return redirect(url_for('main.index'))
     return render_template('production.html', form=form)
+
+
+@main.route('/production/daily', methods=["GET", "POST"])
+@login_required
+def production():
+    pass
+
 
 @main.route('/sales')
 @login_required
