@@ -1,0 +1,33 @@
+{% extends "base_template.html" %}
+
+{% block title %} Production {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+
+{{ super() }}
+
+<h1>Production Page</h1>
+
+<nav class="production-nav">
+    <ul>
+      <li>
+        <a href="{{ url_for('production.create_product')}}">
+          <div class="name" data-text="Home">Add Product</div>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('production.add_production_run')}}">
+          <div class="name" data-text="Production_Run">Production Run</div>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('production.view_products')}}">
+          <div class="name" data-text="View_Products">View Products</div>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+{% endblock %}

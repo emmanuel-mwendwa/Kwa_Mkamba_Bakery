@@ -79,12 +79,12 @@ class Product(db.Model):
     price = db.Column(db.Integer)
     date_created = db.Column(db.DateTime,  default=datetime.datetime.utcnow())
     date_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
-    production = db.relationship('Production', backref='product', lazy='dynamic')
+    production = db.relationship('ProductionRun', backref='product', lazy='dynamic')
 
 
 # Table to store daily production
-class Production(db.Model):
-    __tablename__ = 'production'
+class ProductionRun(db.Model):
+    __tablename__ = 'production_run'
 
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer)

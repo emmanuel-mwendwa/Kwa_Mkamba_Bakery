@@ -1,14 +1,12 @@
 {% extends "base_template.html" %}
 
-{% block title %} Production {% endblock %}
+{% block title %} Add Product {% endblock %}
 
 {% block header %} {{ super() }} {% endblock %}
 
 {% block content %}
 
 {{ super() }}
-
-<h1>Production Page</h1>
 
 <form action="" method="POST">
     {{ wtf.quick_form(form) }}
