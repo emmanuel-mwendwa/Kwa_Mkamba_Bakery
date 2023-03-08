@@ -16,3 +16,25 @@ class AddIngredientsForm(FlaskForm):
     price = IntegerField('Ingredient Price', validators=[DataRequired()])
     supplier = StringField('Supplier', validators=[])
     submit = SubmitField('Add Ingredient')
+
+
+class AddProductionRun(FlaskForm):
+    product_name = StringField('Product Name', validators=[DataRequired()])
+    quantity = IntegerField('Packets Produced', validators=[DataRequired()])
+    submit = SubmitField('Add Production Run')
+
+
+class AddSupplier(FlaskForm):
+    name = StringField('Supplier Name', validators=[DataRequired()])
+    contact_person = StringField('Contact Person', validators=[DataRequired()])
+    contact_number = IntegerField('Contact Integer', validators=[DataRequired()])
+    contact_email = StringField('Contact Email', validators=[DataRequired()])
+    address = StringField('Address')
+    submit = SubmitField('Add Supplier')
+
+
+class AddInventory(FlaskForm):
+    product_name = StringField('Product Name', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired()])
+    cost_per_unit = IntegerField('Cost per Unit', validators=[DataRequired()])
+    submit = SubmitField('Add Inventory')

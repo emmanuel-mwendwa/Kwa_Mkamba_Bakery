@@ -117,6 +117,8 @@ class Supplier(db.Model):
     contact_number = db.Column(db.Integer)
     contact_email = db.Column(db.String(56))
     address = db.Column(db.String(56))
+    date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    date_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
     inventories = db.relationship('Inventory', backref='supplier', lazy='dynamic')
 
 class Inventory(db.Model):
@@ -128,4 +130,6 @@ class Inventory(db.Model):
     reorder_level = db.Column(db.Integer)
     cost_per_unit = db.Column(db.Integer)
     total_cost = db.Column(db.Integer)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    date_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
     supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'))
