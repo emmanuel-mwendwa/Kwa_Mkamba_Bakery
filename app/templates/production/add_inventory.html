@@ -1,6 +1,6 @@
 {% extends "base_template.html" %}
 
-{% block title %} Production Run {% endblock %}
+{% block title %} Inventory {% endblock %}
 
 {% block header %} {{ super() }} {% endblock %}
 
@@ -8,7 +8,7 @@
 
 {{ super() }}
 
-<h1>Production Run</h1>
+<h1>Inventory</h1>
 
 <form action="" method="POST">
     {{ wtf.quick_form(form) }}

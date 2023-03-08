@@ -19,7 +19,7 @@ class AddIngredientsForm(FlaskForm):
 
 
 class AddProductionRun(FlaskForm):
-    product_name = StringField('Product Name', validators=[DataRequired()])
+    product_id = IntegerField('Product Id', validators=[DataRequired()])
     quantity = IntegerField('Packets Produced', validators=[DataRequired()])
     submit = SubmitField('Add Production Run')
 
