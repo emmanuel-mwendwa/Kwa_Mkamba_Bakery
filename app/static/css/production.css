@@ -1,3 +1,8 @@
+body{
+    max-width: 410px;
+    width: 100%;
+}
+
 .production-nav {
     display: flex;
     justify-content: center;
@@ -6,6 +11,8 @@
 
 .production-nav ul {
     margin-left: 12px;
+    overflow: scroll;
+    word-wrap: break-word;
 }
 
 .production-nav ul li{
