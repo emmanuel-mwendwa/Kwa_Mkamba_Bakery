@@ -9,3 +9,10 @@ class AddProductsForm(FlaskForm):
     description = TextAreaField('Product Description', validators=[DataRequired()])
     price = IntegerField('Product Price', validators=[DataRequired()])
     submit = SubmitField('Add Product')
+
+class AddIngredientsForm(FlaskForm):
+    code = StringField('Ingredient Code', validators=[DataRequired()])
+    name = StringField('Ingredient Name', validators=[DataRequired()])
+    price = IntegerField('Ingredient Price', validators=[DataRequired()])
+    supplier = StringField('Supplier', validators=[])
+    submit = SubmitField('Add Ingredient')

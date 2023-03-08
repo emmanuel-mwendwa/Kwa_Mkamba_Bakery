@@ -68,6 +68,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+# Production tables
 # Table to store products
 class Product(db.Model):
     __tablename__ = 'products'
@@ -92,3 +93,39 @@ class ProductionRun(db.Model):
     date_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     
+
+# Ingredients table
+class Ingredient(db.Model):
+    __tablename__ = 'ingredients'
+
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(13), unique=True)
+    name = db.Column(db.String(30))
+    supplier = db.Column(db.String(56))
+    unit_cost = db.Column(db.Integer)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    date_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow(), onupdate=datetime.datetime.utcnow())
+
+
+# Supplier table
+class Supplier(db.Model):
+    __tablename__ = 'suppliers'
+
+    id = db.Column(db.Integer, primary_key=True)
+    supplier_name = db.Column(db.String(56))
+    contact_person = db.Column(db.String(56))
+    contact_number = db.Column(db.Integer)
+    contact_email = db.Column(db.String(56))
+    address = db.Column(db.String(56))
+    inventories = db.relationship('Inventory', backref='supplier', lazy='dynamic')
+
+class Inventory(db.Model):
+    __tablename__ = 'inventory'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(56))
+    current_quantity = db.Column(db.Integer)
+    reorder_level = db.Column(db.Integer)
+    cost_per_unit = db.Column(db.Integer)
+    total_cost = db.Column(db.Integer)
+    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'))
