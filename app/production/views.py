@@ -9,7 +9,8 @@ from ..models import Product, Ingredient, ProductionRun, Supplier, Inventory
 @production.route('/', methods=["GET", "POST"])
 @login_required
 def production():
-    return render_template('production/production.html')
+    products = Product.query.all()
+    return render_template('production/production.html', products=products)
 
 # Add new products to the database
 # @production.route('/create_product', methods=["GET", "POST"])

@@ -46,11 +46,35 @@
       </li>
       <li>
         <a href="{{ url_for('production.add_production_run')}}">
-          <div class="name" data-text="Production_Run">Production Run</div>
+          <div class="name" data-text="Production_Run">Prod Run</div>
         </a>
       </li>
     </ul>
   </nav>
+
+  <br> <hr size="2" style="opacity: 0.2;"/>
+
+  <table border="2">
+    <thead>
+      <th>ID</th>
+      <th>CODE</th>
+      <th>NAME</th>
+      <th>PRICE</th>
+      <th>DESCRIPTION</th>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>{{ product.id }}</td>
+        <td>{{ product.code }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.description }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <hr size="2" style="opacity: 0.2;"/>
 
 {% endblock %}
 
