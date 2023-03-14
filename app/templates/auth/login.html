@@ -25,7 +25,7 @@
         </div>
         <!-- <input type="submit" value="Log In"> -->
             {{ form.submit()}}
-        <div class="pass">Forgot Password?</div>
+        <div class="pass"><a href="{{ url_for('auth.password_reset_request') }}">Forgot Password?</a></div>
     </form>
     <form action="{{ url_for('auth.sign_up') }}">
         <input type="submit" value="Sign Up">
