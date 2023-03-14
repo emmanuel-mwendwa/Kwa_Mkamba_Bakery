@@ -33,7 +33,7 @@ def create_ingredient():
         db.session.add(new_ingredient)
         db.session.commit()
         return redirect(url_for('production.production'))
-    return render_template('production/add_ingredient.html', form=form)
+    return render_template('production/add_product.html', form=form)
 
 # Add new production run 
 # @production.route('/add_production_run', methods=["GET", "POST"])
@@ -45,7 +45,7 @@ def add_production_run():
         db.session.add(new_production_run)
         db.session.commit()
         return redirect(url_for('production.production'))
-    return render_template('production/add_production_run.html', form=form)
+    return render_template('production/add_product.html', form=form)
 
 
 @login_required
@@ -56,7 +56,7 @@ def add_supplier():
         db.session.add(new_supplier)
         db.session.commit()
         return redirect(url_for('production.production'))
-    return render_template('production/add_supplier.html', form=form)
+    return render_template('production/add_product.html', form=form)
 
 
 @login_required
@@ -67,7 +67,7 @@ def add_inventory():
         db.session.add(new_inventory)
         db.session.commit()
         return redirect(url_for('production.production'))
-    return render_template('production/add_inventory.html', form=form)
+    return render_template('production/add_product.html', form=form)
 
 
 # View Products 

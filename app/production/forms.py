@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, IntegerField, SubmitField
+from wtforms import StringField, TextAreaField, IntegerField, SubmitField, SelectField
 from wtforms.validators import DataRequired
+from ..models import Product, Supplier
 
 
 class AddProductsForm(FlaskForm):
@@ -19,9 +20,14 @@ class AddIngredientsForm(FlaskForm):
 
 
 class AddProductionRun(FlaskForm):
-    product_id = IntegerField('Product Id', validators=[DataRequired()])
+    product_id = SelectField('Product', coerce=int)
     quantity = IntegerField('Packets Produced', validators=[DataRequired()])
     submit = SubmitField('Add Production Run')
+
+    def __init__(self, *args, **kwargs):
+        super(AddProductionRun, self).__init__(*args, **kwargs)
+        self.product_id.choices = [(product.id, product.name)
+                                   for product in Product.query.order_by(Product.name).all()]
 
 
 class AddSupplier(FlaskForm):
