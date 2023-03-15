@@ -3,6 +3,7 @@
 {% block title %} Log In {% endblock %}
 
 {% block content %}
+{{ super() }}
 
 <form action="" method="POST">
     {{ wtf.quick_form(form) }}

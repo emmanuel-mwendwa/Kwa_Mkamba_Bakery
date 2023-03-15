@@ -16,7 +16,11 @@
     <nav>
         <ul>
             <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+            {% else %}
             <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+            {% endif %}
         </ul>
     </nav>
 
