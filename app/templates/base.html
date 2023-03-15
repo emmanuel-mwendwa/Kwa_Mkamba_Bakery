@@ -1,3 +1,4 @@
+{% import "bootstrap/wtf.html" as wtf %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,16 @@
 </head>
 <body>
 
-    {% block header %} {% endblock %}
+    {% block header %} 
+    
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+        </ul>
+    </nav>
+
+    {% endblock %}
 
     {% block content %} {% endblock%}
 

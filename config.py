@@ -12,6 +12,9 @@ class Config():
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
+    MAIL_SENDER = 'App Admin'
+    MAIL_SUBJECT_PREFIX = '[KWA MKAMBA]'
+
     APP_ADMIN = os.environ.get('APP_ADMIN')
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
