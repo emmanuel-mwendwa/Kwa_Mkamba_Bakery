@@ -5,13 +5,55 @@ from flask import current_app
 import jwt
 import datetime
 
+
+class Permission:
+    VIEW_PRODUCTS = 1
+    VIEW_INVENTORY = 2
+    VIEW_PRODUCTION_RUN = 4
+    MANAGE_INVENTORY = 8
+    MANAGE_PRODUCTION_RUN = 16
+    VIEW_SALES_REPORT = 32
+    MANAGE_SALES_REPORT = 64
+    VIEW_RECIPE_DETAILS = 128
+    MANAGE_RECIPE_DETAILS = 256
+    MANAGER = 512
+    ADMINISTRATOR = 1024
+
+
 class Role(db.Model):
     __tablename__ = "roles"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
+    # role assigned to new users upon registration
+    default = db.Column(db.Boolean, default=False, index=True)
+    # permissions allowed for different users
+    permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
+    # set the value of permissions to 0 if no initial value is given
+    def __init__(self, **kwargs):
+        super(Role, self).__init__(**kwargs)
+        if self.permissions is None:
+            self.permissions = 0
+
+    # add permission
+    def add_permission(self, perm):
+        if not self.has_permission(perm):
+            self.permissions += perm
+
+    # remove permission
+    def remove_permission(self, perm):
+        if self.has_permission(perm):
+            self.permissions -= perm
+
+    # reset permission
+    def reset_permissions(self):
+        self.permissions = 0
+
+    # check if user has permission
+    def has_permission(self, perm):
+        return self.permissions & perm == perm
 
 class User(UserMixin, db.Model):
     __tablename__ = "users"
