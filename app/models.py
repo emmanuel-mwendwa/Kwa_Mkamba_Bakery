@@ -91,6 +91,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
+    name = db.Column(db.String(64))
+    phone_no = db.Column(db.String(13))
+    member_since = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     @property

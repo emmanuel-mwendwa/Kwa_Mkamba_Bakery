@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} {{ user.username}} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<h1>{{ user.username }}</h1>
+{% if user.name or user.phone_no %}
+<p>
+    {% if user.name %} {{ user.name }} {% endif %}
+    {% if user.phone_no %} {{ user.phone_no }} {% endif %}
+</p>
+{% endif %}
+{% if current_user.is_administrator() %}
+<p><a href="mailto: {{ user.email }}"> {{ user.email }}</a></p>
+{% endif %}
+
+{% if user == current_user %}
+<a href="{{ url_for('main.edit_profile') }}">Edit Profile</a>
+{% endif %}
+{% if current_user.is_administrator() %}
+<a href="{{ url_for('main.edit_profile_admin', id=user.id) }}">Edit Profile [Admin]</a>
+{% endif %}
+{% endblock %}
