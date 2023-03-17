@@ -7,7 +7,7 @@ from ..models import User
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Keep me logged in')
+    remember_me = BooleanField('Keep me logged in', default=True)
     submit = SubmitField('Log In')
 
 
@@ -28,7 +28,7 @@ class SignUpForm(FlaskForm):
         
 
 class ChangePasswordForm(FlaskForm):
-    old_password = StringField('Old Password', validators=[DataRequired()])
+    old_password = PasswordField('Old Password', validators=[DataRequired()])
     password = PasswordField('New Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match')])
     password2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField('Update Password')

@@ -79,7 +79,7 @@ def resend_confirmation():
     return redirect(url_for('main.index'))
 
 # update passwords
-@auth.route('/change_password', methods=["POST"])
+@auth.route('/change_password', methods=["GET", "POST"])
 @login_required
 def change_password():
     form = ChangePasswordForm()

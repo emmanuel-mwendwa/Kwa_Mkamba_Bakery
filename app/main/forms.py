@@ -6,8 +6,16 @@ from ..models import Role, User
 
 class EditProfileForm(FlaskForm):
     name = StringField('Full Name', validators=[Length(0, 64), Regexp('^[A-Za-z ]*$',0, 'Names can only contain letters and spaces')])
-    phone_no = StringField('Phone Number', validators=[Length(0, 64), Regexp('^[0-9+]*$',0, 'Phone number can only contain numbers')])
+    phone_no = StringField('Phone Number', validators=[Length(0, 13), Regexp('^[0-9+]*$',0, 'Phone number can only contain numbers')])
     submit = SubmitField('Submit')
+
+    def validate_phone_no(self, field):
+        if field.data:
+            if field.data.startswith('0'):
+                field.data = field.data[1:]
+                field.data = '+254' + field.data
+            elif not field.data.startswith('+'):
+                field.data = '+' + field.data
 
 
 class EditProfileAdminForm(FlaskForm):
@@ -16,7 +24,7 @@ class EditProfileAdminForm(FlaskForm):
     confirmed = BooleanField('Confirmed')
     role = SelectField('Role', coerce=int)
     name = StringField('Full Name', validators=[Length(0, 64), Regexp('^[A-Za-z ]*$',0, 'Names can only contain letters and spaces')])
-    phone_no = StringField('Phone Number', validators=[Length(0, 64), Regexp('^[0-9+]*$',0, 'Phone number can only contain numbers')])
+    phone_no = StringField('Phone Number', validators=[Length(0, 13), Regexp('^[0-9+]*$',0, 'Phone number can only contain numbers')])
     submit = SubmitField('Submit')
 
     def __init__(self, user, *args, **kwargs):
@@ -34,3 +42,11 @@ class EditProfileAdminForm(FlaskForm):
         if field.data != self.user.username and\
         User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
+        
+    def validate_phone_no(self, field):
+        if field.data:
+            if field.data.startswith('0'):
+                field.data = field.data[1:]
+            field.data = '+254' + field.data
+            if not field.data.startswith('+'):
+                field.data = '+' + field.data
