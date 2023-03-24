@@ -224,3 +224,11 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(24))
+    price = db.Column(db.Integer)
+    description = db.Column(db.Text)
+    date_created = db.Column(db.DateTime(), index=True, default=datetime.datetime.utcnow())
