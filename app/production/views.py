@@ -3,8 +3,10 @@ from . import production
 from .forms import AddNewProductForm, AddNewProductionRunForm
 from .. import db
 from ..models import Product, Production_Run
+from ..decorators import admin_required
 
 @production.route('/new_product', methods=["GET", "POST"])
+@admin_required
 def new_product():
     form = AddNewProductForm()
     if form.validate_on_submit():
@@ -31,4 +33,9 @@ def new_productionrun():
 def view_products():
     products = Product.query.all()
     return render_template("production/view.html", products=products)
+
+@production.route('/view_productionruns', methods=["GET", "POST"])
+def view_productionruns():
+    productionruns = Production_Run.query.all()
+    return render_template("production/productionruns.html", productionruns=productionruns)
 

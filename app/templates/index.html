@@ -7,4 +7,11 @@
 
 <h1>Home Page</h1>
 
+<ul>
+    <li><a href="{{ url_for('production.new_product') }}">New Product</a></li>
+    <li><a href="{{ url_for('production.new_productionrun') }}">New Production Run</a></li>
+    <li><a href="{{ url_for('production.view_products') }}">View Products</a></li>
+    <li><a href="{{ url_for('production.view_productionruns') }}">View Production Runs</a></li>
+</ul>
+
 {% endblock %}

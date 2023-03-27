@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Products</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Flour Kneaded</th>
+        </thead>
+        <tbody>
+            {% for productionrun in productionruns %}
+            <tr>
+                <td>{{ productionrun.product_id }}</td>
+                <td>{{ productionrun.quantity }}</td>
+                <td>{{ productionrun.flour_kneaded}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

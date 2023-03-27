@@ -47,6 +47,9 @@ class EditProfileAdminForm(FlaskForm):
         if field.data:
             if field.data.startswith('0'):
                 field.data = field.data[1:]
-            field.data = '+254' + field.data
+                field.data = '+254' + field.data
+            elif field.data.startswith('254'):
+                field.data = field.data[3:]
+                field.data = '+254' + field.data
             if not field.data.startswith('+'):
                 field.data = '+' + field.data
