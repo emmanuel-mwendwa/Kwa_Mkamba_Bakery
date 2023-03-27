@@ -227,8 +227,20 @@ def load_user(user_id):
 
 
 class Product(db.Model):
+    __tablename__ = "products"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(24))
     price = db.Column(db.Integer)
     description = db.Column(db.Text)
+    date_created = db.Column(db.DateTime(), index=True, default=datetime.datetime.utcnow())
+    product = db.relationship('Production_Run', backref='role', lazy='dynamic')
+
+
+class Production_Run(db.Model):
+    __tablename__ = "production_runs"
+
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
+    quantity = db.Column(db.Integer)
+    flour_kneaded = db.Column(db.Integer)
     date_created = db.Column(db.DateTime(), index=True, default=datetime.datetime.utcnow())

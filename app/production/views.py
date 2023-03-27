@@ -1,8 +1,8 @@
 from flask import render_template, redirect, url_for, flash
 from . import production
-from .forms import AddNewProductForm
+from .forms import AddNewProductForm, AddNewProductionRunForm
 from .. import db
-from ..models import Product
+from ..models import Product, Production_Run
 
 @production.route('/new_product', methods=["GET", "POST"])
 def new_product():
@@ -12,6 +12,17 @@ def new_product():
         db.session.add(new_product)
         db.session.commit()
         flash("Product added successfully", category="success")
+        return redirect(url_for("production.view_products"))
+    return render_template("production/new_items.html", form=form)
+
+@production.route('/new_productionrun', methods=["GET", "POST"])
+def new_productionrun():
+    form = AddNewProductionRunForm()
+    if form.validate_on_submit():
+        new_productionrun = Production_Run(product_id=form.product_id.data, quantity=form.quantity.data, flour_kneaded=form.flour_kneaded.data )
+        db.session.add(new_productionrun)
+        db.session.commit()
+        flash("Production run added successfully", category="success")
         return redirect(url_for("production.view_products"))
     return render_template("production/new_items.html", form=form)
 
