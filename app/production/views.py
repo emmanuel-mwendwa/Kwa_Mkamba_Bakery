@@ -25,7 +25,7 @@ def new_productionrun():
         db.session.add(new_productionrun)
         db.session.commit()
         flash("Production run added successfully", category="success")
-        return redirect(url_for("production.view_products"))
+        return redirect(url_for("production.view_productionruns"))
     return render_template("production/new_items.html", form=form)
 
 
@@ -36,6 +36,6 @@ def view_products():
 
 @production.route('/view_productionruns', methods=["GET", "POST"])
 def view_productionruns():
-    productionruns = Production_Run.query.all()
+    productionruns = db.session.query(Production_Run, Product.name).join(Product, Production_Run.product_id == Product.id).all()
     return render_template("production/productionruns.html", productionruns=productionruns)
 

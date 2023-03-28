@@ -14,9 +14,9 @@
             <th>Flour Kneaded</th>
         </thead>
         <tbody>
-            {% for productionrun in productionruns %}
+            {% for productionrun, product_name in productionruns %}
             <tr>
-                <td>{{ productionrun.product_id }}</td>
+                <td>{{ product_name }}</td>
                 <td>{{ productionrun.quantity }}</td>
                 <td>{{ productionrun.flour_kneaded}}</td>
             </tr>

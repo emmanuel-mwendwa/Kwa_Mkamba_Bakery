@@ -17,6 +17,7 @@ class AddNewProductionRunForm(FlaskForm):
     quantity = IntegerField('Quantity')
     submit = SubmitField('Add New ProductionRun')
 
+    # adding choices to the related fields
     def __init__(self, *args,**kwargs):
         super(AddNewProductionRunForm, self).__init__(*args, **kwargs)
         self.product_id.choices = [(product.id, product.name)
