@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from . import production
 from .forms import AddNewProductForm, AddNewProductionRunForm
 from .. import db
@@ -18,6 +18,7 @@ def new_product():
     return render_template("production/new_items.html", form=form)
 
 @production.route('/new_productionrun', methods=["GET", "POST"])
+@admin_required
 def new_productionrun():
     form = AddNewProductionRunForm()
     if form.validate_on_submit():
@@ -36,6 +37,10 @@ def view_products():
 
 @production.route('/view_productionruns', methods=["GET", "POST"])
 def view_productionruns():
-    productionruns = db.session.query(Production_Run, Product.name).join(Product, Production_Run.product_id == Product.id).all()
-    return render_template("production/productionruns.html", productionruns=productionruns)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    query = db.session.query(Production_Run, Product.name).join(Product, Production_Run.product_id == Product.id).order_by(Production_Run.date_created.desc())
+    pagination = query.paginate(page=page, per_page=per_page)
+    productionruns = pagination.items
+    return render_template("production/productionruns.html", productionruns=productionruns, pagination=pagination)
 

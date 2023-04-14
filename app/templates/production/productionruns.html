@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Products</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %} Production Runs {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
     <table>
         <thead>
-            <th>Name</th>
-            <th>Quantity</th>
+            <th>Product</th>
+            <th>Packets</th>
             <th>Flour Kneaded</th>
+            <th>Date</th>
         </thead>
         <tbody>
             {% for productionrun, product_name in productionruns %}
@@ -19,9 +20,33 @@
                 <td>{{ product_name }}</td>
                 <td>{{ productionrun.quantity }}</td>
                 <td>{{ productionrun.flour_kneaded}}</td>
+                <td>{{ moment(productionrun.date_created).format('L') }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+    {% if pagination.total > pagination.per_page %}
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('production.view_productionruns', page=pagination.prev_num) }}">Previous</a>
+        {% endif %}
+        {% for page in pagination.iter_pages() %}
+            {% if page %}
+                {% if page == pagination.page %}
+                    <span> {{ page }}</span>
+                {% else %}
+                <a href="{{ url_for('production.view_productionruns', page=page) }}"> {{ page }}</a>
+                {% endif %}
+            {% else %}
+            <span>...</span>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+            <a href="{{ url_for('production.view_productionruns', page=pagination.next_num) }}">Next</a>
+        {% endif %}
+    {% endif %}
+
+    {% endblock %}
+
+    {% block footer %} {{ super() }} {% endblock %}
+
+    {% block scripts %} {{ super() }} {% endblock %}
