@@ -226,21 +226,89 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class Product(db.Model):
-    __tablename__ = "products"
+class Ingredient(db.Model):
+    __tablename__ = "ingredient"
+
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(24))
-    price = db.Column(db.Integer)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text)
+    vendors = db.relationship('Vendor', secondary="vendor_ingredient")
+    products = db.relationship('Product', secondary='product_ingredient')
+    recipe_ingredients = db.relationship('RecipeIngredient', backref='ingredient')
+
+
+class Vendor(db.Model):
+    __tablename__ = "vendor"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    address = db.Column(db.String(50))
+    phone_number = db.Column(db.String(13))
+    email = db.Column(db.String(50))
+    ingredients = db.relationship('Ingredient', secondary='vendor_ingredient')
+
+
+class Product(db.Model):
+    __tablename__ = "product"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(24), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text)
     date_created = db.Column(db.DateTime(), index=True, default=datetime.datetime.utcnow())
     product = db.relationship('Production_Run', backref='role', lazy='dynamic')
+    ingredients = db.relationship('Ingredient', secondary='product_ingredient')
+    recipes = db.relationship('Recipe', secondary='recipe_ingredient')
 
 
 class Production_Run(db.Model):
     __tablename__ = "production_runs"
 
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
+    product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
     quantity = db.Column(db.Integer)
     flour_kneaded = db.Column(db.Integer)
+    oil_used = db.Column(db.Integer)
+    electricity_used = db.Column(db.Integer)
     date_created = db.Column(db.DateTime(), index=True, default=datetime.datetime.utcnow())
+
+
+class Recipe(db.Model):
+    __tablename__ = "recipe"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(255))
+    instructions = db.Column(db.Text, nullable=False)
+    yield_amount = db.Column(db.Integer, nullable=False)
+    products = db.relationship('Product', secondary='recipe_ingredient')
+
+
+class ProductIngredient(db.Model):
+    __tablename__ = "product_ingredient"
+
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'), nullable=False)
+    quantity = db.Column(db.Float, nullable=False)
+    measurement_unit = db.Column(db.String(10), nullable=False)
+
+
+class VendorIngredient(db.Model):
+    __tablename__ = "vendor_ingredient"
+
+    id = db.Column(db.Integer, primary_key=True)
+    vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
+    ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+
+
+class RecipeIngredient(db.Model):
+    __tablename__ = "recipe_ingredient"
+
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+    ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'), nullable=False)
+    quantity = db.Column(db.Float, nullable=False)
+    measurement_unit = db.Column(db.String(10), nullable=False)
+
+
