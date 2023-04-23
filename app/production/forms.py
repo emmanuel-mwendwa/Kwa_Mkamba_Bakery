@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, Length
 from wtforms import ValidationError
-from ..models import Product, Production_Run
+from ..models import Product, ProductionRun
 
 class AddNewProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
@@ -14,6 +14,7 @@ class AddNewProductForm(FlaskForm):
 class AddNewProductionRunForm(FlaskForm):
     product_id = SelectField('Product', coerce=int)
     flour_kneaded = StringField('Flour Kneaded')
+    oil_used = StringField('Oil used')
     quantity = IntegerField('Quantity')
     submit = SubmitField('Add New ProductionRun')
 

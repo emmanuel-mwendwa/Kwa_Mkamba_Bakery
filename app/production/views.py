@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, request
 from . import production
 from .forms import AddNewProductForm, AddNewProductionRunForm
 from .. import db
-from ..models import Product, Production_Run
+from ..models import Product, ProductionRun
 from ..decorators import admin_required
 
 @production.route('/new_product', methods=["GET", "POST"])
@@ -22,7 +22,7 @@ def new_product():
 def new_productionrun():
     form = AddNewProductionRunForm()
     if form.validate_on_submit():
-        new_productionrun = Production_Run(product_id=form.product_id.data, quantity=form.quantity.data, flour_kneaded=form.flour_kneaded.data )
+        new_productionrun = ProductionRun(product_id=form.product_id.data, quantity=form.quantity.data, flour_kneaded=form.flour_kneaded.data, oil_used=form.oil_used.data)
         db.session.add(new_productionrun)
         db.session.commit()
         flash("Production run added successfully", category="success")
@@ -39,7 +39,7 @@ def view_products():
 def view_productionruns():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
-    query = db.session.query(Production_Run, Product.name).join(Product, Production_Run.product_id == Product.id).order_by(Production_Run.date_created.desc())
+    query = db.session.query(ProductionRun, Product.name).join(Product, ProductionRun.product_id == Product.id).order_by(ProductionRun.created_at.desc())
     pagination = query.paginate(page=page, per_page=per_page)
     productionruns = pagination.items
     return render_template("production/productionruns.html", productionruns=productionruns, pagination=pagination)
