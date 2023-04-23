@@ -24,6 +24,10 @@
                 <td>{{ productionrun.quantity }}</td>
                 <td>{{ moment(productionrun.created_at).format('L') }}</td>
             </tr>
+            <tr>
+                <td><a href="{{ url_for('production.edit_productionrun', id=productionrun.id)}}">Edit</a></td>
+                <td><a href="{{ url_for('production.delete_productionrun', id=productionrun.id)}}">Delete</a></td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>

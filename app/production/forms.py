@@ -8,18 +8,38 @@ class AddNewProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
     price = IntegerField("Product Price", validators=[DataRequired()])
     description = TextAreaField("Description")
-    submit = SubmitField("Add New Product")
+    submit = SubmitField("Add")
+
+
+class EditProductForm(FlaskForm):
+    name = StringField("Product Name", validators=[DataRequired()])
+    price = IntegerField("Product Price", validators=[DataRequired()])
+    description = TextAreaField("Description")
+    submit = SubmitField("Edit")
 
 
 class AddNewProductionRunForm(FlaskForm):
     product_id = SelectField('Product', coerce=int)
-    flour_kneaded = StringField('Flour Kneaded')
-    oil_used = StringField('Oil used')
+    flour_kneaded = IntegerField('Flour Kneaded')
+    oil_used = IntegerField('Oil used')
     quantity = IntegerField('Quantity')
-    submit = SubmitField('Add New ProductionRun')
+    submit = SubmitField('Add')
 
     # adding choices to the related fields
     def __init__(self, *args,**kwargs):
         super(AddNewProductionRunForm, self).__init__(*args, **kwargs)
+        self.product_id.choices = [(product.id, product.name)
+                                     for product in Product.query.order_by(Product.name).all()]
+
+class EditProductionRunForm(FlaskForm):
+    product_id = SelectField('Product', coerce=int)
+    flour_kneaded = IntegerField('Flour Kneaded')
+    oil_used = IntegerField('Oil used')
+    quantity = IntegerField('Quantity')
+    submit = SubmitField('Edit')
+
+    # adding choices to the related fields
+    def __init__(self, *args,**kwargs):
+        super(EditProductionRunForm, self).__init__(*args, **kwargs)
         self.product_id.choices = [(product.id, product.name)
                                      for product in Product.query.order_by(Product.name).all()]

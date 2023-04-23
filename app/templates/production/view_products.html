@@ -22,6 +22,11 @@
                 <td>{{ product.description}}</td>
                 <td>{{ moment(product.created_at).format('L') }}</td>
             </tr>
+            <tr>
+                <td><a href="{{ url_for('production.edit_product', id=product.id)}}">Edit</a></td>
+                <td><a href="{{ url_for('production.delete_product', id=product.id)}}">Delete</a></td>
+            </tr>
+                
             {% endfor %}
         </tbody>
     </table>
