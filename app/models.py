@@ -66,11 +66,11 @@ class Role(db.Model):
 
             'Sales_Associate': [Permission.VIEW_SALES_REPORT, Permission.MANAGE_SALES_REPORT, Permission.VIEW_INVENTORY, Permission.VIEW_PRODUCTS],
 
-            'Production_Supervisor': [Permission.VIEW_PRODUCTS, Permission.VIEW_PRODUCTION_RUN, Permission.VIEW_INVENTORY, Permission.MANAGE_INVENTORY, Permission.MANAGE_PRODUCTION_RUN],
+            'Production_Supervisor': [Permission.VIEW_PRODUCTS, Permission.VIEW_PRODUCTION_RUN, Permission.VIEW_INVENTORY, Permission.MANAGE_PRODUCTS, Permission.MANAGE_INVENTORY, Permission.MANAGE_PRODUCTION_RUN],
 
-            'Manager': [Permission.VIEW_PRODUCTS, Permission.VIEW_INVENTORY, Permission.VIEW_PRODUCTION_RUN, Permission.VIEW_SALES_REPORT, Permission.MANAGE_INVENTORY, Permission.MANAGE_PRODUCTION_RUN, Permission.MANAGE_SALES_REPORT, Permission.MANAGER],
+            'Manager': [Permission.VIEW_PRODUCTS, Permission.VIEW_INVENTORY, Permission.VIEW_PRODUCTION_RUN, Permission.VIEW_SALES_REPORT, Permission.MANAGE_PRODUCTS, Permission.MANAGE_INVENTORY, Permission.MANAGE_PRODUCTION_RUN, Permission.MANAGE_SALES_REPORT, Permission.MANAGER],
 
-            'Administrator': [Permission.VIEW_PRODUCTS, Permission.VIEW_INVENTORY, Permission.VIEW_PRODUCTION_RUN, Permission.MANAGE_INVENTORY, Permission.MANAGE_PRODUCTION_RUN, Permission.VIEW_SALES_REPORT, Permission.MANAGE_SALES_REPORT, Permission.VIEW_RECIPE_DETAILS, Permission.MANAGE_RECIPE_DETAILS, Permission.MANAGER, Permission.ADMINISTRATOR]
+            'Administrator': [Permission.VIEW_PRODUCTS, Permission.VIEW_INVENTORY, Permission.VIEW_PRODUCTION_RUN, Permission.MANAGE_PRODUCTS, Permission.MANAGE_INVENTORY, Permission.MANAGE_PRODUCTION_RUN, Permission.VIEW_SALES_REPORT, Permission.MANAGE_SALES_REPORT, Permission.VIEW_RECIPE_DETAILS, Permission.MANAGE_RECIPE_DETAILS, Permission.MANAGER, Permission.ADMINISTRATOR]
         }
         default_role = 'User'
         for r in roles:
@@ -269,6 +269,8 @@ class Supplier(db.Model):
     name = db.Column(db.String(50), unique=True, nullable=False)
     phone_no = db.Column(db.String(13), nullable=False)
     email = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
 
 
 class Ingredient(db.Model):
@@ -277,3 +279,5 @@ class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     unit_of_measurement = db.Column(db.String(12))
+    created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())

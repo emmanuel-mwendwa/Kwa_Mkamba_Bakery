@@ -1,8 +1,8 @@
 from flask import render_template, redirect, url_for, flash, request
 from . import production
-from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductForm, EditProductionRunForm
+from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier
 from .. import db
-from ..models import Product, ProductionRun
+from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient
 from ..decorators import admin_required
 
 # Add a new product in the database
@@ -104,3 +104,39 @@ def delete_productionrun(id):
     db.session.delete(productionrun)
     db.session.commit()
     return redirect(url_for("production.view_productionruns"))
+
+# Add ingredients used in production
+@production.route('/new_ingredient', methods=["GET", "POST"])
+@admin_required
+def new_ingredient():
+    form = AddNewIngredient()
+    if form.validate_on_submit():
+        ingredient = Ingredient(name=form.name.data, unit_of_measurement=form.measurement.data)
+        db.session.add(ingredient)
+        db.session.commit()
+        flash("Ingredient added successfully", category="success")
+        return redirect(url_for("production.view_ingredients"))
+    return render_template("production/new_items.html", form=form)
+
+@production.route("/view_ingredients")
+@admin_required
+def view_ingredients():
+    ingredients = Ingredient.query.all()
+    return render_template("production/view_ingredients.html", ingredients=ingredients)
+
+@production.route('/new_supplier', methods=["GET", "POST"])
+def new_supplier():
+    form = AddNewSupplier()
+    if form.validate_on_submit():
+        supplier = Supplier(name=form.name.data, phone_no=form.phone_no.data, email=form.email.data)
+        db.session.add(supplier)
+        db.session.commit()
+        flash("Supplier added successfully", category="success")
+        return redirect(url_for("production.view_suppliers"))
+    return render_template("production/new_items.html", form=form)
+
+@production.route('/view_suppliers')
+@admin_required
+def view_suppliers():
+    suppliers = Supplier.query.all()
+    return render_template("production/view_suppliers.html", suppliers=suppliers)

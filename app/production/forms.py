@@ -43,3 +43,16 @@ class EditProductionRunForm(FlaskForm):
         super(EditProductionRunForm, self).__init__(*args, **kwargs)
         self.product_id.choices = [(product.id, product.name)
                                      for product in Product.query.order_by(Product.name).all()]
+        
+
+class AddNewIngredient(FlaskForm):
+    name = StringField("Ingredient Name", validators=[DataRequired()])
+    measurement = StringField("Unit of Measurement")
+    submit = SubmitField("Add")
+
+
+class AddNewSupplier(FlaskForm):
+    name = StringField("Supplier Name", validators=[DataRequired()])
+    phone_no = StringField("Phone Number", validators=[DataRequired()])
+    email = StringField("Email")
+    submit = SubmitField("Add")

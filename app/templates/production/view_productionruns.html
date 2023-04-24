@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "_macros.html" as macros %}
 
 {% block title %} Production Runs {% endblock %}
 
@@ -31,24 +32,9 @@
             {% endfor %}
         </tbody>
     </table>
-    {% if pagination.total > pagination.per_page %}
-        {% if pagination.has_prev %}
-            <a href="{{ url_for('production.view_productionruns', page=pagination.prev_num) }}">Previous</a>
-        {% endif %}
-        {% for page in pagination.iter_pages() %}
-            {% if page %}
-                {% if page == pagination.page %}
-                    <span> {{ page }}</span>
-                {% else %}
-                <a href="{{ url_for('production.view_productionruns', page=page) }}"> {{ page }}</a>
-                {% endif %}
-            {% else %}
-            <span>...</span>
-            {% endif %}
-        {% endfor %}
-        {% if pagination.has_next %}
-            <a href="{{ url_for('production.view_productionruns', page=pagination.next_num) }}">Next</a>
-        {% endif %}
+
+    {% if pagination %}
+        {{ macros.pagination_widget(pagination, "production.view_productionruns", fragment='')}}
     {% endif %}
 
     {% endblock %}
