@@ -10,14 +10,15 @@ class Permission:
     VIEW_PRODUCTS = 1
     VIEW_INVENTORY = 2
     VIEW_PRODUCTION_RUN = 4
-    MANAGE_INVENTORY = 8
-    MANAGE_PRODUCTION_RUN = 16
-    VIEW_SALES_REPORT = 32
-    MANAGE_SALES_REPORT = 64
-    VIEW_RECIPE_DETAILS = 128
-    MANAGE_RECIPE_DETAILS = 256
-    MANAGER = 512
-    ADMINISTRATOR = 1024
+    MANAGE_PRODUCTS = 8
+    MANAGE_INVENTORY = 16
+    MANAGE_PRODUCTION_RUN = 32
+    VIEW_SALES_REPORT = 64
+    MANAGE_SALES_REPORT = 128
+    VIEW_RECIPE_DETAILS = 256
+    MANAGE_RECIPE_DETAILS = 512
+    MANAGER = 1024
+    ADMINISTRATOR = 2048
 
 
 class Role(db.Model):
@@ -248,3 +249,31 @@ class ProductionRun(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+
+
+class SupplierIngredient(db.Model):
+    __tablename__ = "supplier_ingredients"
+
+    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), primary_key=True)
+    ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), primary_key=True)
+    unit_cost = db.Column(db.Integer)
+
+    supplier = db.relationship('Supplier', backref=db.backref('supplier_ingredients', cascade='all, delete-orphan'))
+    ingredient = db.relationship('Ingredient', backref=db.backref('supplier_ingredients', cascade='all, delete-orphan'))
+
+
+class Supplier(db.Model):
+    __tablename__ = "suppliers"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    phone_no = db.Column(db.String(13), nullable=False)
+    email = db.Column(db.String(50))
+
+
+class Ingredient(db.Model):
+    __tablename__ = "ingredients"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    unit_of_measurement = db.Column(db.String(12))
