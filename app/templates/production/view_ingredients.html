@@ -21,6 +21,8 @@
                 <td>{{ moment(ingredient.created_at).format('L') }}</td>
             </tr>
             <tr>
+                <td><a href="{{ url_for('production.edit_ingredient', id=ingredient.id)}}">Edit</a></td>
+                <td><a href="{{ url_for('production.delete_ingredient', id=ingredient.id)}}">Delete</a></td>
             </tr>
                 
             {% endfor %}

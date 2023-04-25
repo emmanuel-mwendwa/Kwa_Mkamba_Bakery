@@ -15,7 +15,7 @@ class EditProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
     price = IntegerField("Product Price", validators=[DataRequired()])
     description = TextAreaField("Description")
-    submit = SubmitField("Edit")
+    submit = SubmitField("Update")
 
 
 class AddNewProductionRunForm(FlaskForm):
@@ -36,7 +36,7 @@ class EditProductionRunForm(FlaskForm):
     flour_kneaded = IntegerField('Flour Kneaded')
     oil_used = IntegerField('Oil used')
     quantity = IntegerField('Quantity')
-    submit = SubmitField('Edit')
+    submit = SubmitField('Update')
 
     # adding choices to the related fields
     def __init__(self, *args,**kwargs):
@@ -56,3 +56,16 @@ class AddNewSupplier(FlaskForm):
     phone_no = StringField("Phone Number", validators=[DataRequired()])
     email = StringField("Email")
     submit = SubmitField("Add")
+
+
+class EditIngredient(FlaskForm):
+    name = StringField("Ingredient Name", validators=[DataRequired()])
+    measurement = StringField("Unit of Measurement")
+    submit = SubmitField("Update")
+
+
+class EditSupplier(FlaskForm):
+    name = StringField("Supplier Name", validators=[DataRequired()])
+    phone_no = StringField("Phone Number", validators=[DataRequired()])
+    email = StringField("Email")
+    submit = SubmitField("Update")
