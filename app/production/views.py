@@ -9,6 +9,7 @@ from ..decorators import admin_required
 @production.route('/new_product', methods=["GET", "POST"])
 @admin_required
 def new_product():
+    title = "New Product"
     form = AddNewProductForm()
     if form.validate_on_submit():
         new_product = Product(name=form.name.data, price=form.price.data, description=form.description.data)
@@ -16,7 +17,7 @@ def new_product():
         db.session.commit()
         flash("Product added successfully", category="success")
         return redirect(url_for("production.view_products"))
-    return render_template("production/new_items.html", form=form)
+    return render_template("production/new_items.html", form=form, title=title)
 
 # View the products in the database
 @production.route('/view_products', methods=["GET", "POST"])
@@ -28,6 +29,7 @@ def view_products():
 @production.route('/product/<int:id>', methods=["GET", "POST"])
 @admin_required
 def edit_product(id):
+    title="Edit Product"
     product = Product.query.get_or_404(id)
     form = EditProductForm()
     if form.validate_on_submit():
@@ -41,7 +43,7 @@ def edit_product(id):
     form.name.data = product.name
     form.price.data = product.price
     form.description.data = product.description
-    return render_template("production/edit_product.html", form=form)
+    return render_template("production/edit_items.html", form=form, title=title)
 
 # Delete products in the database
 @production.route('/product_delete/<int:id>', methods=["GET", "POST"])
@@ -56,6 +58,7 @@ def delete_product(id):
 @production.route('/new_productionrun', methods=["GET", "POST"])
 @admin_required 
 def new_productionrun():
+    title="New ProductionRun"
     form = AddNewProductionRunForm()
     if form.validate_on_submit():
         new_productionrun = ProductionRun(product_id=form.product_id.data, quantity=form.quantity.data, flour_kneaded=form.flour_kneaded.data, oil_used=form.oil_used.data)
@@ -63,7 +66,7 @@ def new_productionrun():
         db.session.commit()
         flash("Production run added successfully", category="success")
         return redirect(url_for("production.view_productionruns"))
-    return render_template("production/new_items.html", form=form)
+    return render_template("production/new_items.html", form=form, title=title)
 
 # View production runs
 @production.route('/view_productionruns', methods=["GET", "POST"])
@@ -79,6 +82,7 @@ def view_productionruns():
 @production.route('/productionrun/<int:id>', methods=["GET", "POST"])
 @admin_required
 def edit_productionrun(id):
+    title="Edit Items"
     productionrun = ProductionRun.query.get_or_404(id)
     form = EditProductionRunForm()
     if form.validate_on_submit():
@@ -94,7 +98,7 @@ def edit_productionrun(id):
     form.quantity.data = productionrun.quantity
     form.flour_kneaded.data = productionrun.flour_kneaded
     form.oil_used.data = productionrun.oil_used
-    return render_template("production/edit_productionrun.html", form=form)
+    return render_template("production/edit_items.html", form=form, title=title)
 
 # Delete products in the database
 @production.route('/delete_productionrun/<int:id>', methods=["GET", "POST"])
@@ -109,6 +113,7 @@ def delete_productionrun(id):
 @production.route('/new_ingredient', methods=["GET", "POST"])
 @admin_required
 def new_ingredient():
+    title="New Ingredient"
     form = AddNewIngredient()
     if form.validate_on_submit():
         ingredient = Ingredient(name=form.name.data, unit_of_measurement=form.measurement.data)
@@ -116,7 +121,7 @@ def new_ingredient():
         db.session.commit()
         flash("Ingredient added successfully", category="success")
         return redirect(url_for("production.view_ingredients"))
-    return render_template("production/new_items.html", form=form)
+    return render_template("production/new_items.html", form=form, title=title)
 
 @production.route("/view_ingredients")
 @admin_required
@@ -127,6 +132,7 @@ def view_ingredients():
 @production.route('/edit_ingredient/<int:id>', methods=["GET", "POST"])
 @admin_required
 def edit_ingredient(id):
+    title="Edit Ingredient"
     form = EditIngredient()
     ingredient = Ingredient.query.get_or_404(id)
     if form.validate_on_submit():
@@ -138,7 +144,7 @@ def edit_ingredient(id):
         return redirect(url_for("production.view_ingredients"))
     form.name.data = ingredient.name
     form.measurement.data = ingredient.unit_of_measurement
-    return render_template("production/edit_ingredient.html", form=form)
+    return render_template("production/edit_items.html", form=form, title=title)
 
 @production.route('/delete_ingredient/<int:id>', methods=["GET", "POST"])
 def delete_ingredient(id):
@@ -149,6 +155,7 @@ def delete_ingredient(id):
 
 @production.route('/new_supplier', methods=["GET", "POST"])
 def new_supplier():
+    title="New Supplier"
     form = AddNewSupplier()
     if form.validate_on_submit():
         supplier = Supplier(name=form.name.data, phone_no=form.phone_no.data, email=form.email.data)
@@ -156,7 +163,7 @@ def new_supplier():
         db.session.commit()
         flash("Supplier added successfully", category="success")
         return redirect(url_for("production.view_suppliers"))
-    return render_template("production/new_items.html", form=form)
+    return render_template("production/new_items.html", form=form, title=title)
 
 @production.route('/view_suppliers')
 @admin_required
@@ -167,6 +174,7 @@ def view_suppliers():
 @production.route('/edit_supplier/<int:id>', methods=["GET", "POST"])
 @admin_required
 def edit_supplier(id):
+    title = "Edit Supplier"
     form = EditSupplier()
     supplier = Supplier.query.get_or_404(id)
     if form.validate_on_submit():
@@ -180,7 +188,7 @@ def edit_supplier(id):
     form.name.data = supplier.name
     form.phone_no.data = supplier.phone_no
     form.email.data = supplier.email
-    return render_template("production/edit_supplier.html", form=form)
+    return render_template("production/edit_items.html", form=form, title=title)
 
 @production.route('/delete_supplier/<int:id>', methods=["GET", "POST"])
 def delete_supplier(id):
