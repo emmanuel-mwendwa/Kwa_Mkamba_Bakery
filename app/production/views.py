@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request
 from . import production
-from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, EditIngredient, EditSupplier
+from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, EditIngredient, EditSupplier, AddSupplierIngredientForm
 from .. import db
 from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient
 from ..decorators import admin_required
@@ -196,3 +196,18 @@ def delete_supplier(id):
     db.session.delete(supplier)
     db.session.commit()
     return redirect(url_for("production.view_suppliers"))
+
+@production.route('/new_supplier_ingredient', methods=["GET", "POST"])
+@admin_required
+def new_supplier_ingredient():
+    title = "New Supplier Ingredient"
+    form = AddSupplierIngredientForm()
+    if form.validate_on_submit():
+        supplier_ingredient = SupplierIngredient(supplier_id=form.supplier_id.data, 
+                                                 ingredient_id=form.ingredient_id.data, 
+                                                 unit_cost=form.unit_cost.data)
+        db.session.add(supplier_ingredient)
+        db.session.commit()
+        flash("Supplier Ingredient added successfully", category="success")
+        return redirect(url_for('production.view_suppliers'))
+    return render_template('production/new_items', form=form, title=title)

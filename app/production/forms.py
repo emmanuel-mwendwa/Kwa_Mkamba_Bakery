@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, TextAreaField, IntegerField
+from wtforms import StringField, SelectField, SubmitField, TextAreaField, IntegerField, DecimalField
 from wtforms.validators import DataRequired, Length
 from wtforms import ValidationError
-from ..models import Product, ProductionRun
+from ..models import Product, Supplier, Ingredient
 
 class AddNewProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
@@ -69,3 +69,20 @@ class EditSupplier(FlaskForm):
     phone_no = StringField("Phone Number", validators=[DataRequired()])
     email = StringField("Email")
     submit = SubmitField("Update")
+
+
+class AddSupplierIngredientForm():
+    supplier_id = SelectField('Supplier', coerce=int, validators=[DataRequired()])
+    ingredient_id = SelectField('Ingredient', coerce=int, validators=[DataRequired()])
+    unit_cost = DecimalField('Unit Cost', validators=[DataRequired()])
+    submit = SubmitField('Add')
+
+    # adding choices to the related fields
+    def __init__(self, *args,**kwargs):
+        super(AddSupplierIngredientForm, self).__init__(*args, **kwargs)
+        self.supplier_id.choices = [(supplier.id, supplier.name)
+                                     for supplier in Supplier.query.order_by(Supplier.name).all()]
+    
+        self.ingredient_id.choices = [(ingredient.id, ingredient.name)
+                                     for ingredient in Ingredient.query.order_by(Ingredient.name).all()]
+    
