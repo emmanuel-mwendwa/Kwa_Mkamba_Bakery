@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, TextAreaField, IntegerField, DecimalField
+from wtforms import StringField, SelectField, SubmitField, TextAreaField, IntegerField, SelectMultipleField, widgets
 from wtforms.validators import DataRequired, Length
 from wtforms import ValidationError
 from ..models import Product, Supplier, Ingredient
@@ -71,18 +71,23 @@ class EditSupplier(FlaskForm):
     submit = SubmitField("Update")
 
 
-class AddSupplierIngredientForm():
-    supplier_id = SelectField('Supplier', coerce=int, validators=[DataRequired()])
-    ingredient_id = SelectField('Ingredient', coerce=int, validators=[DataRequired()])
-    unit_cost = DecimalField('Unit Cost', validators=[DataRequired()])
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
+class AddSupplierIngredientForm(FlaskForm):
+    supplier = SelectField('Supplier', coerce=int, validators=[DataRequired()])
+    ingredients = MultiCheckboxField('Ingredients', coerce=int)
+    unit_costs = MultiCheckboxField('Unit Costs', coerce=int)
     submit = SubmitField('Add')
 
     # adding choices to the related fields
     def __init__(self, *args,**kwargs):
         super(AddSupplierIngredientForm, self).__init__(*args, **kwargs)
-        self.supplier_id.choices = [(supplier.id, supplier.name)
+        self.supplier.choices = [(supplier.id, supplier.name)
                                      for supplier in Supplier.query.order_by(Supplier.name).all()]
     
-        self.ingredient_id.choices = [(ingredient.id, ingredient.name)
+        self.ingredients.choices = [(ingredient.id, ingredient.name)
                                      for ingredient in Ingredient.query.order_by(Ingredient.name).all()]
     

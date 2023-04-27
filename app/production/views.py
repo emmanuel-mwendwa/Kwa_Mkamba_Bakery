@@ -202,12 +202,23 @@ def delete_supplier(id):
 def new_supplier_ingredient():
     title = "New Supplier Ingredient"
     form = AddSupplierIngredientForm()
+
     if form.validate_on_submit():
-        supplier_ingredient = SupplierIngredient(supplier_id=form.supplier_id.data, 
-                                                 ingredient_id=form.ingredient_id.data, 
-                                                 unit_cost=form.unit_cost.data)
-        db.session.add(supplier_ingredient)
+        supplier_id = form.supplier.data
+        ingredients_data = form.ingredients.data
+        unit_costs_data = form.unit_costs.data
+
+        supplier = Supplier.query.get_or_404(supplier_id)
+
+        for ingredient_id, unit_cost in zip(ingredients_data, unit_costs_data):
+            ingredient = Ingredient.query.get(ingredient_id)
+            
+            supplier_ingredient = SupplierIngredient(supplier_id=supplier, 
+                                                 ingredient_id=ingredient, 
+                                                 unit_cost=unit_cost)
+            db.session.add(supplier_ingredient)
         db.session.commit()
         flash("Supplier Ingredient added successfully", category="success")
         return redirect(url_for('production.view_suppliers'))
-    return render_template('production/new_items', form=form, title=title)
+    
+    return render_template('production/new_supplier_ingredient.html', form=form)
