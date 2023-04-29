@@ -256,7 +256,6 @@ class SupplierIngredient(db.Model):
 
     supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), primary_key=True)
     ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), primary_key=True)
-    unit_cost = db.Column(db.Integer)
 
     supplier = db.relationship('Supplier', backref=db.backref('supplier_ingredients', cascade='all, delete-orphan'))
     ingredient = db.relationship('Ingredient', backref=db.backref('supplier_ingredients', cascade='all, delete-orphan'))
@@ -279,5 +278,6 @@ class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     unit_of_measurement = db.Column(db.String(12))
+    unit_cost = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())

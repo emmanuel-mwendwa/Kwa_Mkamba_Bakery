@@ -116,7 +116,7 @@ def new_ingredient():
     title="New Ingredient"
     form = AddNewIngredient()
     if form.validate_on_submit():
-        ingredient = Ingredient(name=form.name.data, unit_of_measurement=form.measurement.data)
+        ingredient = Ingredient(name=form.name.data, unit_of_measurement=form.measurement.data, unit_cost=form.unit_cost.data)
         db.session.add(ingredient)
         db.session.commit()
         flash("Ingredient added successfully", category="success")
@@ -138,12 +138,14 @@ def edit_ingredient(id):
     if form.validate_on_submit():
         ingredient.name = form.name.data
         ingredient.unit_of_measurement = form.measurement.data
+        ingredient.unit_cost = form.unit_cost.data
         db.session.add(ingredient)
         db.session.commit()
         flash("Ingredient updated successfully", category="success")
         return redirect(url_for("production.view_ingredients"))
     form.name.data = ingredient.name
     form.measurement.data = ingredient.unit_of_measurement
+    form.unit_cost.data = ingredient.unit_cost
     return render_template("production/edit_items.html", form=form, title=title)
 
 @production.route('/delete_ingredient/<int:id>', methods=["GET", "POST"])
@@ -206,16 +208,14 @@ def new_supplier_ingredient():
     if form.validate_on_submit():
         supplier_id = form.supplier.data
         ingredients_data = form.ingredients.data
-        unit_costs_data = form.unit_costs.data
 
-        supplier = Supplier.query.get_or_404(supplier_id)
-
-        for ingredient_id, unit_cost in zip(ingredients_data, unit_costs_data):
+        for ingredient_id in ingredients_data:
             ingredient = Ingredient.query.get(ingredient_id)
             
-            supplier_ingredient = SupplierIngredient(supplier_id=supplier, 
-                                                 ingredient_id=ingredient, 
-                                                 unit_cost=unit_cost)
+            supplier_ingredient = SupplierIngredient(
+                                supplier_id=supplier_id, 
+                                ingredient_id=ingredient_id
+                                ) 
             db.session.add(supplier_ingredient)
         db.session.commit()
         flash("Supplier Ingredient added successfully", category="success")

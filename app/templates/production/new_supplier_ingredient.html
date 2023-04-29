@@ -6,23 +6,14 @@
 {{ super() }}
 
 <form action="" method="POST">
-    {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
     <div>
         {{ form.supplier.label }} {{ form.supplier()}}
     </div>
     <div>
         {{ form.ingredients.label }}
-        {% for subfield in form.ingredients %}
-            {{ subfield() }} {{ subfield.label() }}
-        {% endfor %}
-    </div>
-    <div>
-        {{ form.unit_costs.label }}
-        {% for subfield in form.unit_costs %}
-            {{ subfield() }} {{ subfield.label() }}
-            {% if subfield.checked %}
-                <input type="text" name="unit_cost_{{ subfield.data }}" placeholder="Unit cost for {{ subfield.label.text }}">
-            {% endif %}
+        {% for ingredient in form.ingredients %}
+            {{ ingredient() }} {{ ingredient.label }}
         {% endfor %}
     </div>
         {{ form.submit() }}

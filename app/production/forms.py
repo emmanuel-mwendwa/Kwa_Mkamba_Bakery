@@ -48,6 +48,7 @@ class EditProductionRunForm(FlaskForm):
 class AddNewIngredient(FlaskForm):
     name = StringField("Ingredient Name", validators=[DataRequired()])
     measurement = StringField("Unit of Measurement")
+    unit_cost = IntegerField("Unit Cost", validators=[DataRequired()])
     submit = SubmitField("Add")
 
 
@@ -61,6 +62,7 @@ class AddNewSupplier(FlaskForm):
 class EditIngredient(FlaskForm):
     name = StringField("Ingredient Name", validators=[DataRequired()])
     measurement = StringField("Unit of Measurement")
+    unit_cost = IntegerField("Unit Cost", validators=[DataRequired()])
     submit = SubmitField("Update")
 
 
@@ -79,7 +81,6 @@ class MultiCheckboxField(SelectMultipleField):
 class AddSupplierIngredientForm(FlaskForm):
     supplier = SelectField('Supplier', coerce=int, validators=[DataRequired()])
     ingredients = MultiCheckboxField('Ingredients', coerce=int)
-    unit_costs = MultiCheckboxField('Unit Costs', coerce=int)
     submit = SubmitField('Add')
 
     # adding choices to the related fields
