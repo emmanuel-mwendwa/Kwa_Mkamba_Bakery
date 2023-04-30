@@ -10,11 +10,20 @@
     <div>
         {{ form.supplier.label }} {{ form.supplier()}}
     </div>
+    <br>
     <div>
-        {{ form.ingredients.label }}
-        {% for ingredient in form.ingredients %}
-            {{ ingredient() }} {{ ingredient.label }}
-        {% endfor %}
+        <table>
+            <thead>
+                <th>{{ form.ingredients.label }}</th>
+            </thead>
+            <tbody>
+                {% for ingredient in form.ingredients %}
+                <tr>
+                    <td>{{ ingredient() }} {{ ingredient.label }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
         {{ form.submit() }}
 </form>

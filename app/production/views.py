@@ -173,6 +173,11 @@ def view_suppliers():
     suppliers = Supplier.query.all()
     return render_template("production/view_suppliers.html", suppliers=suppliers)
 
+@production.route('/view_supplier/<int:id>', methods=["GET", "POST"])
+@admin_required
+def view_supplier(id):
+    pass
+
 @production.route('/edit_supplier/<int:id>', methods=["GET", "POST"])
 @admin_required
 def edit_supplier(id):
@@ -210,8 +215,6 @@ def new_supplier_ingredient():
         ingredients_data = form.ingredients.data
 
         for ingredient_id in ingredients_data:
-            ingredient = Ingredient.query.get(ingredient_id)
-            
             supplier_ingredient = SupplierIngredient(
                                 supplier_id=supplier_id, 
                                 ingredient_id=ingredient_id
