@@ -281,3 +281,27 @@ class Ingredient(db.Model):
     unit_cost = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+
+    # insert ingredients
+    @staticmethod
+    def insert_ingredients():
+        ingredients = {
+            "Flour": ["Flour", "Kilograms", 2350],
+            "Saccharin": ["Saccharin", "grams", 1500],
+            "Yeast": ["Yeast", "grams", 385],
+            "Salt": ["Salt", "grams", 60],
+            "Baking": ["Baking Powder", "grams", 1735],
+            "Cooking Oil": ["Cooking Oil", "Litres", 4350],
+            "Water": ["Water", "litres", 20],
+            "Electricity": ["Electricity", "KiloWatts", 32],
+            "Papers": ["Packing Papers", "Packets", 200]
+        }
+        # iterate over the dictionary to add the ingredients
+        for name, values in ingredients.items():
+            ingredient = Ingredient(
+                name=name,
+                unit_of_measurement=values[1],
+                unit_cost=values[2] 
+                )
+            db.session.add(ingredient)
+        db.session.commit()
