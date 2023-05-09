@@ -1,8 +1,8 @@
-"""unit cost in ingredients table
+"""recipe and recipe_ingredient tables
 
-Revision ID: f4495a385b68
+Revision ID: 965c0f15e922
 Revises: 
-Create Date: 2023-04-29 23:29:37.758195
+Create Date: 2023-05-10 00:57:14.097375
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f4495a385b68'
+revision = '965c0f15e922'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,6 +36,16 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('recipes',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('yield_amount', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
     )
     op.create_table('roles',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -67,6 +77,18 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('recipe_ingredients',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('recipe_id', sa.Integer(), nullable=True),
+    sa.Column('ingredient_id', sa.Integer(), nullable=True),
+    sa.Column('quantity', sa.Float(), nullable=False),
+    sa.Column('unit_of_measurement', sa.String(length=12), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['ingredient_id'], ['ingredients.id'], ),
+    sa.ForeignKeyConstraint(['recipe_id'], ['recipes.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('supplier_ingredients',
@@ -104,12 +126,14 @@ def downgrade():
 
     op.drop_table('users')
     op.drop_table('supplier_ingredients')
+    op.drop_table('recipe_ingredients')
     op.drop_table('production_runs')
     op.drop_table('suppliers')
     with op.batch_alter_table('roles', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_roles_default'))
 
     op.drop_table('roles')
+    op.drop_table('recipes')
     op.drop_table('products')
     op.drop_table('ingredients')
     # ### end Alembic commands ###

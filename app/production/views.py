@@ -12,7 +12,14 @@ def new_product():
     title = "New Product"
     form = AddNewProductForm()
     if form.validate_on_submit():
-        new_product = Product(name=form.name.data, price=form.price.data, description=form.description.data)
+        product = Product.query.filter_by(name=form.name.data).first()
+        if product is not None:
+            flash("A product with this name already exists.", category="error")
+        new_product = Product(
+            name=form.name.data, 
+            price=form.price.data, 
+            description=form.description.data
+            )
         db.session.add(new_product)
         db.session.commit()
         flash("Product added successfully", category="success")
@@ -188,6 +195,8 @@ def edit_supplier(id):
         supplier.name = form.name.data
         supplier.phone_no = form.phone_no.data
         supplier.email = form.email.data
+        # Call the update_timestamp method to update the updated_at
+        Supplier.update_timestamp(None, None, supplier)
         db.session.add(supplier)
         db.session.commit()
         flash("Supplier updated successfully", category="success")

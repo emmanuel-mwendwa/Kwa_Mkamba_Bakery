@@ -2,6 +2,7 @@ from . import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from flask import current_app
+from sqlalchemy import event
 import jwt
 import datetime
 
@@ -271,6 +272,16 @@ class Supplier(db.Model):
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
 
+    @staticmethod
+    def update_timestamp(mapper, connection, target):
+        target.updated_at = datetime.datetime.utcnow()
+
+    @classmethod
+    def register_event_listeners(cls):
+        event.listen(cls, 'before_update', cls.update_timestamp)
+
+Supplier.register_event_listeners()
+
 
 class Ingredient(db.Model):
     __tablename__ = "ingredients"
@@ -286,22 +297,54 @@ class Ingredient(db.Model):
     @staticmethod
     def insert_ingredients():
         ingredients = {
-            "Flour": ["Flour", "Kilograms", 2350],
-            "Saccharin": ["Saccharin", "grams", 1500],
-            "Yeast": ["Yeast", "grams", 385],
-            "Salt": ["Salt", "grams", 60],
-            "Baking": ["Baking Powder", "grams", 1735],
-            "Cooking Oil": ["Cooking Oil", "Litres", 4350],
-            "Water": ["Water", "litres", 20],
-            "Electricity": ["Electricity", "KiloWatts", 32],
-            "Papers": ["Packing Papers", "Packets", 200]
+            "Flour": ["Kilograms", 2350],
+            "Saccharin": ["grams", 1500],
+            "Yeast": ["grams", 385],
+            "Salt": ["grams", 60],
+            "Baking Powder": ["grams", 1735],
+            "Cooking Oil": ["Litres", 4350],
+            "Water": ["litres", 20],
+            "Electricity": ["KiloWatts", 32],
+            "Packing Papers": ["Packets", 200]
         }
-        # iterate over the dictionary to add the ingredients
-        for name, values in ingredients.items():
-            ingredient = Ingredient(
-                name=name,
-                unit_of_measurement=values[1],
-                unit_cost=values[2] 
-                )
-            db.session.add(ingredient)
-        db.session.commit()
+        try:
+            # iterate over the dictionary to add the ingredients
+            for name, values in ingredients.items():
+                ingredient = Ingredient.query.filter_by(name=name).first()
+                if ingredient is not None: 
+                    print(f"Ingredient '{name}' already exists.")
+                else:
+                    ingredient = Ingredient(
+                        name=name,
+                        unit_of_measurement=values[0],
+                        unit_cost=values[1] 
+                        )
+                    db.session.add(ingredient)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error occured: {e}")
+
+
+class Recipe(db.Model):
+    __tablename__ = "recipes"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    description = db.Column(db.Text)
+    yield_amount = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+    recipe_ingredients = db.relationship('RecipeIngredient', backref="recipe")
+
+
+class RecipeIngredient(db.Model):
+    __tablename__ = "recipe_ingredients"
+
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.id"))
+    ingredient_id = db.Column(db.Integer, db.ForeignKey("ingredients.id"))
+    quantity = db.Column(db.Float, nullable=False)
+    unit_of_measurement = db.Column(db.String(12))
+    created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
