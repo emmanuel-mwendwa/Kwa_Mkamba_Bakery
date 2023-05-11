@@ -180,10 +180,11 @@ def view_suppliers():
     suppliers = Supplier.query.all()
     return render_template("production/view_suppliers.html", suppliers=suppliers)
 
-@production.route('/view_supplier/<int:id>', methods=["GET", "POST"])
+@production.route('/view_supplier/<int:id>')
 @admin_required
 def view_supplier(id):
-    pass
+    supplier = Supplier.query.get_or_404(id)
+    return render_template("production/view_supplier.html", supplier=supplier)
 
 @production.route('/edit_supplier/<int:id>', methods=["GET", "POST"])
 @admin_required
@@ -220,17 +221,14 @@ def new_supplier_ingredient():
     form = AddSupplierIngredientForm()
 
     if form.validate_on_submit():
-        supplier_id = form.supplier.data
-        ingredients_data = form.ingredients.data
-
-        for ingredient_id in ingredients_data:
-            supplier_ingredient = SupplierIngredient(
-                                supplier_id=supplier_id, 
-                                ingredient_id=ingredient_id
-                                ) 
-            db.session.add(supplier_ingredient)
+        supplier_ingredient = SupplierIngredient(
+                            supplier_id=form.supplier_id.data,
+                            ingredient_id=form.ingredient_id.data,
+                            unit_cost = form.unit_cost.data
+                            ) 
+        db.session.add(supplier_ingredient)
         db.session.commit()
         flash("Supplier Ingredient added successfully", category="success")
         return redirect(url_for('production.view_suppliers'))
     
-    return render_template('production/new_supplier_ingredient.html', form=form)
+    return render_template('production/new_items.html', form=form)

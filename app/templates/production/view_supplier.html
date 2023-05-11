@@ -17,7 +17,6 @@
             <th>Date Added</th>
         </thead>
         <tbody>
-            {% for supplier in suppliers %}
             <tr>
                 <td><a href="{{ url_for('production.view_supplier', id=supplier.id)}}">{{ supplier.name }}</a></td>
                 <td>{{ supplier.phone_no }}</td>
@@ -28,8 +27,6 @@
                 <td><a href="{{ url_for('production.edit_supplier', id=supplier.id)}}">Edit</a></td>
                 <td><a href="{{ url_for('production.delete_supplier', id=supplier.id)}}">Delete</a></td>
             </tr>
-                
-            {% endfor %}
         </tbody>
     </table>
 

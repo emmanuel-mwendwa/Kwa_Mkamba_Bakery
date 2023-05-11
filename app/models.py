@@ -257,6 +257,7 @@ class SupplierIngredient(db.Model):
 
     supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), primary_key=True)
     ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), primary_key=True)
+    unit_cost = db.Column(db.Float, nullable=False)
 
     supplier = db.relationship('Supplier', backref=db.backref('supplier_ingredients', cascade='all, delete-orphan'))
     ingredient = db.relationship('Ingredient', backref=db.backref('supplier_ingredients', cascade='all, delete-orphan'))
@@ -289,7 +290,6 @@ class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     unit_of_measurement = db.Column(db.String(12))
-    unit_cost = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
 
@@ -297,15 +297,15 @@ class Ingredient(db.Model):
     @staticmethod
     def insert_ingredients():
         ingredients = {
-            "Flour": ["Kilograms", 2350],
-            "Saccharin": ["grams", 1500],
-            "Yeast": ["grams", 385],
-            "Salt": ["grams", 60],
-            "Baking Powder": ["grams", 1735],
-            "Cooking Oil": ["Litres", 4350],
-            "Water": ["litres", 20],
-            "Electricity": ["KiloWatts", 32],
-            "Packing Papers": ["Packets", 200]
+            "Flour": ["Kilograms"],
+            "Saccharin": ["grams"],
+            "Yeast": ["grams"],
+            "Salt": ["grams"],
+            "Baking Powder": ["grams"],
+            "Cooking Oil": ["Litres"],
+            "Water": ["litres"],
+            "Electricity": ["KiloWatts"],
+            "Packing Papers": ["Packets"]
         }
         try:
             # iterate over the dictionary to add the ingredients
@@ -316,8 +316,7 @@ class Ingredient(db.Model):
                 else:
                     ingredient = Ingredient(
                         name=name,
-                        unit_of_measurement=values[0],
-                        unit_cost=values[1] 
+                        unit_of_measurement=values[0]
                         )
                     db.session.add(ingredient)
             db.session.commit()
