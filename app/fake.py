@@ -1,7 +1,32 @@
 from random import randint
 from faker import Faker
+from sqlalchemy.exc import IntegrityError
 from . import db
-from .models import Product, ProductionRun
+from .models import User, Product, ProductionRun
+
+def users(count=100):
+    fake = Faker()
+
+    i = 0
+    #Generate fake users
+    while i < count:
+        u = User(email=fake.email(),
+                 username=fake.user_name(),
+                 password="asdf",
+                 confirmed=True,
+                 name=fake.name(),
+                 phone_no=fake.random_number(digits=9),
+                 member_since=fake.past_date()
+                 )
+        db.session.add(u)
+        i += 1
+    with db.session.no_autoflush:
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+
+
 
 def products(num_products=10, num_production_runs=50):
     fake = Faker()

@@ -1,0 +1,21 @@
+:root {
+    --background-orange-color: #a8610f;
+    --text-color: #ffffff;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--background-orange-color);
+    color: var(--text-color);
+}

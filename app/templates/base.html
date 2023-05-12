@@ -7,37 +7,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mkamba - {% block title %} {% endblock %}</title>
 
-    {% block styles %} {% endblock %}
+    {% block styles %} 
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% endblock %}
 </head>
 <body>
 
-    {% block header %} 
+    {% block header %}
     
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('main.index') }}">Home</a></li>
-            {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('main.user', username=current_user.username)}}"> Profile</a></li>
-            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-            <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
-            <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
-            {% else %}
-            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    {% endblock %}
-
-    {% block content %} 
+    <header class="settings-side-form__header--details">
     
-    {% for message in get_flashed_messages() %}
-          {{ message }}
-      {% endfor %}
+        <nav class="settings-side-form__navigation--details">
+            <ul class="settings-side-form__items--details">
+                <li class="company-logo"><a href="{{ url_for('main.index') }}">Home</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.user', username=current_user.username)}}">Profile</a></li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    </header>
+    {% endblock %}  
+
+    {% block content %}
+    
+    <main>
+        <!-- display error or success messages  -->
+        <section class="flashed-messages__section--pop-up">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == "error" %}
+                            {{ message}}
+                        {% else %}
+                            {{ message}}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </section>
+
+        <section class="">
+
+        </section>
+
+    </main>
+    
+    
 
     {% endblock%}
 
-    {% block footer %} {% endblock %}
+    {% block footer %} 
+    
+        <footer class="main-navigation-bar__footer--details">
+            <nav class="main-navigation-bar__nav--details">
+                <ul class="main-navigation-bar__unordered-list--details">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Production</a></li>
+                    <li><a href="#">Sales</a></li>
+                    <li><a href="#">Expenses</a></li>
+                    <li><a href="#">Staff</a></li>
+                </ul>
+            </nav>
+        </footer>
+    
+    {% endblock %}
 
     {% block scripts %}
         {{ moment.include_moment() }}
