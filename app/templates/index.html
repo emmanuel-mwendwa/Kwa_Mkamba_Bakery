@@ -2,6 +2,10 @@
 
 {% block title %} Home {% endblock %}
 
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
 {% block content %}
 {{ super() }}
 
@@ -22,3 +26,7 @@
 </ul>
 
 {% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}

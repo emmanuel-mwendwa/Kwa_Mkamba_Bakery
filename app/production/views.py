@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, request
 from . import production
 from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, EditIngredient, EditSupplier, AddSupplierIngredientForm
 from .. import db
-from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient
+from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient, Recipe, RecipeIngredient
 from ..decorators import admin_required
 
 # Add a new product in the database
@@ -232,3 +232,8 @@ def new_supplier_ingredient():
         return redirect(url_for('production.view_suppliers'))
     
     return render_template('production/new_items.html', form=form)
+
+@production.route("/recipes/new", methods=["GET", "POST"])
+@admin_required
+def create_recipe():
+    pass

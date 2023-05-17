@@ -42,9 +42,13 @@
                 {% if messages %}
                     {% for category, message in messages %}
                         {% if category == "error" %}
+                            <div class="flashed-messages__div--error">
                             {{ message}}
+                            </div>
                         {% else %}
+                            <div class="flashed-messages__div--success">
                             {{ message}}
+                            </div>
                         {% endif %}
                     {% endfor %}
                 {% endif %}

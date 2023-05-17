@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Suppliers {% endblock %}
+{% block title %} {{ supplier.name }} {% endblock %}
 
 {% block styles %} {{ super() }} {% endblock %}
 
@@ -23,6 +23,12 @@
                 <td>{{ supplier.email }}</td>
                 <td>{{ moment(supplier.created_at).format('L') }}</td>
             </tr>
+            {% for ingredient, unit_cost in supplier_ingredients %}
+            <tr>
+                <td>{{ ingredient.name }}</td>
+                <td>{{ unit_cost }}</td>
+            </tr>
+            {% endfor %}
             <tr>
                 <td><a href="{{ url_for('production.edit_supplier', id=supplier.id)}}">Edit</a></td>
                 <td><a href="{{ url_for('production.delete_supplier', id=supplier.id)}}">Delete</a></td>
