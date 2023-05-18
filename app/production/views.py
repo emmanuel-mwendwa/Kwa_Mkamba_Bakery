@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request
 from . import production
-from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, EditIngredient, EditSupplier, AddSupplierIngredientForm
+from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, EditIngredient, EditSupplier, AddSupplierIngredientForm, RecipeForm, RecipeIngredientForm
 from .. import db
 from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient, Recipe, RecipeIngredient
 from ..decorators import admin_required
@@ -10,6 +10,7 @@ from ..decorators import admin_required
 @admin_required
 def new_product():
     title = "New Product"
+    form_title = "New Product"
     form = AddNewProductForm()
     if form.validate_on_submit():
         product = Product.query.filter_by(name=form.name.data).first()
@@ -24,7 +25,7 @@ def new_product():
         db.session.commit()
         flash("Product added successfully", category="success")
         return redirect(url_for("production.view_products"))
-    return render_template("production/new_items.html", form=form, title=title)
+    return render_template("production/new_items.html", form=form, title=title, form_title=form_title)
 
 # View the products in the database
 @production.route('/view_products', methods=["GET", "POST"])
@@ -184,7 +185,11 @@ def view_suppliers():
 @admin_required
 def view_supplier(id):
     supplier = Supplier.query.get_or_404(id)
-    return render_template("production/view_supplier.html", supplier=supplier)
+    supplier_ingredients = db.session.query(Ingredient, SupplierIngredient.unit_cost).\
+                            join(SupplierIngredient).\
+                            filter(SupplierIngredient.supplier_id == supplier.id).\
+                            all()
+    return render_template("production/view_supplier.html", supplier=supplier, supplier_ingredients=supplier_ingredients)
 
 @production.route('/edit_supplier/<int:id>', methods=["GET", "POST"])
 @admin_required
@@ -233,7 +238,40 @@ def new_supplier_ingredient():
     
     return render_template('production/new_items.html', form=form)
 
-@production.route("/recipes/new", methods=["GET", "POST"])
+@production.route("/create_recipe", methods=["GET", "POST"])
 @admin_required
 def create_recipe():
-    pass
+    recipe_form = RecipeForm()
+    ingredient_forms = [RecipeIngredientForm()]
+
+    
+    if recipe_form.validate_on_submit():
+        # Create recipe and recipe ingredients
+        if 'add_ingredient' in request.form:
+            ingredient_forms.append(RecipeIngredientForm())
+        elif 'submit_recipe' in request.form:
+            if all(form.validate() for form in ingredient_forms):
+                recipe = Recipe(
+                    name = recipe_form.name.data,
+                    description = recipe_form.description.data,
+                    yield_amount = recipe_form.yield_amount.data
+                )
+                db.session.add(recipe)
+                db.session.commit()
+
+                db.session.refresh(recipe)
+
+                for form in ingredient_forms:
+                    # if form.ingredient_id.data:
+                    recipe_ingredient = RecipeIngredient(
+                        recipe_id = recipe.id,
+                        ingredient_id = form.ingredient_id.data,
+                        quantity = form.quantity.data,
+                        unit_of_measurement = form.unit_of_measurement.data
+                    )
+                    db.session.add(recipe_ingredient)
+                db.session.commit()
+
+                return redirect(url_for("main.index"))
+    
+    return render_template("production/create_recipe.html", recipe_form=recipe_form, ingredient_forms=ingredient_forms)

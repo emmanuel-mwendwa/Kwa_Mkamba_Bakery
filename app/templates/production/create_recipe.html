@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %} Create Recipe {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }} 
+
+<h1>Create Recipe</h1>
+
+<form method="POST">
+    {{ recipe_form.hidden_tag() }}
+    
+    <div class="form-group">
+      {{ recipe_form.name.label(class="form-label") }}
+      {{ recipe_form.name(class="form-control") }}
+      {% if recipe_form.name.errors %}
+        <ul class="errors">
+          {% for error in recipe_form.name.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    
+    <div class="form-group">
+      {{ recipe_form.description.label(class="form-label") }}
+      {{ recipe_form.description(class="form-control") }}
+      {% if recipe_form.description.errors %}
+        <ul class="errors">
+          {% for error in recipe_form.description.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    
+    <div class="form-group">
+      {{ recipe_form.yield_amount.label(class="form-label") }}
+      {{ recipe_form.yield_amount(class="form-control") }}
+      {% if recipe_form.yield_amount.errors %}
+        <ul class="errors">
+          {% for error in recipe_form.yield_amount.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    
+    <hr>
+    
+    <h2>Recipe Ingredients</h2>
+    
+    <div id="recipe-ingredients">
+      {% for ingredient_form in ingredient_forms %}
+        <div class="recipe-ingredient">
+          {{ ingredient_form.hidden_tag() }}
+          
+          <div class="form-group">
+            {{ ingredient_form.ingredient_id.label(class="form-label") }}
+            {{ ingredient_form.ingredient_id(class="form-control") }}
+            {% if ingredient_form.ingredient_id.errors %}
+              <ul class="errors">
+                {% for error in ingredient_form.ingredient_id.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          
+          <div class="form-group">
+            {{ ingredient_form.quantity.label(class="form-label") }}
+            {{ ingredient_form.quantity(class="form-control") }}
+            {% if ingredient_form.quantity.errors %}
+              <ul class="errors">
+                {% for error in ingredient_form.quantity.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          
+          <div class="form-group">
+            {{ ingredient_form.unit_of_measurement.label(class="form-label") }}
+            {{ ingredient_form.unit_of_measurement(class="form-control") }}
+            {% if ingredient_form.unit_of_measurement.errors %}
+              <ul class="errors">
+                {% for error in ingredient_form.unit_of_measurement.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    
+    <div>
+        <input type="submit" name="add_ingredient" value="Add Ingredient">
+        <input type="submit" name="submit_recipe" value="Submit Recipe">
+    </div>
+  </form>
+
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}

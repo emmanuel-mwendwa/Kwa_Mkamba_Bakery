@@ -29,3 +29,7 @@
 <p><a href="{{ url_for('auth.logout') }}">Log Out</a></p>
 
 {% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}
