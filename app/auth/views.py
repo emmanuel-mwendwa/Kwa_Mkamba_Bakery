@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, request, flash
 from . import auth
 from .. import db
 from .forms import LoginForm, SignUpForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
+from ..main.forms import EditProfileForm
 from ..models import User
 from ..email import send_email
 from flask_login import login_user, logout_user, login_required, current_user
@@ -9,15 +10,22 @@ from flask_login import login_user, logout_user, login_required, current_user
 @auth.route('/signup', methods=["GET", "POST"])
 def signup():
     form = SignUpForm()
-    if form.validate_on_submit():
-        user = User(email=form.email.data, username=form.username.data, password=form.password.data)
+    profile_form = EditProfileForm()
+    if form.validate_on_submit() and profile_form.validate_on_submit():
+        user = User(
+            email=form.email.data.lower(), 
+            username=form.username.data, 
+            password=form.password.data, 
+            name=profile_form.name.data, 
+            phone_no=profile_form.phone_no.data
+            )
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
         send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user=user, token=token)
         flash('A confirmation email has been sent to you.', category='success')
         return redirect(url_for('auth.login'))
-    return render_template('auth/signup.html', form=form)
+    return render_template('auth/signup.html', form=form, profile_form=profile_form)
 
 @auth.route('/login', methods=["GET", "POST"])
 def login():
@@ -54,6 +62,7 @@ def confirm(token):
         flash('The confirmation link is invalid or has expired.')
     return redirect(url_for('main.index'))
 
+# run before everything else in the application
 @auth.before_app_request
 def before_request():
     if current_user.is_authenticated\
@@ -123,7 +132,7 @@ def password_reset(token):
             return redirect(url_for('main.index'))
     return render_template('auth/reset_password.html', form=form)
 
-
+# change email address
 @auth.route('/change_email', methods=['GET', 'POST'])
 @login_required
 def change_email_request():

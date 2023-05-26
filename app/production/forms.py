@@ -8,14 +8,7 @@ class AddNewProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
     price = IntegerField("Product Price", validators=[DataRequired()])
     description = TextAreaField("Description")
-    submit = SubmitField("Add")
-
-
-class EditProductForm(FlaskForm):
-    name = StringField("Product Name", validators=[DataRequired()])
-    price = IntegerField("Product Price", validators=[DataRequired()])
-    description = TextAreaField("Description")
-    submit = SubmitField("Update")
+    submit = SubmitField("Submit")
 
 
 class AddNewProductionRunForm(FlaskForm):

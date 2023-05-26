@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %} Add Product {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<label for="">Product Name: </label> <span>{{ product.name }} </span>
+<br>
+<label for="">Product Price: </label> <span>{{ product.price }} </span>
+<br>
+<label for="">Product Description: </label> <span>{{ product.description }} </span>
+<br>
+<label for="">Created at: </label> <span> {{ moment(product.created_at).format('L') }} </span>
+<br>
+
+
+{% if current_user.can(Permission.MANAGE_PRODUCTS) %}
+<h3><a href="{{ url_for('production.edit_product', id=product.id)}}">Edit</a></h3>
+<h3><a href="{{ url_for('production.delete_product', id=product.id)}}">Delete</a></h3>
+{% endif %}
+
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}
