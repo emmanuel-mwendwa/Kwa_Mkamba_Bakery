@@ -1,14 +1,16 @@
 from flask import render_template, redirect, url_for, flash, request
+from flask_login import login_required
 from . import production
-from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, EditIngredient, EditSupplier, AddSupplierIngredientForm, RecipeForm, RecipeIngredientForm
+from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, EditSupplier, AddSupplierIngredientForm, RecipeForm, RecipeIngredientForm
 from .. import db
-from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient, Recipe, RecipeIngredient
-from ..decorators import admin_required
+from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient, Recipe, RecipeIngredient, Permission
+from ..decorators import admin_required, permission_required
 
 # Add a new product in the database
 @production.route('/new_product', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGE_PRODUCTS)
 def new_product():
+    title = "Add Product"
     product_form = AddNewProductForm()
     if product_form.validate_on_submit():
         # check if a similar product exists
@@ -24,7 +26,7 @@ def new_product():
         db.session.commit()
         flash("Product added successfully", category="success")
         return redirect(url_for("production.view_products"))
-    return render_template("production/products/create_product.html", product_form=product_form)
+    return render_template("production/products/create_product.html", product_form=product_form, title=title)
 
 # View the products in the database
 @production.route('/view_products', methods=["GET", "POST"])
@@ -39,8 +41,9 @@ def view_product(id):
 
 # Edit values of the products in the database
 @production.route('/product/<int:id>', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGE_PRODUCTS)
 def edit_product(id):
+    title = "Edit Product"
     product = Product.query.get_or_404(id)
     product_form = AddNewProductForm()
     if product_form.validate_on_submit():
@@ -54,11 +57,11 @@ def edit_product(id):
     product_form.name.data = product.name
     product_form.price.data = product.price
     product_form.description.data = product.description
-    return render_template("production/products/edit_product.html", product_form=product_form)
+    return render_template("production/products/create_product.html", product_form=product_form, title=title)
 
 # Delete products in the database
 @production.route('/product_delete/<int:id>', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGE_PRODUCTS)
 def delete_product(id):
     product = Product.query.get_or_404(id)
     db.session.delete(product)
@@ -130,48 +133,46 @@ def delete_productionrun(id):
 
 # Add ingredients used in production
 @production.route('/new_ingredient', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGE_RECIPE_DETAILS)
 def new_ingredient():
     title="New Ingredient"
-    form = AddNewIngredient()
-    if form.validate_on_submit():
+    ingredient_form = AddNewIngredient()
+    if ingredient_form.validate_on_submit():
         ingredient = Ingredient(
-            name=form.name.data, 
-            unit_of_measurement=form.measurement.data, 
-            unit_cost=form.unit_cost.data)
+            name=ingredient_form.name.data, 
+            unit_of_measurement=ingredient_form.measurement.data
+            )
         db.session.add(ingredient)
         db.session.commit()
         flash("Ingredient added successfully", category="success")
         return redirect(url_for("production.view_ingredients"))
-    return render_template("production/new_items.html", form=form, title=title)
+    return render_template("production/ingredients/create_ingredient.html", ingredient_form=ingredient_form, title=title)
 
 @production.route("/view_ingredients")
-@admin_required
+@permission_required(Permission.MANAGE_RECIPE_DETAILS)
 def view_ingredients():
     ingredients = Ingredient.query.all()
     return render_template("production/view_ingredients.html", ingredients=ingredients)
 
 @production.route('/edit_ingredient/<int:id>', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGE_RECIPE_DETAILS)
 def edit_ingredient(id):
     title="Edit Ingredient"
-    form = EditIngredient()
+    ingredient_form = AddNewIngredient()
     ingredient = Ingredient.query.get_or_404(id)
-    if form.validate_on_submit():
-        ingredient.name = form.name.data
-        ingredient.unit_of_measurement = form.measurement.data
-        ingredient.unit_cost = form.unit_cost.data
+    if ingredient_form.validate_on_submit():
+        ingredient.name = ingredient_form.name.data
+        ingredient.unit_of_measurement = ingredient_form.measurement.data
         db.session.add(ingredient)
         db.session.commit()
         flash("Ingredient updated successfully", category="success")
         return redirect(url_for("production.view_ingredients"))
-    form.name.data = ingredient.name
-    form.measurement.data = ingredient.unit_of_measurement
-    form.unit_cost.data = ingredient.unit_cost
-    return render_template("production/edit_items.html", form=form, title=title)
+    ingredient_form.name.data = ingredient.name
+    ingredient_form.measurement.data = ingredient.unit_of_measurement
+    return render_template("production/ingredients/create_ingredient.html", ingredient_form=ingredient_form, title=title)
 
 @production.route('/delete_ingredient/<int:id>', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGE_RECIPE_DETAILS)
 def delete_ingredient(id):
     ingredient = Ingredient.query.get_or_404(id)
     db.session.delete(ingredient)
@@ -179,7 +180,7 @@ def delete_ingredient(id):
     return redirect(url_for("production.view_ingredients"))
 
 @production.route('/new_supplier', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGER)
 def new_supplier():
     title="New Supplier"
     form = AddNewSupplier()
@@ -196,13 +197,13 @@ def new_supplier():
     return render_template("production/new_items.html", form=form, title=title)
 
 @production.route('/view_suppliers')
-@admin_required
+@permission_required(Permission.MANAGER)
 def view_suppliers():
     suppliers = Supplier.query.all()
     return render_template("production/view_suppliers.html", suppliers=suppliers)
 
 @production.route('/view_supplier/<int:id>')
-@admin_required
+@permission_required(Permission.MANAGER)
 def view_supplier(id):
     supplier = Supplier.query.get_or_404(id)
     supplier_ingredients = db.session.query(Ingredient, SupplierIngredient.unit_cost).\
@@ -212,7 +213,7 @@ def view_supplier(id):
     return render_template("production/view_supplier.html", supplier=supplier, supplier_ingredients=supplier_ingredients)
 
 @production.route('/edit_supplier/<int:id>', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGER)
 def edit_supplier(id):
     title = "Edit Supplier"
     form = EditSupplier()
@@ -233,7 +234,7 @@ def edit_supplier(id):
     return render_template("production/edit_items.html", form=form, title=title)
 
 @production.route('/delete_supplier/<int:id>', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGER)
 def delete_supplier(id):
     supplier = Supplier.query.get_or_404(id)
     db.session.delete(supplier)
@@ -241,7 +242,7 @@ def delete_supplier(id):
     return redirect(url_for("production.view_suppliers"))
 
 @production.route('/new_supplier_ingredient', methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGER)
 def new_supplier_ingredient():
     title = "New Supplier Ingredient"
     form = AddSupplierIngredientForm()
@@ -260,7 +261,7 @@ def new_supplier_ingredient():
     return render_template('production/new_items.html', form=form)
 
 @production.route("/create_recipe", methods=["GET", "POST"])
-@admin_required
+@permission_required(Permission.MANAGE_RECIPE_DETAILS)
 def create_recipe():
     recipe_form = RecipeForm()
     ingredient_forms = [RecipeIngredientForm()]

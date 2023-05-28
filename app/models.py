@@ -63,7 +63,7 @@ class Role(db.Model):
         roles = {
             'User': [Permission.VIEW_PRODUCTS],
 
-            'Baker': [Permission.VIEW_RECIPE_DETAILS, Permission.MANAGE_RECIPE_DETAILS],
+            'Baker': [Permission.VIEW_RECIPE_DETAILS, Permission.MANAGE_RECIPE_DETAILS, Permission.VIEW_PRODUCTS],
 
             'Sales_Associate': [Permission.VIEW_SALES_REPORT, Permission.MANAGE_SALES_REPORT, Permission.VIEW_INVENTORY, Permission.VIEW_PRODUCTS],
 

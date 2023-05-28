@@ -16,7 +16,7 @@ class AddNewProductionRunForm(FlaskForm):
     flour_kneaded = IntegerField('Flour Kneaded')
     oil_used = IntegerField('Oil used')
     quantity = IntegerField('Quantity')
-    submit = SubmitField('Add')
+    submit = SubmitField('Submit')
 
     # adding choices to the related fields
     def __init__(self, *args,**kwargs):
@@ -41,22 +41,14 @@ class EditProductionRunForm(FlaskForm):
 class AddNewIngredient(FlaskForm):
     name = StringField("Ingredient Name", validators=[DataRequired()])
     measurement = StringField("Unit of Measurement")
-    unit_cost = IntegerField("Unit Cost", validators=[DataRequired()])
-    submit = SubmitField("Add")
+    submit = SubmitField("Submit")
 
 
 class AddNewSupplier(FlaskForm):
     name = StringField("Supplier Name", validators=[DataRequired()])
     phone_no = StringField("Phone Number", validators=[DataRequired()])
     email = StringField("Email")
-    submit = SubmitField("Add")
-
-
-class EditIngredient(FlaskForm):
-    name = StringField("Ingredient Name", validators=[DataRequired()])
-    measurement = StringField("Unit of Measurement")
-    unit_cost = IntegerField("Unit Cost", validators=[DataRequired()])
-    submit = SubmitField("Update")
+    submit = SubmitField("Submit")
 
 
 class EditSupplier(FlaskForm):
@@ -75,7 +67,7 @@ class AddSupplierIngredientForm(FlaskForm):
     supplier_id = SelectField('Supplier', coerce=int, validators=[DataRequired()])
     ingredient_id = SelectField('Ingredient', coerce=int)
     unit_cost = FloatField('Unit Cost')
-    submit = SubmitField('Add')
+    submit = SubmitField('Submit')
 
     # adding choices to the related fields
     def __init__(self, *args,**kwargs):
