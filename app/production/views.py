@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from . import production
-from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, EditSupplier, AddSupplierIngredientForm, RecipeForm, RecipeIngredientForm
+from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductionRunForm, AddNewIngredient, AddNewSupplier, AddSupplierIngredientForm, RecipeForm, RecipeIngredientForm
 from .. import db
 from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient, Recipe, RecipeIngredient, Permission
 from ..decorators import admin_required, permission_required
@@ -193,24 +193,24 @@ def delete_ingredient(id):
 @permission_required(Permission.MANAGER)
 def new_supplier():
     title="New Supplier"
-    form = AddNewSupplier()
-    if form.validate_on_submit():
+    supplier_form = AddNewSupplier()
+    if supplier_form.validate_on_submit():
         supplier = Supplier(
-            name=form.name.data, 
-            phone_no=form.phone_no.data, 
-            email=form.email.data
+            name=supplier_form.name.data, 
+            phone_no=supplier_form.phone_no.data, 
+            email=supplier_form.email.data
             )
         db.session.add(supplier)
         db.session.commit()
         flash("Supplier added successfully", category="success")
         return redirect(url_for("production.view_suppliers"))
-    return render_template("production/new_items.html", form=form, title=title)
+    return render_template("production/suppliers/create_supplier.html", supplier_form=supplier_form, title=title)
 
 @production.route('/view_suppliers')
 @permission_required(Permission.MANAGER)
 def view_suppliers():
     suppliers = Supplier.query.all()
-    return render_template("production/view_suppliers.html", suppliers=suppliers)
+    return render_template("production/suppliers/view_suppliers.html", suppliers=suppliers)
 
 @production.route('/view_supplier/<int:id>')
 @permission_required(Permission.MANAGER)
@@ -220,28 +220,28 @@ def view_supplier(id):
                             join(SupplierIngredient).\
                             filter(SupplierIngredient.supplier_id == supplier.id).\
                             all()
-    return render_template("production/view_supplier.html", supplier=supplier, supplier_ingredients=supplier_ingredients)
+    return render_template("production/suppliers/view_supplier.html", supplier=supplier, supplier_ingredients=supplier_ingredients)
 
 @production.route('/edit_supplier/<int:id>', methods=["GET", "POST"])
 @permission_required(Permission.MANAGER)
 def edit_supplier(id):
     title = "Edit Supplier"
-    form = EditSupplier()
+    supplier_form = AddNewSupplier()
     supplier = Supplier.query.get_or_404(id)
-    if form.validate_on_submit():
-        supplier.name = form.name.data
-        supplier.phone_no = form.phone_no.data
-        supplier.email = form.email.data
+    if supplier_form.validate_on_submit():
+        supplier.name = supplier_form.name.data
+        supplier.phone_no = supplier_form.phone_no.data
+        supplier.email = supplier_form.email.data
         # Call the update_timestamp method to update the updated_at
         Supplier.update_timestamp(None, None, supplier)
         db.session.add(supplier)
         db.session.commit()
         flash("Supplier updated successfully", category="success")
         return redirect(url_for("production.view_suppliers"))
-    form.name.data = supplier.name
-    form.phone_no.data = supplier.phone_no
-    form.email.data = supplier.email
-    return render_template("production/edit_items.html", form=form, title=title)
+    supplier_form.name.data = supplier.name
+    supplier_form.phone_no.data = supplier.phone_no
+    supplier_form.email.data = supplier.email
+    return render_template("production/suppliers/create_supplier.html", supplier_form=supplier_form, title=title)
 
 @production.route('/delete_supplier/<int:id>', methods=["GET", "POST"])
 @permission_required(Permission.MANAGER)

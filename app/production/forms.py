@@ -51,13 +51,6 @@ class AddNewSupplier(FlaskForm):
     submit = SubmitField("Submit")
 
 
-class EditSupplier(FlaskForm):
-    name = StringField("Supplier Name", validators=[DataRequired()])
-    phone_no = StringField("Phone Number", validators=[DataRequired()])
-    email = StringField("Email")
-    submit = SubmitField("Update")
-
-
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
