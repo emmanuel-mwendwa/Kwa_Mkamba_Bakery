@@ -152,7 +152,17 @@ def new_ingredient():
 @permission_required(Permission.MANAGE_RECIPE_DETAILS)
 def view_ingredients():
     ingredients = Ingredient.query.all()
-    return render_template("production/view_ingredients.html", ingredients=ingredients)
+    return render_template("production/ingredients/view_ingredients.html", ingredients=ingredients)
+
+@production.route("/view_ingredient/<int:id>", methods=["GET"])
+@permission_required(Permission.MANAGE_RECIPE_DETAILS)
+def view_ingredient(id):
+    ingredient = Ingredient.query.get_or_404(id)
+    suppliers = Supplier.query.join(Supplier.supplier_ingredients)\
+                                .join(Ingredient, SupplierIngredient.ingredient)\
+                                .filter(Ingredient.name == ingredient.name)\
+                                .all()
+    return render_template("production/ingredients/view_ingredient.html", ingredient=ingredient, suppliers=suppliers)
 
 @production.route('/edit_ingredient/<int:id>', methods=["GET", "POST"])
 @permission_required(Permission.MANAGE_RECIPE_DETAILS)

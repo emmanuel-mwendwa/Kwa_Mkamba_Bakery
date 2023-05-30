@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %} {{ ingredient.name }} {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<label for="">Ingredient Name: </label> <span>{{ ingredient.name }} </span>
+<br>
+
+<table>
+    <thead>
+        <th>Supplier Name</th>
+        <th>Unit Cost</th>
+    </thead>
+    <tbody>
+        {% for supplier in suppliers %}
+        <tr>
+            <td>{{ supplier.name }}</td>
+            <td>{{ supplier.supplier_ingredients[0].unit_cost }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% if current_user.can(Permission.MANAGE_PRODUCTS) %}
+<h3><a href="#">Edit</a></h3>
+<h3><a href="#">Delete</a></h3>
+{% endif %}
+
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}
