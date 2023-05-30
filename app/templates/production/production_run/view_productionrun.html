@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %} View Production Run {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<label for="">Product Name: </label> <span>{{ product.name }} </span>
+<br>
+<label for="">Packets Produced: </label> <span>{{ productionrun.quantity }} </span>
+<br>
+<label for="">Flour Kneaded: </label> <span>{{ productionrun.flour_kneaded }} </span>
+<br>
+<label for="">Oil Used: </label> <span> {{ productionrun.oil_used }} </span>
+<br>
+
+
+{% if current_user.can(Permission.MANAGE_PRODUCTS) %}
+<h3><a href="{{ url_for('production.edit_productionrun', id=productionrun.id)}}">Edit</a></h3>
+<h3><a href="{{ url_for('production.delete_productionrun', id=productionrun.id)}}">Delete</a></h3>
+{% endif %}
+
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}

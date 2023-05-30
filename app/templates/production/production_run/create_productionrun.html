@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<h1>{{ title }}</h1>
+
+<form action="" method="POST">
+    {{ production_run_form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ production_run_form.product_id.label(class="form-label") }}
+        {{ production_run_form.product_id(class="form-control") }}
+        {% if production_run_form.product_id.errors %}
+            <ul class="errors">
+                {% for error in production_run_form.product_id.errors %}
+                    <li>{{ errror }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ production_run_form.flour_kneaded.label(class="form-label") }}
+        {{ production_run_form.flour_kneaded(class="form-control") }}
+        {% if production_run_form.flour_kneaded.errors %}
+            <ul class="errors">
+                {% for error in production_run_form.flour_kneaded.errors %}
+                    <li>{{ errror }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ production_run_form.oil_used.label(class="form-label") }}
+        {{ production_run_form.oil_used(class="form-control") }}
+        {% if production_run_form.oil_used.errors %}
+            <ul class="errors">
+                {% for error in production_run_form.oil_used.errors %}
+                    <li>{{ errror }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ production_run_form.quantity.label(class="form-label") }}
+        {{ production_run_form.quantity(class="form-control") }}
+        {% if production_run_form.quantity.errors %}
+            <ul class="errors">
+                {% for error in production_run_form.quantity.errors %}
+                    <li>{{ errror }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div>
+        {{ production_run_form.submit() }}
+    </div>
+
+</form>
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}

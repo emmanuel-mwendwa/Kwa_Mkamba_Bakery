@@ -72,20 +72,20 @@ def delete_product(id):
 @production.route('/new_productionrun', methods=["GET", "POST"])
 @admin_required 
 def new_productionrun():
-    title="New ProductionRun"
-    form = AddNewProductionRunForm()
-    if form.validate_on_submit():
+    title="New Production Run"
+    production_run_form = AddNewProductionRunForm()
+    if production_run_form.validate_on_submit():
         new_productionrun = ProductionRun(
-            product_id=form.product_id.data, 
-            quantity=form.quantity.data, 
-            flour_kneaded=form.flour_kneaded.data, 
-            oil_used=form.oil_used.data
+            product_id=production_run_form.product_id.data, 
+            quantity=production_run_form.quantity.data, 
+            flour_kneaded=production_run_form.flour_kneaded.data, 
+            oil_used=production_run_form.oil_used.data
             )
         db.session.add(new_productionrun)
         db.session.commit()
         flash("Production run added successfully", category="success")
         return redirect(url_for("production.view_productionruns"))
-    return render_template("production/new_items.html", form=form, title=title)
+    return render_template("production/prodution_run/create_productionrun.html", production_run_form=production_run_form, title=title)
 
 # View production runs
 @production.route('/view_productionruns', methods=["GET", "POST"])
@@ -98,29 +98,36 @@ def view_productionruns():
                         order_by(ProductionRun.created_at.desc())
     pagination = query.paginate(page=page, per_page=per_page)
     productionruns = pagination.items
-    return render_template("production/view_productionruns.html", productionruns=productionruns, pagination=pagination)
+    return render_template("production/production_run/view_productionruns.html", productionruns=productionruns, pagination=pagination)
+
+@production.route('/view_productionrun/<int:id>', methods=["GET"])
+@admin_required
+def view_productionrun(id):
+    productionrun = ProductionRun.query.get_or_404(id)
+    product = Product.query.get(productionrun.product_id)
+    return render_template("production/production_run/view_productionrun.html", productionrun=productionrun, product=product)
 
 # Edit production runs
 @production.route('/productionrun/<int:id>', methods=["GET", "POST"])
 @admin_required
 def edit_productionrun(id):
-    title="Edit Items"
+    title="Edit Production Run"
     productionrun = ProductionRun.query.get_or_404(id)
-    form = EditProductionRunForm()
-    if form.validate_on_submit():
-        productionrun.product_id = form.product_id.data
-        productionrun.quantity = form.quantity.data
-        productionrun.flour_kneaded = form.flour_kneaded.data
-        productionrun.oil_used = form.oil_used.data
+    production_run_form = AddNewProductionRunForm()
+    if production_run_form.validate_on_submit():
+        productionrun.product_id = production_run_form.product_id.data
+        productionrun.quantity = production_run_form.quantity.data
+        productionrun.flour_kneaded = production_run_form.flour_kneaded.data
+        productionrun.oil_used = production_run_form.oil_used.data
         db.session.add(productionrun)
         db.session.commit()
         flash("Production run edited successfully", category="success")
         return redirect(url_for("production.view_productionruns"))
-    form.product_id.data = productionrun.product_id
-    form.quantity.data = productionrun.quantity
-    form.flour_kneaded.data = productionrun.flour_kneaded
-    form.oil_used.data = productionrun.oil_used
-    return render_template("production/edit_items.html", form=form, title=title)
+    production_run_form.product_id.data = productionrun.product_id
+    production_run_form.quantity.data = productionrun.quantity
+    production_run_form.flour_kneaded.data = productionrun.flour_kneaded
+    production_run_form.oil_used.data = productionrun.oil_used
+    return render_template("production/production_run/create_productionrun.html", production_run_form=production_run_form, title=title)
 
 # Delete products in the database
 @production.route('/delete_productionrun/<int:id>', methods=["GET", "POST"])

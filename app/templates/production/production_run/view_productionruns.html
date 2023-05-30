@@ -21,15 +21,11 @@
         <tbody>
             {% for productionrun, product_name in productionruns %}
             <tr>
-                <td>{{ product_name }}</td>
+                <td><a href="{{ url_for('production.view_productionrun', id=productionrun.id) }}">{{ product_name }}</a></td>
                 <td>{{ productionrun.flour_kneaded}}</td>
                 <td>{{ productionrun.oil_used }}</td>
                 <td>{{ productionrun.quantity }}</td>
                 <td>{{ moment(productionrun.created_at).format('L') }}</td>
-            </tr>
-            <tr>
-                <td><a href="{{ url_for('production.edit_productionrun', id=productionrun.id)}}">Edit</a></td>
-                <td><a href="{{ url_for('production.delete_productionrun', id=productionrun.id)}}">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>
