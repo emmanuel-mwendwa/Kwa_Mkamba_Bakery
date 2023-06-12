@@ -37,7 +37,8 @@ def view_products():
 @production.route('/view_product/<int:id>')
 def view_product(id):
     product = Product.query.get_or_404(id)
-    return render_template("production/products/view_product.html", product=product)
+    production_runs = product.production_runs.all()
+    return render_template("production/products/view_product.html", product=product, production_runs=production_runs)
 
 # Edit values of the products in the database
 @production.route('/product/<int:id>', methods=["GET", "POST"])
@@ -85,7 +86,7 @@ def new_productionrun():
         db.session.commit()
         flash("Production run added successfully", category="success")
         return redirect(url_for("production.view_productionruns"))
-    return render_template("production/prodution_run/create_productionrun.html", production_run_form=production_run_form, title=title)
+    return render_template("production/production_run/create_productionrun.html", production_run_form=production_run_form, title=title)
 
 # View production runs
 @production.route('/view_productionruns', methods=["GET", "POST"])
@@ -209,6 +210,7 @@ def new_supplier():
             )
         db.session.add(supplier)
         db.session.commit()
+        new_supplier_ingredient()
         flash("Supplier added successfully", category="success")
         return redirect(url_for("production.view_suppliers"))
     return render_template("production/suppliers/create_supplier.html", supplier_form=supplier_form, title=title)

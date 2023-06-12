@@ -18,6 +18,24 @@
 <label for="">Created at: </label> <span> {{ moment(product.created_at).format('L') }} </span>
 <br>
 
+<h2>Production Runs</h2>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Flour Kneaded</th>
+        <th>Oil Used</th>
+        <th>Quantity</th>
+    </tr>
+    {% for production_run in production_runs %}
+    <tr>
+        <td>{{ moment(production_run.created_at).format('L') }}</td>
+        <td>{{ production_run.flour_kneaded }}</td>
+        <td>{{ production_run.oil_used }}</td>
+        <td>{{ production_run.quantity }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
 
 {% if current_user.can(Permission.MANAGE_PRODUCTS) %}
 <h3><a href="{{ url_for('production.edit_product', id=product.id)}}">Edit</a></h3>
