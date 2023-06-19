@@ -347,3 +347,60 @@ class RecipeIngredient(db.Model):
     unit_of_measurement = db.Column(db.String(12))
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+
+
+class Customer(db.Model):
+    __tablename__ = "customers"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128))
+    email = db.Column(db.String(128))
+    phone_no = db.Column(db.Integer)
+    mpesa_agent_name = db.Column(db.String(128))
+
+
+class Order(db.Model):
+    __tablename__ = "orders"
+
+    id = db.Column(db.Integer, primary_key=True)
+    orderDate = db.Column(db.DateTime())
+    notes = db.Column(db.Text)
+    customerId = db.relationship('Customer', db.ForeignKey('customers.id'))
+
+
+class OrderDetail(db.Model):
+    __tablename__ = "orderdetails"
+
+    id = db.Column(db.Integer, primary_key=True)
+    orderId = db.relationship('Order', db.ForeignKey('orders.id'))
+    productId = db.relationship('Product', db.ForeignKey('products.id'))
+    quantity = db.Column(db.Float)
+
+
+class Sale(db.Model):
+    __tablename__ = "sales"
+
+    id = db.Column(db.Integer, primary_key=True)
+    saleDate = db.Column(db.DateTime())
+    totalAmount = db.Column(db.Float)
+    customerId = db.relationship('Customer', db.ForeignKey("customers.id"))
+    paymentMethod = db.Column(db.String(28))
+
+
+class PaymentMethod(db.Model):
+    __tablename__ = "payment_methods"
+
+    id = db.Column(db.Integer, primary_key=True)
+    method_name =  db.Column(db.String(28))
+    details = db.Column(db.String(56))
+
+
+class SalesReport(db.Model):
+    __tablename__ = "sales_reports"
+
+    id = db.Column(db.Integer, primary_key=True)
+    report_date = db.Column(db.DateTime())
+    report_type = db.Column(db.String(28))
+    total_sales = db.Column(db.Float)
+    top_selling_products = db.Column(db.String(56))
+    customer_sales_summary = db.Column(db.Text())

@@ -6,6 +6,11 @@ from .. import db
 from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient, Recipe, RecipeIngredient, Permission
 from ..decorators import admin_required, permission_required
 
+
+@production.route('/')
+def production_home():
+    return "Production Page"
+
 # Add a new product in the database
 @production.route('/new_product', methods=["GET", "POST"])
 @permission_required(Permission.MANAGE_PRODUCTS)

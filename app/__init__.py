@@ -36,4 +36,7 @@ def create_app(config_name):
     from .production import production as production_blueprint
     app.register_blueprint(production_blueprint, url_prefix='/production')
 
+    from .sales import sales as sales_blueprint
+    app.register_blueprint(sales_blueprint, url_prefix="/sales")
+
     return app
