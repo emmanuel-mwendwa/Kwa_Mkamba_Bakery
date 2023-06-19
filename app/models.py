@@ -404,3 +404,24 @@ class SalesReport(db.Model):
     total_sales = db.Column(db.Float)
     top_selling_products = db.Column(db.String(56))
     customer_sales_summary = db.Column(db.Text())
+
+
+class Dispatch(db.Model):
+    __tablename__ = "dispatch"
+
+    id = db.Column(db.Integer, primary_key=True)
+    dispatch_date = db.Column(db.DateTime())
+    sales_associate_id = db.Column(db.Integer)
+    product_id = db.Column(db.Integer)
+    quantity = db.Column(db.Float)
+
+
+class Return(db.Model):
+    __tablename__ = "returns"
+
+    id = db.Column(db.Integer, primary_key=True)
+    return_date = db.Column(db.DateTime())
+    sales_associate_id = db.Column(db.Integer)
+    dispatch_id = db.Column(db.Integer)
+    product_id = db.Column(db.Integer)
+    quantity = db.Column(db.Float)
