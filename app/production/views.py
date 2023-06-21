@@ -9,7 +9,7 @@ from ..decorators import admin_required, permission_required
 
 @production.route('/')
 def production_home():
-    return "Production Page"
+    return render_template("production/production.html")
 
 # Add a new product in the database
 @production.route('/new_product', methods=["GET", "POST"])
