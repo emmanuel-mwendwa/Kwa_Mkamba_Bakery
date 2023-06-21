@@ -1,7 +1,7 @@
 from . import sales
 
 @sales.route("/")
-def sales():
+def sales_page():
     return "Sales Page"
 
 @sales.route("/new_customer")

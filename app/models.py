@@ -238,6 +238,7 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     production_runs = db.relationship('ProductionRun', backref='production', lazy='dynamic')
+    order_details = db.relationship('OrderDetail', backref='orderdetails')
 
 
 class ProductionRun(db.Model):
@@ -352,53 +353,56 @@ class RecipeIngredient(db.Model):
 class Customer(db.Model):
     __tablename__ = "customers"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128))
-    email = db.Column(db.String(128))
-    phone_no = db.Column(db.Integer)
-    mpesa_agent_name = db.Column(db.String(128))
+    cust_id = db.Column(db.Integer, primary_key=True)
+    cust_name = db.Column(db.String(128))
+    cust_email = db.Column(db.String(128))
+    cust_phone_no = db.Column(db.Integer)
+    cust_mpesa_agent_name = db.Column(db.String(128))
+    cust_orders = db.relationship('Order', backref="order")
+    cust_sales = db.relationship('Sale', backref="sales")
 
 
 class Order(db.Model):
     __tablename__ = "orders"
 
-    id = db.Column(db.Integer, primary_key=True)
-    orderDate = db.Column(db.DateTime())
-    notes = db.Column(db.Text)
-    customerId = db.relationship('Customer', db.ForeignKey('customers.id'))
+    order_id = db.Column(db.Integer, primary_key=True)
+    order_date = db.Column(db.DateTime())
+    order_notes = db.Column(db.Text)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.cust_id'))
+    order_details = db.relationship('OrderDetail', backref="orderdetail")
 
 
 class OrderDetail(db.Model):
-    __tablename__ = "orderdetails"
+    __tablename__ = "order_details"
 
-    id = db.Column(db.Integer, primary_key=True)
-    orderId = db.relationship('Order', db.ForeignKey('orders.id'))
-    productId = db.relationship('Product', db.ForeignKey('products.id'))
+    order_detail_id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     quantity = db.Column(db.Float)
 
 
 class Sale(db.Model):
     __tablename__ = "sales"
 
-    id = db.Column(db.Integer, primary_key=True)
-    saleDate = db.Column(db.DateTime())
-    totalAmount = db.Column(db.Float)
-    customerId = db.relationship('Customer', db.ForeignKey("customers.id"))
-    paymentMethod = db.Column(db.String(28))
+    sales_id = db.Column(db.Integer, primary_key=True)
+    sale_date = db.Column(db.DateTime())
+    sales_total_amount = db.Column(db.Float)
+    customer_id = db.Column(db.Integer, db.ForeignKey("customers.cust_id"))
+    payment_method = db.Column(db.String(28))
 
 
 class PaymentMethod(db.Model):
     __tablename__ = "payment_methods"
 
-    id = db.Column(db.Integer, primary_key=True)
+    method_id = db.Column(db.Integer, primary_key=True)
     method_name =  db.Column(db.String(28))
-    details = db.Column(db.String(56))
+    method_details = db.Column(db.String(56))
 
 
 class SalesReport(db.Model):
     __tablename__ = "sales_reports"
 
-    id = db.Column(db.Integer, primary_key=True)
+    report_id = db.Column(db.Integer, primary_key=True)
     report_date = db.Column(db.DateTime())
     report_type = db.Column(db.String(28))
     total_sales = db.Column(db.Float)
@@ -409,7 +413,7 @@ class SalesReport(db.Model):
 class Dispatch(db.Model):
     __tablename__ = "dispatch"
 
-    id = db.Column(db.Integer, primary_key=True)
+    dispatch_id = db.Column(db.Integer, primary_key=True)
     dispatch_date = db.Column(db.DateTime())
     sales_associate_id = db.Column(db.Integer)
     product_id = db.Column(db.Integer)
