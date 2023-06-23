@@ -29,7 +29,8 @@ def new_customer():
 
 @sales.route("/view_customers")
 def view_customers():
-    return "View Customers"
+    customers = Customer.query.all()
+    return render_template("sales/customer/view_customers.html", customers=customers)
 
 @sales.route("/view_customer/<int:id>")
 def view_customer(id):
@@ -37,6 +38,7 @@ def view_customer(id):
 
 @sales.route("/edit_customer/<int:id>", methods=["GET", "POST"])
 def edit_customer(id):
+    title = "Edit Customer"
     customer = Customer.query.get_or_404(id)
     customer_form = AddNewCustomerForm()
     if customer_form.validate_on_submit():
@@ -48,9 +50,9 @@ def edit_customer(id):
         db.session.add(customer)
         db.session.commit()
         flash("Customer added successfully", category="success")
-        return "Edit Customer"
+        return "Customer editted successfully"
     customer_form.cust_name.data = customer.cust_name
     customer_form.cust_email.data = customer.cust_email
     customer_form.cust_phone_no.data = customer.cust_phone_no
-    customer_form.mpesa_agent_name.data = customer.cust_mpesa_agent_name
-    return "Edit Customer"
+    customer_form.cust_mpesa_agent_name.data = customer.cust_mpesa_agent_name
+    return render_template("sales/customer/new_customer.html", customer_form=customer_form, title=title)
