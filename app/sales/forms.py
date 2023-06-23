@@ -8,7 +8,7 @@ class AddNewCustomerForm(FlaskForm):
     cust_name = StringField("Customer Name: ", validators=[DataRequired(), Length(0, 64), Regexp('^[A-Za-z ]*$',0, 'Names can only contain letters and spaces')])
     cust_email = StringField("Customer Email: ", validators=[DataRequired(), Length(1, 64), Email()])
     cust_phone_no = StringField('Phone Number: ', validators=[Length(0, 13), Regexp('^[0-9+]*$', 0, 'Phonw number can only contain numbers')])
-    mpesa_agent_name = StringField("Mpesa Name: ", validators=[])
+    cust_mpesa_agent_name = StringField("Mpesa Name: ", validators=[])
     submit = SubmitField("Submit")
 
 
