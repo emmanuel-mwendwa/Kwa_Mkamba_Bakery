@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} View Customer {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<label for="">Customer Name: </label> <span>{{ customer.cust_name }} </span>
+<br>
+<label for="">Customer Email: </label> <span>{{ customer.cust_email }} </span>
+<br>
+<label for="">Customer Phone No: </label> <span>{{ customer.cust_phone_no }} </span>
+<br>
+<label for="">M-Pesa Agent: </label> <span> {{ customer.cust_mpesa_agent_name }} </span>
+<br>
+
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}

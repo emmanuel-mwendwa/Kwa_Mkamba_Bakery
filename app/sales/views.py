@@ -34,7 +34,8 @@ def view_customers():
 
 @sales.route("/view_customer/<int:id>")
 def view_customer(id):
-    return "View Customer"
+    customer = Customer.query.get_or_404(id)
+    return render_template("sales/customer/view_customer.html", customer=customer)
 
 @sales.route("/edit_customer/<int:id>", methods=["GET", "POST"])
 def edit_customer(id):
