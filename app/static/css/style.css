@@ -1,5 +1,6 @@
 :root {
     --background-orange-color: #a8610f;
+    --backgroud-lighter-orange-color: #e2820c;
     --text-color: #ffffff;
 }
 
@@ -20,7 +21,32 @@ body {
     color: var(--text-color);
 }
 
+.production-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+}
+
+.main-navigation-bar__footer--details {
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    background-color: var(--backgroud-lighter-orange-color);
+    width: 100%;
+}
+
 .main-navigation-bar__unordered-list--details {
-    display: flex;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    text-align: center;
+    gap: 1rem;
+}
+
+.main-navigation-bar__unordered-list--details li {
+    list-style-type: none;
+}
+
+.main-navigation-bar__unordered-list--details li a {
+    text-decoration: none;
+    font-size: 22px;
 }
