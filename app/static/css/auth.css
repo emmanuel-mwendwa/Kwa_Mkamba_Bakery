@@ -1,0 +1,62 @@
+:root {
+    --background-orange-color: #a8610f;
+    --backgroud-lighter-orange-color: #e2820c;
+    --text-color: #ffffff;
+}
+
+* { 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+form {
+    display: grid;
+    justify-content: center;
+    gap: 1em;
+    width: 100%;
+}
+
+.company-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+    height: 150px;
+}
+
+form .form-group input {
+    font-size: 18px;
+    border-radius: 10px;
+    width: 100%;
+    height: 40px;
+}
+
+.new-user__div {
+    display: grid;
+    border: 1px solid black;
+    background-color: white;
+    justify-content: center;
+    border-radius: 10px;
+    height: 40px;
+    width: 100%;
+}
+
+.new-user__div a {
+    margin-top: 6px;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bolder;
+}
+
+.important-links {
+    display: grid;
+    gap: 1em;
+    text-align: center;
+}
+
+.important-links a {
+    text-decoration: none;
+    font-size: 20px;
+}

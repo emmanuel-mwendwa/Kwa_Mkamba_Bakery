@@ -2,17 +2,35 @@
 
 {% block title %} Log In {% endblock %}
 
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">
+{% endblock %}
+
 {% block content %}
 {{ super() }}
 
-<p>
-    New user?
-    <a href="{{ url_for('auth.signup') }}"> Sign Up</a>
-</p>
 <form action="" method="POST">
-    {{ wtf.quick_form(form) }}
-</form>
 
-<p><a href="{{ url_for('auth.password_reset_request') }}">Forgot your password?</a></p>
+    {{ login_form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ login_form.email(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ login_form.password(class="form-control") }}
+    </div>
+    <div class="important-links">
+        <a href="{{ url_for('auth.password_reset_request') }}">Forgot your password?</a>
+        <div class="form-group">
+            {{ login_form.submit() }}
+        </div>
+        <p> OR </p>
+        <div class="new-user__div">
+            <a href="{{ url_for('auth.signup') }}"> Sign Up</a>
+        </div>
+    </div>
+    
+</form>
 
 {% endblock %}

@@ -4,7 +4,7 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm
 from .. import db
 from ..models import User, Role
-from ..decorators import admin_required
+from ..decorators import admin_required, permission_required
 
 @main.route('/home')
 @main.route('/')
@@ -13,7 +13,6 @@ def index():
 
 @main.route('/user/<username>')
 @login_required
-@admin_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     if user == current_user:

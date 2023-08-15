@@ -22,7 +22,7 @@
         <nav class="settings-side-form__navigation--details">
             <!-- a header with the users profile pic or initials and a notifications bell and pie chart for graphs -->
             <ul class="settings-side-form__items--details">
-                <li class="company-logo"><img src="../static/images/" alt="Initials" /></li>
+                <li class="user-profile-initials"><img src="../static/images/" alt="Initials" /></li>
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('main.user', username=current_user.username)}}">Profile</a></li>
                 <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
@@ -91,5 +91,6 @@
     {% block scripts %}
         {{ moment.include_moment() }}
     {% endblock %}
+    
 </body>
 </html>

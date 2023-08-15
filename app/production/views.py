@@ -296,7 +296,6 @@ def create_recipe():
         if 'add_ingredient' in request.form:
             ingredient_forms.append(RecipeIngredientForm())
         elif 'submit_recipe' in request.form:
-            if all(form.validate() for form in ingredient_forms):
                 recipe = Recipe(
                     name = recipe_form.name.data,
                     description = recipe_form.description.data,
@@ -305,7 +304,7 @@ def create_recipe():
                 db.session.add(recipe)
                 db.session.commit()
 
-                db.session.refresh(recipe)
+                # db.session.refresh(recipe)
 
                 for form in ingredient_forms:
                     # if form.ingredient_id.data:

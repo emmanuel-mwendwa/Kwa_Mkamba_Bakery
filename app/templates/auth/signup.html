@@ -2,10 +2,21 @@
 
 {% block title %} Log In {% endblock %}
 
+{% block scripts %} 
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+
+{% endblock %}
+
 {% block content %}
 {{ super() }}
 
 <form action="" method="POST">
+
+    <div class="company-logo-div">
+        <img class="company-logo" src="../../static/images/Kwa_Mkamba_Bakery_Sample_Logo.png" alt="Company Logo">
+    </div>
+
     {{ profile_form.hidden_tag() }}
     {{ form.hidden_tag() }}
 

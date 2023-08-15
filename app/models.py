@@ -97,6 +97,7 @@ class User(UserMixin, db.Model):
     phone_no = db.Column(db.String(13))
     member_since = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    sales_assoc = db.relationship("Route", backref="sales_assoc", lazy="dynamic")
 
     @property
     def password(self):
@@ -228,6 +229,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+# production management tables for my system 
 class Product(db.Model):
     __tablename__ = "products"
 
@@ -238,7 +240,6 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     production_runs = db.relationship('ProductionRun', backref='production', lazy='dynamic')
-    order_details = db.relationship('OrderDetail', backref='orderdetails')
 
 
 class ProductionRun(db.Model):
@@ -350,6 +351,13 @@ class RecipeIngredient(db.Model):
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
 
 
+# sales management tables for my bakery system 
+class Route(db.Model):
+    route_id = db.Column(db.Integer, primary_key=True)
+    route_name = db.Column(db.String(26))
+    sales_assoc_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+
 class Customer(db.Model):
     __tablename__ = "customers"
 
@@ -358,74 +366,72 @@ class Customer(db.Model):
     cust_email = db.Column(db.String(128))
     cust_phone_no = db.Column(db.Integer)
     cust_mpesa_agent_name = db.Column(db.String(128))
-    cust_orders = db.relationship('Order', backref="order")
-    cust_sales = db.relationship('Sale', backref="sales")
 
 
-class Order(db.Model):
-    __tablename__ = "orders"
+# class Order(db.Model):
+#     __tablename__ = "orders"
 
-    order_id = db.Column(db.Integer, primary_key=True)
-    order_date = db.Column(db.DateTime())
-    order_notes = db.Column(db.Text)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customers.cust_id'))
-    order_details = db.relationship('OrderDetail', backref="orderdetail")
-
-
-class OrderDetail(db.Model):
-    __tablename__ = "order_details"
-
-    order_detail_id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    quantity = db.Column(db.Float)
+#     order_id = db.Column(db.Integer, primary_key=True)
+#     order_date = db.Column(db.DateTime())
+#     order_notes = db.Column(db.Text)
+#     customer_id = db.Column(db.Integer, db.ForeignKey('customers.cust_id'))
+#     order_details = db.relationship('OrderDetail', backref="orderdetail")
 
 
-class Sale(db.Model):
-    __tablename__ = "sales"
+# class OrderDetail(db.Model):
+#     __tablename__ = "order_details"
 
-    sales_id = db.Column(db.Integer, primary_key=True)
-    sale_date = db.Column(db.DateTime())
-    sales_total_amount = db.Column(db.Float)
-    customer_id = db.Column(db.Integer, db.ForeignKey("customers.cust_id"))
-    payment_method = db.Column(db.String(28))
-
-
-class PaymentMethod(db.Model):
-    __tablename__ = "payment_methods"
-
-    method_id = db.Column(db.Integer, primary_key=True)
-    method_name =  db.Column(db.String(28))
-    method_details = db.Column(db.String(56))
+#     order_detail_id = db.Column(db.Integer, primary_key=True)
+#     order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'))
+#     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+#     quantity = db.Column(db.Float)
 
 
-class SalesReport(db.Model):
-    __tablename__ = "sales_reports"
+# class Sale(db.Model):
+#     __tablename__ = "sales"
 
-    report_id = db.Column(db.Integer, primary_key=True)
-    report_date = db.Column(db.DateTime())
-    report_type = db.Column(db.String(28))
-    total_sales = db.Column(db.Float)
-    top_selling_products = db.Column(db.String(56))
-    customer_sales_summary = db.Column(db.Text())
-
-
-class Dispatch(db.Model):
-    __tablename__ = "dispatch"
-
-    dispatch_id = db.Column(db.Integer, primary_key=True)
-    dispatch_date = db.Column(db.DateTime())
-    sales_associate_id = db.Column(db.Integer)
-    product_id = db.Column(db.Integer)
-    quantity = db.Column(db.Float)
+#     sales_id = db.Column(db.Integer, primary_key=True)
+#     sale_date = db.Column(db.DateTime())
+#     sales_total_amount = db.Column(db.Float)
+#     customer_id = db.Column(db.Integer, db.ForeignKey("customers.cust_id"))
+#     payment_method = db.Column(db.String(28))
 
 
-class Return(db.Model):
-    __tablename__ = "returns"
+# class PaymentMethod(db.Model):
+#     __tablename__ = "payment_methods"
 
-    id = db.Column(db.Integer, primary_key=True)
-    return_date = db.Column(db.DateTime())
-    sales_associate_id = db.Column(db.Integer)
-    dispatch_id = db.Column(db.Integer)
-    product_id = db.Column(db.Integer)
-    quantity = db.Column(db.Float)
+#     method_id = db.Column(db.Integer, primary_key=True)
+#     method_name =  db.Column(db.String(28))
+#     method_details = db.Column(db.String(56))
+
+
+# class SalesReport(db.Model):
+#     __tablename__ = "sales_reports"
+
+#     report_id = db.Column(db.Integer, primary_key=True)
+#     report_date = db.Column(db.DateTime())
+#     report_type = db.Column(db.String(28))
+#     total_sales = db.Column(db.Float)
+#     top_selling_products = db.Column(db.String(56))
+#     customer_sales_summary = db.Column(db.Text())
+
+
+# class Dispatch(db.Model):
+#     __tablename__ = "dispatch"
+
+#     dispatch_id = db.Column(db.Integer, primary_key=True)
+#     dispatch_date = db.Column(db.DateTime())
+#     sales_associate_id = db.Column(db.Integer)
+#     product_id = db.Column(db.Integer)
+#     quantity = db.Column(db.Float)
+
+
+# class Return(db.Model):
+#     __tablename__ = "returns"
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     return_date = db.Column(db.DateTime())
+#     sales_associate_id = db.Column(db.Integer)
+#     dispatch_id = db.Column(db.Integer)
+#     product_id = db.Column(db.Integer)
+#     quantity = db.Column(db.Float)
