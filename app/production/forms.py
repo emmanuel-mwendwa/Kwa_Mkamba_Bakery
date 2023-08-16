@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, TextAreaField, IntegerField, FloatField, SelectMultipleField, widgets
+from wtforms import StringField, SelectField, SubmitField, TextAreaField, IntegerField, FloatField, SelectMultipleField, widgets, FormField, FieldList
 from wtforms.validators import DataRequired, Length, NumberRange
 from wtforms import ValidationError
 from ..models import Product, Supplier, Ingredient
@@ -72,12 +72,6 @@ class AddSupplierIngredientForm(FlaskForm):
                                      for ingredient in Ingredient.query.order_by(Ingredient.name).all()]
         
 
-class RecipeForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    description = TextAreaField('Description')
-    yield_amount = IntegerField('Yield Amount', validators=[DataRequired()])
-
-
 class RecipeIngredientForm(FlaskForm):
     ingredient_id = SelectField('Ingredient', coerce=int, validators=[DataRequired()])
     quantity = FloatField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
@@ -85,6 +79,17 @@ class RecipeIngredientForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(RecipeIngredientForm, self).__init__(*args, **kwargs)
-        self.ingredient_id.choices = [(ingredient.id, ingredient.name)
+        self.ingredient_id.choices = [(0, 'Select an Ingredient')] + [(ingredient.id, ingredient.name)
                                      for ingredient in Ingredient.query.order_by(Ingredient.name).all()]
-    
+
+
+class RecipeForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    description = TextAreaField('Description')
+    yield_amount = IntegerField('Yield Amount', validators=[DataRequired()])
+    recipe_ingredients = FieldList(FormField(RecipeIngredientForm), min_entries=1)
+    submit = SubmitField("Submit")
+
+    def add_empty_ingredient(self):
+        empty_ingredient = RecipeIngredientForm()
+        self.recipe_ingredients.append_entry(empty_ingredient)

@@ -3,15 +3,20 @@ from flask_wtf.form import _Auto
 from wtforms import StringField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Regexp, Email, Length
 from wtforms import ValidationError
-from ..models import User, Customer
+from ..models import User, Customer, Route
 
 class AddNewCustomerForm(FlaskForm):
     cust_name = StringField("Customer Name: ", validators=[DataRequired(), Length(0, 64), Regexp('^[A-Za-z ]*$',0, 'Names can only contain letters and spaces')])
     cust_email = StringField("Customer Email: ", validators=[DataRequired(), Length(1, 64), Email()])
     cust_phone_no = StringField('Phone Number: ', validators=[Length(0, 13), Regexp('^[0-9+]*$', 0, 'Phonw number can only contain numbers')])
     cust_mpesa_agent_name = StringField("Mpesa Name: ", validators=[])
+    route_id = SelectField('Route', coerce=int)
     submit = SubmitField("Submit")
 
+    def __init__(self, *args, **kwargs):
+        super(AddNewCustomerForm, self).__init__(*args, **kwargs)
+        self.route_id.choices = [(route.route_id, route.route_name)
+                                 for route in Route.query.all()]
 
     def validate_cust_email(self, field):
         if Customer.query.filter_by(cust_email=field.data).first():

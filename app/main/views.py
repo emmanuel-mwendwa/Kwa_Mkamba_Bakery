@@ -15,7 +15,7 @@ def index():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    if (user == current_user or user.role_id == 6):
+    if user == current_user:
         return render_template('user.html', user=user)
     else:
         abort(403)

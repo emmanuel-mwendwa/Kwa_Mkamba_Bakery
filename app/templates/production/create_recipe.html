@@ -55,10 +55,9 @@
     <h2>Recipe Ingredients</h2>
     
     <div id="recipe-ingredients">
-      {% for ingredient_form in ingredient_forms %}
+      {% for ingredient_form in recipe_form.recipe_ingredients %}
+      <br>
         <div class="recipe-ingredient">
-          {{ ingredient_form.hidden_tag() }}
-          
           <div class="form-group">
             {{ ingredient_form.ingredient_id.label(class="form-label") }}
             {{ ingredient_form.ingredient_id(class="form-control") }}
@@ -95,12 +94,13 @@
             {% endif %}
           </div>
         </div>
+        <br>
       {% endfor %}
     </div>
     
     <div>
-        <input type="submit" name="add_ingredient" value="Add Ingredient">
-        <input type="submit" name="submit_recipe" value="Submit Recipe">
+      <input type="submit" name="add_ingredient" value="Add Ingredient">
+      <input type="submit" name="submit_recipe" value="Submit Recipe">
     </div>
   </form>
 

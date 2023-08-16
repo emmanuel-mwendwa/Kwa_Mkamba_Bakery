@@ -17,6 +17,8 @@
 <br>
 <label for="">M-Pesa Agent: </label> <span> {{ customer.cust_mpesa_agent_name }} </span>
 <br>
+<label for="">Route: </label> <span> {{ customer.cust_route.route_name }} </span>
+<br>
 
 
 <button><a href="{{ url_for('sales.edit_customer', id=customer.cust_id) }}">Edit</a></button>

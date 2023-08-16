@@ -288,35 +288,31 @@ def new_supplier_ingredient():
 @permission_required(Permission.MANAGE_RECIPE_DETAILS)
 def create_recipe():
     recipe_form = RecipeForm()
-    ingredient_forms = [RecipeIngredientForm()]
 
-    
     if recipe_form.validate_on_submit():
-        # Create recipe and recipe ingredients
         if 'add_ingredient' in request.form:
-            ingredient_forms.append(RecipeIngredientForm())
+            recipe_form.add_empty_ingredient()
         elif 'submit_recipe' in request.form:
-                recipe = Recipe(
-                    name = recipe_form.name.data,
-                    description = recipe_form.description.data,
-                    yield_amount = recipe_form.yield_amount.data
-                )
-                db.session.add(recipe)
-                db.session.commit()
+            recipe = Recipe(
+                name = recipe_form.name.data,
+                description = recipe_form.description.data,
+                yield_amount = recipe_form.yield_amount.data
+            )
+            db.session.add(recipe)
+            db.session.commit()
 
-                # db.session.refresh(recipe)
-
-                for form in ingredient_forms:
-                    # if form.ingredient_id.data:
-                    recipe_ingredient = RecipeIngredient(
+            for ingredient_form in recipe_form.recipe_ingredients:
+                if ingredient_form.ingredient_id.data != 0:
+                    ingredient = RecipeIngredient(
                         recipe_id = recipe.id,
-                        ingredient_id = form.ingredient_id.data,
-                        quantity = form.quantity.data,
-                        unit_of_measurement = form.unit_of_measurement.data
+                        ingredient_id = ingredient_form.ingredient_id.data,
+                        quantity = ingredient_form.quantity.data,
+                        unit_of_measurement = ingredient_form.unit_of_measurement.data
                     )
-                    db.session.add(recipe_ingredient)
-                db.session.commit()
-
-                return redirect(url_for("main.index"))
+                    db.session.add(ingredient)
+            db.session.commit()
+            return redirect(url_for("main.index"))
     
-    return render_template("production/create_recipe.html", recipe_form=recipe_form, ingredient_forms=ingredient_forms)
+    
+
+    return render_template("production/create_recipe.html", recipe_form=recipe_form)

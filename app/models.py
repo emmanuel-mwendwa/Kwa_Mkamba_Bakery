@@ -358,6 +358,7 @@ class Route(db.Model):
     route_id = db.Column(db.Integer, primary_key=True)
     route_name = db.Column(db.String(26))
     sales_assoc_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    customers = db.relationship('Customer', lazy="dynamic", backref="cust_route")
 
 
 class Customer(db.Model):
@@ -368,6 +369,25 @@ class Customer(db.Model):
     cust_email = db.Column(db.String(128))
     cust_phone_no = db.Column(db.Integer)
     cust_mpesa_agent_name = db.Column(db.String(128))
+    route_id = db.Column(db.Integer, db.ForeignKey("routes.route_id"))
+
+
+class Dispatch(db.Model):
+    __tablename__ = "dispatch"
+
+    dispatch_id = db.Column(db.Integer, primary_key=True)
+    dispatch_date = db.Column(db.DateTime())
+    sales_associate_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+
+class DispatchDetails(db.Model):
+    __tablename__ = "dispatch_details"
+
+    id = db.Column(db.Integer, primary_key=True)
+    dispatch_id = db.Column(db.Integer, db.ForeignKey("dispatch.dispatch_id"))
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
+    quantity = db.Column(db.Float)
+    returns = db.Column(db.Float)
 
 
 # class Order(db.Model):
@@ -416,24 +436,3 @@ class Customer(db.Model):
 #     total_sales = db.Column(db.Float)
 #     top_selling_products = db.Column(db.String(56))
 #     customer_sales_summary = db.Column(db.Text())
-
-
-# class Dispatch(db.Model):
-#     __tablename__ = "dispatch"
-
-#     dispatch_id = db.Column(db.Integer, primary_key=True)
-#     dispatch_date = db.Column(db.DateTime())
-#     sales_associate_id = db.Column(db.Integer)
-#     product_id = db.Column(db.Integer)
-#     quantity = db.Column(db.Float)
-
-
-# class Return(db.Model):
-#     __tablename__ = "returns"
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     return_date = db.Column(db.DateTime())
-#     sales_associate_id = db.Column(db.Integer)
-#     dispatch_id = db.Column(db.Integer)
-#     product_id = db.Column(db.Integer)
-#     quantity = db.Column(db.Float)

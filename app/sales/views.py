@@ -3,7 +3,7 @@ from flask import redirect, render_template, url_for, flash, request
 from flask_login import login_required
 from .forms import AddNewCustomerForm, AddNewRouteForm
 from .. import db
-from ..models import Customer, Route
+from ..models import Customer, Route, User
 from ..decorators import admin_required, permission_required
 
 @sales.route("/")
@@ -32,7 +32,8 @@ def view_routes():
 @sales.route("/view_route/<int:id>")
 def view_route(id):
     route = Route.query.get_or_404(id)
-    return render_template("sales/route/view_route.html", route=route)
+    sales_assoc = User.query.filter_by(id = route.sales_assoc_id).first()
+    return render_template("sales/route/view_route.html", route=route, sales_assoc=sales_assoc)
 
 @sales.route("/edit_route/<int:id>", methods=["GET", "POST"])
 def edit_route(id):
@@ -67,7 +68,8 @@ def new_customer():
            cust_name = customer_form.cust_name.data,
            cust_email = customer_form.cust_email.data,
            cust_phone_no = customer_form.cust_phone_no.data,
-           cust_mpesa_agent_name = customer_form.cust_mpesa_agent_name.data
+           cust_mpesa_agent_name = customer_form.cust_mpesa_agent_name.data,
+           route_id = customer_form.route_id.data
         )
         db.session.add(new_customer)
         db.session.commit()

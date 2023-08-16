@@ -15,6 +15,7 @@
             <th>Email</th>
             <th>Phone No.</th>
             <th>M-Pesa Agent</th>
+            <th>Route</th>
         </thead>
         <tbody>
             {% for customer in customers %}
@@ -23,6 +24,7 @@
                 <td>{{ customer.cust_email }}</td>
                 <td>{{ customer.cust_phone_no }}</td>
                 <td>{{ customer.cust_mpesa_agent_name }}</td>
+                <td>{{ customer.cust_route.route_name }}</td>
             </tr>
             {% endfor %}
         </tbody>
