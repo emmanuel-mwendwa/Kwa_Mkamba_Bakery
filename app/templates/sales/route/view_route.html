@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %} View Route {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<label for="">Route Name: </label> <span>{{ route.route_name }} </span>
+<br>
+
+<button><a href="{{ url_for('sales.edit_route', id=route.route_id) }}">Edit</a></button>
+<button><a href="{{ url_for('sales.delete_route', id=route.route_id) }}">Delete</a></button>
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}

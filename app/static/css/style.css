@@ -27,6 +27,12 @@ body {
     gap: 1em;
 }
 
+.sales-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+}
+
 .main-navigation-bar__footer--details {
     position: fixed;
     bottom: 0;

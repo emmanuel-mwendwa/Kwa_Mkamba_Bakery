@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %} Routes {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+    <table>
+        <thead>
+            <th>Route Name</th>
+        </thead>
+        <tbody>
+            {% for route in routes %}
+            <tr>
+                <td><a href="{{ url_for('sales.view_route', id=route.route_id) }}">{{ route.route_name }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}
+
+    {% block footer %} {{ super() }} {% endblock %}
+
+    {% block scripts %} {{ super() }} {% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} Sales {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+
+<div class="sales-links">
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('sales.new_customer')}}">New Customer</a>
+        <a href="{{ url_for('sales.new_route')}}">New Route</a>
+        <a href="{{ url_for('sales.view_customers')}}">View Customers</a>
+        <a href="{{ url_for('sales.view_routes')}}">View Routes</a>
+    {% endif %}
+</div>
+    
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}

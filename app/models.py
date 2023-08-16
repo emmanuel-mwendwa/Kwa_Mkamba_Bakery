@@ -353,6 +353,8 @@ class RecipeIngredient(db.Model):
 
 # sales management tables for my bakery system 
 class Route(db.Model):
+    __tablename__ = "routes"
+
     route_id = db.Column(db.Integer, primary_key=True)
     route_name = db.Column(db.String(26))
     sales_assoc_id = db.Column(db.Integer, db.ForeignKey("users.id"))

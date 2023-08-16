@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<h1>{{ title }}</h1>
+
+<form action="" method="POST">
+    {{ route_form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ route_form.route_name.label(class="form-label") }}
+        {{ route_form.route_name(class="form-control") }}
+        {% if route_form.route_name.errors %}
+            <ul class="errors">
+                {% for error in route_form.route_name.errors %}
+                    <li>{{ errror }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ route_form.sales_assoc_id.label(class="form-label") }}
+        {{ route_form.sales_assoc_id(class="form-control") }}
+        {% if route_form.sales_assoc_id.errors %}
+            <ul class="errors">
+                {% for error in route_form.sales_assoc_id.errors %}
+                    <li>{{ errror }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div>
+        {{ route_form.submit() }}
+    </div>
+
+</form>
+
+{% endblock %}
+
+{% block footer %} {{ super() }} {% endblock %}
+
+{% block scripts %} {{ super() }} {% endblock %}

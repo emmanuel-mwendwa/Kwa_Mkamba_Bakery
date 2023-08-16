@@ -19,6 +19,9 @@
 <br>
 
 
+<button><a href="{{ url_for('sales.edit_customer', id=customer.cust_id) }}">Edit</a></button>
+<button><a href="{{ url_for('sales.delete_customer', id=customer.cust_id) }}">Delete</a></button>
+
 {% endblock %}
 
 {% block footer %} {{ super() }} {% endblock %}

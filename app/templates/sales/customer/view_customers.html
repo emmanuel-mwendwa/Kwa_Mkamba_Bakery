@@ -19,7 +19,7 @@
         <tbody>
             {% for customer in customers %}
             <tr>
-                <td>{{ customer.cust_name }}</td>
+                <td><a href="{{ url_for('sales.view_customer', id=customer.cust_id) }}">{{ customer.cust_name }}</a></td>
                 <td>{{ customer.cust_email }}</td>
                 <td>{{ customer.cust_phone_no }}</td>
                 <td>{{ customer.cust_mpesa_agent_name }}</td>
