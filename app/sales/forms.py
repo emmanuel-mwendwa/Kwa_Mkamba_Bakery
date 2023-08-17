@@ -55,15 +55,14 @@ class DispatchDetailsForm(FlaskForm):
 
 
 class DispatchForm(FlaskForm):
-    sales_assoc_name = SelectField('Sales Agent', coerce=int)
-    # route_name = SelectField("Route", coerce=int)
+    route_id = SelectField("Route", coerce=int)
     dispatch_details = FieldList(FormField(DispatchDetailsForm), min_entries=2)
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
         super(DispatchForm, self).__init__(*args, **kwargs)
-        self.sales_assoc_name.choices = [(sales_assoc.id, sales_assoc.name)
-                                         for sales_assoc in User.query.filter_by(role_id=3).all()]
+        self.route_id.choices = [(route.route_id, route.route_name)
+                                         for route in Route.query.all()]
 
     def add_empty_dispatch(self):
         empty_dispatch = DispatchDetailsForm()

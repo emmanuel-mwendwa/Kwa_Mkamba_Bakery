@@ -126,7 +126,7 @@ def new_dispatch():
         elif 'submit_dispatch' in request.form:
             dispatch = Dispatch(
                 dispatch_date = datetime.utcnow(),
-                sales_associate_id = dispatch_form.sales_assoc_name.data
+                route_id = dispatch_form.route_id.data
             )
             db.session.add(dispatch)
             db.session.commit()
@@ -141,13 +141,21 @@ def new_dispatch():
                     )
                     db.session.add(dispatch_detail)
             db.session.commit()
-            return redirect(url_for("main.index"))
+            return redirect(url_for("sales.view_dispatches"))
     return render_template("sales/dispatch/new_dispatch.html", dispatch_form=dispatch_form)
+
 
 @sales.route("/view_dispatches")
 def view_dispatches():
     dispatches = Dispatch.query.all()
     return render_template("sales/dispatch/view_dispatches.html", dispatches=dispatches)
+
+def get_user_details_by_route_id(route_id):
+    # Join Dispatch and Route tables on route_id
+    dispatch_query = db.session.query(Dispatch).filter_by(route_id=route_id).subquery()
+    join_query = db.session.query(User).join(Route, User.sales_assoc).join(dispatch_query, Route.dispatch_route).all()
+
+    return join_query
 
 @sales.route("/view_dispatch/<int:id>")
 def view_dispatch(id):

@@ -11,22 +11,35 @@
     
     <table>
         <thead>
-            <th>Sales Agent Name</th>
-            <th>Phone No</th>
+            <th>Route ID</th>
             <th>Dispatch Date</th>
         </thead>
         <tbody>
             {% for dispatch in dispatches %}
             <tr>
-                <td><a href="{{ url_for('production.view_dispatch', id=dispatch.id)}}">{{ dispatch_details.name }}</a></td>
-                <td>{{ dispatch.phone_no }}</td>
+                <td><a href="{{ url_for('sales.view_dispatch', id=dispatch.dispatch_id)}}">{{ dispatch.route_id }}</a></td>
                 <td>{{ moment(dispatch.dispatch_date).format('L') }}</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Returns</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detail in dispatch.dispatch_details%}
+                            <tr>
+                                <td>{{ detail.product.name }}</td>
+                                <td>{{ detail.quantity }}</td>
+                                <td>{{ detail.returns }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
             </tr>
-            <tr>
-                <td><a href="{{ url_for('production.edit_supplier', id=supplier.id)}}">Edit</a></td>
-                <td><a href="{{ url_for('production.delete_supplier', id=supplier.id)}}">Delete</a></td>
-            </tr>
-                
             {% endfor %}
         </tbody>
     </table>

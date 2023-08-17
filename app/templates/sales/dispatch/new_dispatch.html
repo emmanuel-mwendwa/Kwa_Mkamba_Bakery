@@ -15,11 +15,11 @@
     {{ dispatch_form.hidden_tag() }}
     
     <div class="form-group">
-      {{ dispatch_form.sales_assoc_name.label(class="form-label") }}
-      {{ dispatch_form.sales_assoc_name(class="form-control") }}
-      {% if dispatch_form.sales_assoc_name.errors %}
+      {{ dispatch_form.route_id.label(class="form-label") }}
+      {{ dispatch_form.route_id(class="form-control") }}
+      {% if dispatch_form.route_id.errors %}
         <ul class="errors">
-          {% for error in dispatch_form.sales_assoc_name.errors %}
+          {% for error in dispatch_form.route_id.errors %}
             <li>{{ error }}</li>
           {% endfor %}
         </ul>

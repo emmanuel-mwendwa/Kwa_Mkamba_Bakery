@@ -12,8 +12,10 @@
     {% if current_user.is_authenticated %}
         <a href="{{ url_for('sales.new_customer')}}">New Customer</a>
         <a href="{{ url_for('sales.new_route')}}">New Route</a>
+        <a href="{{ url_for('sales.new_dispatch')}}">New Dispatch</a>
         <a href="{{ url_for('sales.view_customers')}}">View Customers</a>
         <a href="{{ url_for('sales.view_routes')}}">View Routes</a>
+        <a href="{{ url_for('sales.view_dispatches')}}">View Dispatches</a>
     {% endif %}
 </div>
     
