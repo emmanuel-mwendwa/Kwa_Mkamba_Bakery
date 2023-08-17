@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from flask_wtf.form import _Auto
-from wtforms import StringField, SelectField, SubmitField
+from wtforms import StringField, SelectField, SubmitField, FloatField, FormField, FieldList
 from wtforms.validators import DataRequired, Regexp, Email, Length
 from wtforms import ValidationError
-from ..models import User, Customer, Route
+from ..models import User, Customer, Route, Product
 
 class AddNewCustomerForm(FlaskForm):
     cust_name = StringField("Customer Name: ", validators=[DataRequired(), Length(0, 64), Regexp('^[A-Za-z ]*$',0, 'Names can only contain letters and spaces')])
@@ -41,3 +41,30 @@ class AddNewRouteForm(FlaskForm):
         super(AddNewRouteForm, self).__init__(*args, **kwargs)
         self.sales_assoc_id.choices = [(user.id, user.name)
                                        for user in User.query.filter_by(role_id=3).all()]
+        
+
+class DispatchDetailsForm(FlaskForm):
+    product_id = SelectField('Product', coerce=int)
+    quantity = FloatField('Quantity')
+    returns = FloatField('Returns')
+
+    def __init__(self, *args, **kwargs):
+        super(DispatchDetailsForm, self).__init__(*args, **kwargs)
+        self.product_id.choices = [(0, 'Select a product')] + [(product.id, product.name)
+                                                               for product in Product.query.order_by(Product.name).all()]
+
+
+class DispatchForm(FlaskForm):
+    sales_assoc_name = SelectField('Sales Agent', coerce=int)
+    # route_name = SelectField("Route", coerce=int)
+    dispatch_details = FieldList(FormField(DispatchDetailsForm), min_entries=2)
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(DispatchForm, self).__init__(*args, **kwargs)
+        self.sales_assoc_name.choices = [(sales_assoc.id, sales_assoc.name)
+                                         for sales_assoc in User.query.filter_by(role_id=3).all()]
+
+    def add_empty_dispatch(self):
+        empty_dispatch = DispatchDetailsForm()
+        self.dispatch_details.append_entry(empty_dispatch)

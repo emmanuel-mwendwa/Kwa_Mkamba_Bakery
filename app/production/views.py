@@ -312,7 +312,4 @@ def create_recipe():
                     db.session.add(ingredient)
             db.session.commit()
             return redirect(url_for("main.index"))
-    
-    
-
     return render_template("production/create_recipe.html", recipe_form=recipe_form)

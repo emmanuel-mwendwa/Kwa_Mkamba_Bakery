@@ -21,6 +21,39 @@ body {
     color: var(--text-color);
 }
 
+.settings-side-form__items--details {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: var(--backgroud-lighter-orange-color);
+    color: var(--text-color);
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    min-width: 160px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--backgroud-lighter-orange-color);
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.settings-side-form__items--details:hover .dropdown-content {
+    display: block;
+}
+
 .production-links {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

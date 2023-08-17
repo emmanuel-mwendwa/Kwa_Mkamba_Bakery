@@ -359,6 +359,7 @@ class Route(db.Model):
     route_name = db.Column(db.String(26))
     sales_assoc_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     customers = db.relationship('Customer', lazy="dynamic", backref="cust_route")
+    dispatch_sales_associate = db.relationship('Dispatch', lazy="dynamic", backref="dispatch_sales_associate")
 
 
 class Customer(db.Model):
@@ -378,6 +379,7 @@ class Dispatch(db.Model):
     dispatch_id = db.Column(db.Integer, primary_key=True)
     dispatch_date = db.Column(db.DateTime())
     sales_associate_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    dispatch_details = db.relationship('DispatchDetails', lazy='dynamic', backref='dispatch_details')
 
 
 class DispatchDetails(db.Model):

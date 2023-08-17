@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %} Dispatches {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+    {{ super() }}
+    
+    <table>
+        <thead>
+            <th>Sales Agent Name</th>
+            <th>Phone No</th>
+            <th>Dispatch Date</th>
+        </thead>
+        <tbody>
+            {% for dispatch in dispatches %}
+            <tr>
+                <td><a href="{{ url_for('production.view_dispatch', id=dispatch.id)}}">{{ dispatch_details.name }}</a></td>
+                <td>{{ dispatch.phone_no }}</td>
+                <td>{{ moment(dispatch.dispatch_date).format('L') }}</td>
+            </tr>
+            <tr>
+                <td><a href="{{ url_for('production.edit_supplier', id=supplier.id)}}">Edit</a></td>
+                <td><a href="{{ url_for('production.delete_supplier', id=supplier.id)}}">Delete</a></td>
+            </tr>
+                
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}
+
+    {% block footer %} {{ super() }} {% endblock %}
+
+    {% block scripts %} {{ super() }} {% endblock %}

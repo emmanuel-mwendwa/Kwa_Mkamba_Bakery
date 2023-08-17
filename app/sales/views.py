@@ -1,10 +1,11 @@
 from . import sales
 from flask import redirect, render_template, url_for, flash, request
 from flask_login import login_required
-from .forms import AddNewCustomerForm, AddNewRouteForm
+from .forms import AddNewCustomerForm, AddNewRouteForm, DispatchForm
 from .. import db
-from ..models import Customer, Route, User
+from ..models import Customer, Route, User, Dispatch, DispatchDetails
 from ..decorators import admin_required, permission_required
+from datetime import datetime
 
 @sales.route("/")
 def sales_page():
@@ -114,3 +115,40 @@ def delete_customer(id):
     db.session.delete(customer)
     db.session.commit()
     return redirect(url_for("sales.view_customers"))
+
+@sales.route('/new_dispatch', methods=["GET", "POST"])
+def new_dispatch():
+    title = "New Dispatch"
+    dispatch_form = DispatchForm()
+    if dispatch_form.validate_on_submit():
+        if 'add_dispatch' in request.form:
+            dispatch_form.add_empty_dispatch()
+        elif 'submit_dispatch' in request.form:
+            dispatch = Dispatch(
+                dispatch_date = datetime.utcnow(),
+                sales_associate_id = dispatch_form.sales_assoc_name.data
+            )
+            db.session.add(dispatch)
+            db.session.commit()
+
+            for dispatch_details_form in dispatch_form.dispatch_details:
+                if dispatch_details_form.product_id.data != 0:
+                    dispatch_detail = DispatchDetails(
+                        dispatch_id = dispatch.dispatch_id,
+                        product_id = dispatch_details_form.product_id.data,
+                        quantity = dispatch_details_form.quantity.data,
+                        returns = dispatch_details_form.returns.data
+                    )
+                    db.session.add(dispatch_detail)
+            db.session.commit()
+            return redirect(url_for("main.index"))
+    return render_template("sales/dispatch/new_dispatch.html", dispatch_form=dispatch_form)
+
+@sales.route("/view_dispatches")
+def view_dispatches():
+    dispatches = Dispatch.query.all()
+    return render_template("sales/dispatch/view_dispatches.html", dispatches=dispatches)
+
+@sales.route("/view_dispatch/<int:id>")
+def view_dispatch(id):
+    pass

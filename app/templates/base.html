@@ -22,21 +22,24 @@
     <header class="settings-side-form__header--details">
       <nav class="settings-side-form__navigation--details">
         <!-- a header with the users profile pic or initials and a notifications bell and pie chart for graphs -->
-        <ul class="settings-side-form__items--details">
-          <li class="user-profile-initials">
+        <div class="settings-side-form__items--details">
+          <button class="dropbtn" id="dropbtn"
+          onclick="document.getElementsByClassName('dropdown-content').style.display = 'block' "
+          >
             <img src="../static/images/" alt="Initials" />
-          </li>
-          {% if current_user.is_authenticated %}
-          <li>
-            <a href="{{ url_for('main.user', username=current_user.username)}}"
-              >Profile</a
-            >
-          </li>
-          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-          {% else %}
-          <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-          {% endif %}
-        </ul>
+          </button>
+          <div class="dropdown-content">
+            {% if current_user.is_authenticated %}
+              <a
+                href="{{ url_for('main.user', username=current_user.username)}}"
+                >Profile</a
+              >
+              <a href="{{ url_for('auth.logout') }}">Logout</a>
+            {% else %}
+              <a href="{{ url_for('auth.login') }}">Log In</a>
+            {% endif %}
+          </div>
+        </div>
       </nav>
     </header>
 
@@ -59,9 +62,7 @@
       <section class=""></section>
     </main>
 
-    {% endblock%} 
-    
-    {% block footer %}
+    {% endblock%} {% block footer %}
 
     <br /><br />
 
@@ -89,7 +90,9 @@
       </nav>
     </footer>
 
-    {% endblock %} {% block scripts %} {{ moment.include_moment() }} {% endblock
-    %}
+    {% endblock %} {% block scripts %} 
+    {{ moment.include_moment() }} 
+    
+    {% endblock%}
   </body>
 </html>
