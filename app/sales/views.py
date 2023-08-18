@@ -147,8 +147,18 @@ def new_dispatch():
 
 @sales.route("/view_dispatches")
 def view_dispatches():
-    dispatches = Dispatch.query.all()
-    return render_template("sales/dispatch/view_dispatches.html", dispatches=dispatches)
+    dispatches = Dispatch.query.join(Route, Dispatch.route_id == Route.route_id)\
+                                .join(User, Route.sales_assoc_id == User.id).all()
+                                # .add_columns(Dispatch.dispatch_id,
+                                #              Dispatch.dispatch_date,
+                                #              Route.route_id,
+                                #              Route.route_name,
+                                #              User.name,
+                                #              User.phone_no)\
+                                # .all()
+    # dispatches_id = Dispatch.query.all()
+    dispatches_data = DispatchDetails.query.all()
+    return render_template("sales/dispatch/view_dispatches.html", dispatches=dispatches, dispatches_data=dispatches_data)
 
 def get_user_details_by_route_id(route_id):
     # Join Dispatch and Route tables on route_id

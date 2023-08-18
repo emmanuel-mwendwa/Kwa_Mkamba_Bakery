@@ -11,14 +11,22 @@
     
     <table>
         <thead>
-            <th>Route ID</th>
+            <th>Dispatch ID</th>
             <th>Dispatch Date</th>
+            <th>Route ID</th>
+            <th>Route Name</th>
+            <th>Sales Agent Name</th>
+            <th>Sales Agent Number</th>
         </thead>
         <tbody>
             {% for dispatch in dispatches %}
             <tr>
-                <td><a href="{{ url_for('sales.view_dispatch', id=dispatch.dispatch_id)}}">{{ dispatch.route_id }}</a></td>
+                <td>{{ dispatch.dispatch_id }}</td>
                 <td>{{ moment(dispatch.dispatch_date).format('L') }}</td>
+                <td>{{ dispatch.route_id }}</td>
+                <td>{{ dispatch.route_name }}</td>
+                <td>{{ dispatch.name }}</td>
+                <td>{{ dispatch.phone_no }}</td>
                 <td>
                     <table>
                         <thead>
@@ -29,7 +37,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for detail in dispatch.dispatch_details%}
+                            {% for detail in dispatch.dispatch_details %}
                             <tr>
                                 <td>{{ detail.product.name }}</td>
                                 <td>{{ detail.quantity }}</td>
