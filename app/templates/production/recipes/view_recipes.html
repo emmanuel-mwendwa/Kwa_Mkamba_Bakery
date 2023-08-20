@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %} Orders {% endblock %}
+
+{% block styles %} {{ super() }} {% endblock %}
+
+{% block header %} {{ super() }} {% endblock %}
+
+{% block content %}
+    {{ super() }}
+    
+    <table>
+        <thead>
+            <th>Recipe Name</th>
+            <th>Description</th>
+            <th>Yield Amount</th>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+            <tr>
+                <td><a href="{{ url_for('production.view_recipe', recipe_id=recipe.id)}}">{{ recipe.name }}</a></td>
+                <td>{{ recipe.description }}</td>
+                <td>{{ recipe.yield_amount }}</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ingredient Name</th>
+                                <th>Quantity</th>
+                                <th>Measurement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detail in recipe.recipe_ingredients %}
+                            <tr>
+                                <td>{{ detail.ingredient_id }}</td>
+                                <td>{{ detail.quantity }}</td>
+                                <td>{{ detail.unit_of_measurement }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}
+
+    {% block footer %} {{ super() }} {% endblock %}
+
+    {% block scripts %} {{ super() }} {% endblock %}

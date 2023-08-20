@@ -5,6 +5,7 @@ from .forms import AddNewProductForm, AddNewProductionRunForm, EditProductionRun
 from .. import db
 from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient, Recipe, RecipeIngredient, Permission
 from ..decorators import admin_required, permission_required
+from datetime import datetime
 
 
 @production.route('/')
@@ -311,7 +312,63 @@ def create_recipe():
                     )
                     db.session.add(ingredient)
             db.session.commit()
-            return redirect(url_for("main.index"))
-    return render_template("production/create_recipe.html", recipe_form=recipe_form)
+            return redirect(url_for("production.view_recipe"))
+    return render_template("production/recipes/create_recipe.html", recipe_form=recipe_form)
 
 
+@production.route("/view_recipes", methods=["GET", "POST"])
+@permission_required(Permission.VIEW_RECIPE_DETAILS)
+def view_recipes():
+    recipes = Recipe.query.all()
+    return render_template("production/recipes/view_recipes.html", recipes=recipes)
+
+@production.route("/view_recipe/<int:recipe_id>", methods=["GET", "POST"])
+@permission_required(Permission.VIEW_RECIPE_DETAILS)
+def view_recipe(recipe_id):
+    recipe = Recipe.query.get_or_404(recipe_id)
+    return render_template("production/recipes/view_recipe.html", recipe=recipe)
+
+@production.route("/update_recipe/<int:recipe_id>", methods=["GET", "POST"])
+@permission_required(Permission.MANAGE_RECIPE_DETAILS)
+def update_recipe(recipe_id):
+    title = "Update Recipe"
+    recipe = Recipe.query.get(recipe_id)
+    if recipe is None:
+        # Handle case where recipe is not found
+        return "Recipe not found", 404
+
+    # populates the form fields with data fetched from recipe query
+    recipe_form = RecipeForm(obj=recipe)
+
+    if recipe_form.validate_on_submit():
+        recipe_form.populate_obj(recipe)
+          # Update recipe data
+        recipe.created_at = datetime.utcnow()
+        recipe.name = recipe_form.name.data
+        recipe.description = recipe_form.description.data
+        recipe.yield_amount = recipe_form.yield_amount.data
+
+        # Update recipe details
+        for index, recipe_ingredient_form in enumerate(recipe_form.recipe_ingredients):
+            recipe_details = recipe.recipe_ingredients[index]
+            if recipe_ingredient_form and recipe_ingredient_form.ingredient_id.data != 0:
+                recipe_details.ingredient_id = recipe_ingredient_form.ingredient_id.data
+                recipe_details.quantity = recipe_ingredient_form.quantity.data
+                recipe_ingredient_form.unit_of_measurement.data = recipe_details.unit_of_measurement
+
+        db.session.commit()
+        return redirect(url_for("production.view_recipe", recipe_id=recipe.id))
+    return render_template("production/recipes/create_recipe.html", recipe_form=recipe_form, title=title)
+
+@production.route("/delete_recipe/<int:recipe_id>", methods=["GET", "POST"])
+@permission_required(Permission.MANAGE_RECIPE_DETAILS)
+def delete_recipe(recipe_id):
+    recipe = Recipe.query.get_or_404(recipe_id)
+
+    # Delete corresponding recipe details
+    for recipe_ingredient in recipe.recipe_ingredients:
+        db.session.delete(recipe_ingredient)
+
+    db.session.delete(recipe)
+    db.session.commit()
+    return redirect(url_for("production.view_recipes"))

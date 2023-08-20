@@ -450,24 +450,3 @@ class OrderDetail(db.Model):
     quantity = db.Column(db.Float)
 
     product = db.relationship('Product', backref="orderdetail")
-
-
-# class Sale(db.Model):
-#     __tablename__ = "sales"
-
-#     sales_id = db.Column(db.Integer, primary_key=True)
-#     sale_date = db.Column(db.DateTime())
-#     sales_total_amount = db.Column(db.Float)
-#     customer_id = db.Column(db.Integer, db.ForeignKey("customers.cust_id"))
-#     payment_method = db.Column(db.String(28))
-
-
-# class SalesReport(db.Model):
-#     __tablename__ = "sales_reports"
-
-#     report_id = db.Column(db.Integer, primary_key=True)
-#     report_date = db.Column(db.DateTime())
-#     report_type = db.Column(db.String(28))
-#     total_sales = db.Column(db.Float)
-#     top_selling_products = db.Column(db.String(56))
-#     customer_sales_summary = db.Column(db.Text())
