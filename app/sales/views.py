@@ -147,26 +147,51 @@ def new_dispatch():
 
 @sales.route("/view_dispatches")
 def view_dispatches():
-    dispatches = Dispatch.query.join(Route, Dispatch.route_id == Route.route_id)\
-                                .join(User, Route.sales_assoc_id == User.id).all()
-                                # .add_columns(Dispatch.dispatch_id,
-                                #              Dispatch.dispatch_date,
-                                #              Route.route_id,
-                                #              Route.route_name,
-                                #              User.name,
-                                #              User.phone_no)\
-                                # .all()
-    # dispatches_id = Dispatch.query.all()
-    dispatches_data = DispatchDetails.query.all()
-    return render_template("sales/dispatch/view_dispatches.html", dispatches=dispatches, dispatches_data=dispatches_data)
-
-def get_user_details_by_route_id(route_id):
-    # Join Dispatch and Route tables on route_id
-    dispatch_query = db.session.query(Dispatch).filter_by(route_id=route_id).subquery()
-    join_query = db.session.query(User).join(Route, User.sales_assoc).join(dispatch_query, Route.dispatch_route).all()
-
-    return join_query
+    dispatches = Dispatch.query.all()
+    return render_template("sales/dispatch/view_dispatches.html", dispatches=dispatches)
 
 @sales.route("/view_dispatch/<int:id>")
 def view_dispatch(id):
-    pass
+    dispatch = Dispatch.query.get_or_404(id)
+    return render_template("sales/dispatch/view_dispatch.html", dispatch=dispatch)
+
+@sales.route("/edit_dispatch/<int:id>", methods=["GET", "POST"])
+def update_dispatch(id):
+    dispatch = Dispatch.query.get(id)
+    if dispatch is None:
+        # Handle case where dispatch is not found
+        return "Dispatch not found", 404
+
+    # populates the form fields with data fetched from dispatch query
+    dispatch_form = DispatchForm(obj=dispatch)
+
+    if dispatch_form.validate_on_submit():
+        dispatch_form.populate_obj(dispatch)
+          # Update dispatch data
+        dispatch.dispatch_date = datetime.utcnow()
+        dispatch.route_id = dispatch_form.route_id.data
+
+        # Update dispatch details
+        for index, dispatch_details_form in enumerate(dispatch_form.dispatch_details):
+            dispatch_details = dispatch.dispatch_details[index]
+            if dispatch_details_form and dispatch_details_form.product_id.data != 0:
+                dispatch_details.product_id = dispatch_details_form.product_id.data
+                dispatch_details.quantity = dispatch_details_form.quantity.data
+                dispatch_details.returns = dispatch_details_form.returns.data
+
+        db.session.commit()
+        return redirect(url_for("sales.view_dispatch", id=dispatch.dispatch_id))  # Assuming you have a view_dispatches route
+
+    return render_template("sales/dispatch/new_dispatch.html", dispatch_form=dispatch_form)
+
+@sales.route('/delete_dispatch/<int:id>', methods=["GET", "POST"])
+def delete_dispatch(id):
+    dispatch = Dispatch.query.get_or_404(id)
+
+    # Delete corresponding dispatch details
+    for dispatch_detail in dispatch.dispatch_details:
+        db.session.delete(dispatch_detail)
+
+    db.session.delete(dispatch)
+    db.session.commit()
+    return redirect(url_for("sales.view_dispatches"))

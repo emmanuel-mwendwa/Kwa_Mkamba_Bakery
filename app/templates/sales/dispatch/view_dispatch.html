@@ -19,7 +19,6 @@
             <th>Sales Agent Number</th>
         </thead>
         <tbody>
-            {% for dispatch in dispatches %}
             <tr>
                 <td>{{ dispatch.dispatch_id }}</td>
                 <td>{{ moment(dispatch.dispatch_date).format('L') }}</td>
@@ -48,7 +47,6 @@
                     </table>
                 </td>
             </tr>
-            {% endfor %}
         </tbody>
     </table>
 

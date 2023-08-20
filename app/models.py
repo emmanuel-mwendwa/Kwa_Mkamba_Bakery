@@ -394,23 +394,62 @@ class DispatchDetails(db.Model):
     product = db.relationship('Product', backref='dispatch_details')
 
 
-# class Order(db.Model):
-#     __tablename__ = "orders"
+class PaymentMethod(db.Model):
+    __tablename__ = "payment_methods"
 
-#     order_id = db.Column(db.Integer, primary_key=True)
-#     order_date = db.Column(db.DateTime())
-#     order_notes = db.Column(db.Text)
-#     customer_id = db.Column(db.Integer, db.ForeignKey('customers.cust_id'))
-#     order_details = db.relationship('OrderDetail', backref="orderdetail")
+    method_id = db.Column(db.Integer, primary_key=True)
+    method_name =  db.Column(db.String(28))
+    method_details = db.Column(db.String(56))
+
+    # insert payment methods
+    @staticmethod
+    def insert_payment_methods():
+        methods = {
+            "Cash": "Cash",
+            "M-PESA": "M-Pesa Code"
+        }
+        try:
+            # iterate over the dictionary to add the payment methods
+            for name, values in methods.items():
+                method = PaymentMethod.query.filter_by(name=name).first()
+                if method is not None: 
+                    print(f"Payment method '{name}' already exists.")
+                else:
+                    method = PaymentMethod(
+                        method_name=name,
+                        method_details=values[0]
+                        )
+                    db.session.add(method)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error occured: {e}")
 
 
-# class OrderDetail(db.Model):
-#     __tablename__ = "order_details"
 
-#     order_detail_id = db.Column(db.Integer, primary_key=True)
-#     order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'))
-#     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-#     quantity = db.Column(db.Float)
+class Order(db.Model):
+    __tablename__ = "orders"
+
+    order_id = db.Column(db.Integer, primary_key=True)
+    order_date = db.Column(db.DateTime())
+    order_notes = db.Column(db.Text)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.cust_id'))
+    payment_method_id = db.Column(db.Integer, db.ForeignKey('payment_methods.method_id'))
+
+    order_details = db.relationship('OrderDetail', backref="orderdetail")
+    customer = db.relationship('Customer', backref="customer")
+    payment = db.relationship('PaymentMethod', backref="payment")
+
+
+class OrderDetail(db.Model):
+    __tablename__ = "order_details"
+
+    order_detail_id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    quantity = db.Column(db.Float)
+
+    product = db.relationship('Product', backref="orderdetail")
 
 
 # class Sale(db.Model):
@@ -421,14 +460,6 @@ class DispatchDetails(db.Model):
 #     sales_total_amount = db.Column(db.Float)
 #     customer_id = db.Column(db.Integer, db.ForeignKey("customers.cust_id"))
 #     payment_method = db.Column(db.String(28))
-
-
-# class PaymentMethod(db.Model):
-#     __tablename__ = "payment_methods"
-
-#     method_id = db.Column(db.Integer, primary_key=True)
-#     method_name =  db.Column(db.String(28))
-#     method_details = db.Column(db.String(56))
 
 
 # class SalesReport(db.Model):

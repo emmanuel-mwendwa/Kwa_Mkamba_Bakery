@@ -189,7 +189,7 @@ def edit_ingredient(id):
         db.session.add(ingredient)
         db.session.commit()
         flash("Ingredient updated successfully", category="success")
-        return redirect(url_for("production.view_ingredients"))
+        return redirect(url_for("production.view_ingredient", id=ingredient.id))
     ingredient_form.name.data = ingredient.name
     ingredient_form.measurement.data = ingredient.unit_of_measurement
     return render_template("production/ingredients/create_ingredient.html", ingredient_form=ingredient_form, title=title)
