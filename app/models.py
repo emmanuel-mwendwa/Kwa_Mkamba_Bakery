@@ -3,9 +3,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from flask import current_app
 from sqlalchemy import event
+from sqlalchemy.ext.declarative import declarative_base
 import jwt
 import datetime
 
+
+Base = declarative_base()
 
 class Permission:
     VIEW_PRODUCTS = 1
@@ -349,6 +352,8 @@ class RecipeIngredient(db.Model):
     unit_of_measurement = db.Column(db.String(12))
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+
+    recipe_ingredients = db.relationship('Ingredient', backref='recipe')
 
 
 # sales management tables for my bakery system 

@@ -57,7 +57,7 @@
     <div id="order-details">
       {% for order_details_form in order_form.order_details %}
       <br>
-        <div class="dispatch-detail">
+        <div class="order-detail">
           <div class="form-group">
             {{ order_details_form.product_id.label(class="form-label") }}
             {{ order_details_form.product_id(class="form-control") }}

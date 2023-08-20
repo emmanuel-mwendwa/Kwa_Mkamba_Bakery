@@ -30,7 +30,7 @@
 
 
 {% if current_user.can(Permission.MANAGE_PRODUCTS) %}
-<h3><a href="{{ url_for('production.edit_ingredient', id=ingredient.id)}}">Edit</a></h3>
+<h3><a href="{{ url_for('production.update_ingredient', id=ingredient.id)}}">Update</a></h3>
 <h3><a href="{{ url_for('production.delete_ingredient', id=ingredient.id)}}">Delete</a></h3>
 {% endif %}
 

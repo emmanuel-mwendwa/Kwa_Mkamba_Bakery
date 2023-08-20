@@ -23,12 +23,7 @@
                 <td>{{ supplier.phone_no }}</td>
                 <td>{{ supplier.email }}</td>
                 <td>{{ moment(supplier.created_at).format('L') }}</td>
-            </tr>
-            <tr>
-                <td><a href="{{ url_for('production.edit_supplier', id=supplier.id)}}">Edit</a></td>
-                <td><a href="{{ url_for('production.delete_supplier', id=supplier.id)}}">Delete</a></td>
-            </tr>
-                
+            </tr>      
             {% endfor %}
         </tbody>
     </table>

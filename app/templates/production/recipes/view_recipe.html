@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Order {% endblock %}
+{% block title %} {{ recipe.name }} {% endblock %}
 
 {% block styles %} {{ super() }} {% endblock %}
 
@@ -32,7 +32,7 @@
                         <tbody>
                             {% for detail in recipe.recipe_ingredients %}
                             <tr>
-                                <td>{{ detail.ingredient_id }}</td>
+                                <td>{{ detail.recipe_ingredients.recipe.name }}</td>
                                 <td>{{ detail.quantity }}</td>
                                 <td>{{ detail.unit_of_measurement }}</td>
                             </tr>
@@ -44,7 +44,7 @@
         </tbody>
     </table>
     <div>
-        <a href="{{ url_for('production.update_recipe', recipe_id=recipe.id)}}">Edit</a>
+        <a href="{{ url_for('production.update_recipe', recipe_id=recipe.id)}}">Update</a>
         <a href="{{ url_for('production.delete_recipe', recipe_id=recipe.id)}}">Delete</a>
     </div>
 

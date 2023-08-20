@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} View Customer {% endblock %}
+{% block title %} {{ customer.name }} {% endblock %}
 
 {% block styles %} {{ super() }} {% endblock %}
 
@@ -21,7 +21,7 @@
 <br>
 
 
-<button><a href="{{ url_for('sales.update_customer', id=customer.cust_id) }}">Edit</a></button>
+<button><a href="{{ url_for('sales.update_customer', id=customer.cust_id) }}">Update</a></button>
 <button><a href="{{ url_for('sales.delete_customer', id=customer.cust_id) }}">Delete</a></button>
 
 {% endblock %}

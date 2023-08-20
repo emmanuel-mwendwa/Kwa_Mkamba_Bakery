@@ -34,7 +34,7 @@
             </tr>
             {% endfor %}
             <tr>
-                <td><a href="{{ url_for('production.edit_supplier', id=supplier.id)}}">Edit</a></td>
+                <td><a href="{{ url_for('production.update_supplier', id=supplier.id)}}">Update</a></td>
                 <td><a href="{{ url_for('production.delete_supplier', id=supplier.id)}}">Delete</a></td>
             </tr>
         </tbody>

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Add Product {% endblock %}
+{% block title %} {{ product.name }} {% endblock %}
 
 {% block styles %} {{ super() }} {% endblock %}
 
@@ -38,7 +38,7 @@
 
 
 {% if current_user.can(Permission.MANAGE_PRODUCTS) %}
-<h3><a href="{{ url_for('production.edit_product', id=product.id)}}">Edit</a></h3>
+<h3><a href="{{ url_for('production.update_product', id=product.id)}}">Update</a></h3>
 <h3><a href="{{ url_for('production.delete_product', id=product.id)}}">Delete</a></h3>
 {% endif %}
 
