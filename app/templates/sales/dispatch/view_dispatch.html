@@ -49,6 +49,10 @@
             </tr>
         </tbody>
     </table>
+    <div>
+        <a href="{{ url_for('sales.update_dispatch', id=dispatch.dispatch_id)}}">Edit</a>
+        <a href="{{ url_for('sales.delete_dispatch', id=dispatch.dispatch_id)}}">Delete</a>
+    </div>
 
     {% endblock %}
 

@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from flask_wtf.form import _Auto
-from wtforms import StringField, SelectField, SubmitField, FloatField, FormField, FieldList
+from wtforms import StringField, SelectField, SubmitField, FloatField, FormField, FieldList, TextAreaField
 from wtforms.validators import DataRequired, Regexp, Email, Length
 from wtforms import ValidationError
-from ..models import User, Customer, Route, Product
+from ..models import User, Customer, Route, Product, PaymentMethod
 
 class AddNewCustomerForm(FlaskForm):
     cust_name = StringField("Customer Name: ", validators=[DataRequired(), Length(0, 64), Regexp('^[A-Za-z ]*$',0, 'Names can only contain letters and spaces')])
@@ -67,3 +67,32 @@ class DispatchForm(FlaskForm):
     def add_empty_dispatch(self):
         empty_dispatch = DispatchDetailsForm()
         self.dispatch_details.append_entry(empty_dispatch)
+
+
+class OrderDetailsForm(FlaskForm):
+    product_id = SelectField("Product", coerce=int)
+    quantity = FloatField("Quantity")
+
+    def __init__(self, *args, **kwargs):
+        super(OrderDetailsForm, self).__init__(*args, **kwargs)
+        self.product_id.choices = [(product.id, product.name)
+                                   for product in Product.query.all()]
+
+
+class OrderForm(FlaskForm):
+    customer_id = SelectField("Customer", coerce=int)
+    order_notes = TextAreaField("Notes")
+    payment_method_id = SelectField("Payment Method")
+    order_details = FieldList(FormField(OrderDetailsForm), min_entries=1)
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(OrderForm, self).__init__(*args, **kwargs)
+        self.customer_id.choices = [(customer.cust_id,customer.cust_name)
+                                    for customer in Customer.query.all()]
+        self.payment_method_id.choices = [(method.method_id, method.method_name)
+                                          for method in PaymentMethod.query.all()]
+        
+    def add_empty_orderdetail(self):
+        empty_orderdetail = OrderDetailsForm()
+        self.order_details.append_entry(empty_orderdetail)

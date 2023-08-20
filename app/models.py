@@ -411,13 +411,13 @@ class PaymentMethod(db.Model):
         try:
             # iterate over the dictionary to add the payment methods
             for name, values in methods.items():
-                method = PaymentMethod.query.filter_by(name=name).first()
+                method = PaymentMethod.query.filter_by(method_name=name).first()
                 if method is not None: 
                     print(f"Payment method '{name}' already exists.")
                 else:
                     method = PaymentMethod(
                         method_name=name,
-                        method_details=values[0]
+                        method_details=values
                         )
                     db.session.add(method)
             db.session.commit()

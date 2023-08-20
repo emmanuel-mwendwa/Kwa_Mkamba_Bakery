@@ -1,9 +1,9 @@
 from . import sales
 from flask import redirect, render_template, url_for, flash, request
 from flask_login import login_required
-from .forms import AddNewCustomerForm, AddNewRouteForm, DispatchForm
+from .forms import AddNewCustomerForm, AddNewRouteForm, DispatchForm, OrderForm
 from .. import db
-from ..models import Customer, Route, User, Dispatch, DispatchDetails
+from ..models import Customer, Route, User, Dispatch, DispatchDetails, Order, OrderDetail
 from ..decorators import admin_required, permission_required
 from datetime import datetime
 
@@ -142,7 +142,7 @@ def new_dispatch():
                     db.session.add(dispatch_detail)
             db.session.commit()
             return redirect(url_for("sales.view_dispatches"))
-    return render_template("sales/dispatch/new_dispatch.html", dispatch_form=dispatch_form)
+    return render_template("sales/dispatch/new_dispatch.html", dispatch_form=dispatch_form, title=title)
 
 
 @sales.route("/view_dispatches")
@@ -195,3 +195,42 @@ def delete_dispatch(id):
     db.session.delete(dispatch)
     db.session.commit()
     return redirect(url_for("sales.view_dispatches"))
+
+@sales.route('/new_order', methods=["GET", "POST"])
+def new_order():
+    title = "New Order"
+    order_form = OrderForm()
+    if order_form.validate_on_submit():
+        if 'add_order' in request.form:
+            order_form.add_empty_orderdetail()
+        elif 'submit_order' in request.form:
+            order = Order(
+                order_date = datetime.utcnow(),
+                order_notes = order_form.order_notes.data,
+                customer_id = order_form.customer_id.data,
+                payment_method_id = order_form.payment_method_id.data
+            )
+            db.session.add(order)
+            db.session.commit()
+
+            for order_details_form in order_form.order_details:
+                if order_details_form.product_id.data != 0:
+                    order_detail = OrderDetail(
+                        order_id = order.order_id,
+                        product_id = order_details_form.product_id.data,
+                        quantity = order_details_form.quantity.data
+                    )
+                    db.session.add(order_detail)
+            db.session.commit()
+            return redirect(url_for("sales.view_orders"))
+    return render_template("sales/orders/new_order.html", order_form=order_form, title=title)
+
+@sales.route('/view_orders')
+def view_orders():
+    orders = Order.query.all()
+    return render_template("sales/orders/view_orders.html", orders=orders)
+
+@sales.route('/view_order/<int:order_id>')
+def view_order(order_id):
+    order = Order.query.get_or_404(order_id)
+    return render_template("sales/orders/view_order.html", order=order)

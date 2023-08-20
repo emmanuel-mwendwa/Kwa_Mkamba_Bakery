@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Dispatches {% endblock %}
+{% block title %} Orders {% endblock %}
 
 {% block styles %} {{ super() }} {% endblock %}
 
@@ -11,44 +11,38 @@
     
     <table>
         <thead>
-            <th>Dispatch ID</th>
-            <th>Dispatch Date</th>
-            <th>Route ID</th>
-            <th>Route Name</th>
-            <th>Sales Agent Name</th>
-            <th>Sales Agent Number</th>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Customer</th>
+            <th>Payment</th>
+            <th>Served By</th>
         </thead>
         <tbody>
-            {% for dispatch in dispatches %}
             <tr>
-                <td><a href="{{ url_for('sales.view_dispatch', id=dispatch.dispatch_id)}}">{{ dispatch.dispatch_id }}</a></td>
-                <td>{{ moment(dispatch.dispatch_date).format('L') }}</td>
-                <td>{{ dispatch.route_id }}</td>
-                <td>{{ dispatch.dispatch_route.route_name }}</td>
-                <td>{{ dispatch.dispatch_route.sales_assoc.name }}</td>
-                <td>{{ dispatch.dispatch_route.sales_assoc.phone_no }}</td>
+                <td>{{ order.order_id }}</td>
+                <td>{{ moment(order.order_date).format('L') }}</td>
+                <td>{{ order.customer.cust_name }}</td>
+                <td>{{ order.payment.method_name }}</td>
+                <td>{{ order.customer.route_id.sales_assoc.name }}</td>
                 <td>
                     <table>
                         <thead>
                             <tr>
                                 <th>Product Name</th>
                                 <th>Quantity</th>
-                                <th>Returns</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for detail in dispatch.dispatch_details %}
+                            {% for detail in order.order_details %}
                             <tr>
                                 <td>{{ detail.product.name }}</td>
                                 <td>{{ detail.quantity }}</td>
-                                <td>{{ detail.returns }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </td>
             </tr>
-            {% endfor %}
         </tbody>
     </table>
 

@@ -1,6 +1,6 @@
 from app import create_app, db
 from flask_migrate import Migrate
-from app.models import Role, User, Permission, Product, ProductionRun, Supplier, SupplierIngredient, Ingredient, Recipe, RecipeIngredient, Route, Customer, Dispatch, DispatchDetails
+from app.models import Role, User, Permission, Product, ProductionRun, Supplier, SupplierIngredient, Ingredient, Recipe, RecipeIngredient, Route, Customer, Dispatch, DispatchDetails, PaymentMethod, Order, OrderDetail
 import os
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -23,5 +23,8 @@ def make_shell_processor():
         Route=Route,
         Customer=Customer,
         Dispatch=Dispatch,
-        DispatchDetails=DispatchDetails
+        DispatchDetails=DispatchDetails,
+        Order=Order,
+        OrderDetail=OrderDetail,
+        PaymentMethod=PaymentMethod
     )
