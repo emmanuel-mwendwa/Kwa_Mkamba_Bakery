@@ -16,7 +16,7 @@
 <label for="">Agent Number: </label> <span>{{ sales_assoc.phone_no }}</span>
 <br>
 
-<button><a href="{{ url_for('sales.edit_route', id=route.route_id) }}">Edit</a></button>
+<button><a href="{{ url_for('sales.update_route', id=route.route_id) }}">Edit</a></button>
 <button><a href="{{ url_for('sales.delete_route', id=route.route_id) }}">Delete</a></button>
 
 {% endblock %}

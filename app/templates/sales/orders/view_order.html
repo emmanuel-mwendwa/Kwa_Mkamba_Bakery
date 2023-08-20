@@ -23,7 +23,7 @@
                 <td>{{ moment(order.order_date).format('L') }}</td>
                 <td>{{ order.customer.cust_name }}</td>
                 <td>{{ order.payment.method_name }}</td>
-                <td>{{ order.customer.route_id.sales_assoc.name }}</td>
+                <td>{{ order.customer.cust_route.sales_assoc.name }}</td>
                 <td>
                     <table>
                         <thead>
@@ -45,6 +45,10 @@
             </tr>
         </tbody>
     </table>
+    <div>
+        <a href="{{ url_for('sales.update_order', order_id=order.order_id)}}">Edit</a>
+        <a href="{{ url_for('sales.delete_order', order_id=order.order_id)}}">Delete</a>
+    </div>
 
     {% endblock %}
 

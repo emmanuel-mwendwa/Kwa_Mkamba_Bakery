@@ -36,9 +36,9 @@ def view_route(id):
     sales_assoc = User.query.filter_by(id = route.sales_assoc_id).first()
     return render_template("sales/route/view_route.html", route=route, sales_assoc=sales_assoc)
 
-@sales.route("/edit_route/<int:id>", methods=["GET", "POST"])
-def edit_route(id):
-    title = "Edit Route"
+@sales.route("/update_route/<int:id>", methods=["GET", "POST"])
+def update_route(id):
+    title = "Update Route"
     route = Route.query.get_or_404(id)
     route_form = AddNewRouteForm()
     if route_form.validate_on_submit():
@@ -47,8 +47,8 @@ def edit_route(id):
 
         db.session.add(route)
         db.session.commit()
-        flash("Route editted successfully", category="success")
-        return "Route editted successfully"
+        flash("Route updated successfully", category="success")
+        return redirect(url_for("sales.view_route", id=route.route_id))
     route_form.route_name.data = route.route_name
     route_form.sales_assoc_id.data = route.sales_assoc_id
     return render_template("sales/route/new_route.html", route_form=route_form, title=title)
@@ -88,9 +88,9 @@ def view_customer(id):
     customer = Customer.query.get_or_404(id)
     return render_template("sales/customer/view_customer.html", customer=customer)
 
-@sales.route("/edit_customer/<int:id>", methods=["GET", "POST"])
-def edit_customer(id):
-    title = "Edit Customer"
+@sales.route("/update_customer/<int:id>", methods=["GET", "POST"])
+def update_customer(id):
+    title = "Update Customer"
     customer = Customer.query.get_or_404(id)
     customer_form = AddNewCustomerForm()
     if customer_form.validate_on_submit():
@@ -157,6 +157,7 @@ def view_dispatch(id):
 
 @sales.route("/edit_dispatch/<int:id>", methods=["GET", "POST"])
 def update_dispatch(id):
+    title = "Update Dispatch"
     dispatch = Dispatch.query.get(id)
     if dispatch is None:
         # Handle case where dispatch is not found
@@ -180,9 +181,9 @@ def update_dispatch(id):
                 dispatch_details.returns = dispatch_details_form.returns.data
 
         db.session.commit()
-        return redirect(url_for("sales.view_dispatch", id=dispatch.dispatch_id))  # Assuming you have a view_dispatches route
+        return redirect(url_for("sales.view_dispatch", id=dispatch.dispatch_id))
 
-    return render_template("sales/dispatch/new_dispatch.html", dispatch_form=dispatch_form)
+    return render_template("sales/dispatch/new_dispatch.html", dispatch_form=dispatch_form, title=title)
 
 @sales.route('/delete_dispatch/<int:id>', methods=["GET", "POST"])
 def delete_dispatch(id):
@@ -234,3 +235,45 @@ def view_orders():
 def view_order(order_id):
     order = Order.query.get_or_404(order_id)
     return render_template("sales/orders/view_order.html", order=order)
+
+@sales.route('/update_order/<int:order_id>', methods=["GET", "POST"])
+def update_order(order_id):
+    title = "Update Order"
+    order = Order.query.get(order_id)
+    if order is None:
+        # Handle case where order is not found
+        return "Order not found", 404
+
+    # populates the form fields with data fetched from order query
+    order_form = OrderForm(obj=order)
+
+    if order_form.validate_on_submit():
+        order_form.populate_obj(order)
+          # Update order data
+        order.order_date = datetime.utcnow()
+        order.customer_id = order_form.customer_id.data
+        order.notes = order_form.order_notes.data
+        order.payment_method_id = order_form.payment_method_id.data
+
+        # Update order details
+        for index, order_details_form in enumerate(order_form.order_details):
+            order_details = order.order_details[index]
+            if order_details_form and order_details_form.product_id.data != 0:
+                order_details.product_id = order_details_form.product_id.data
+                order_details.quantity = order_details_form.quantity.data
+
+        db.session.commit()
+        return redirect(url_for("sales.view_order", order_id=order.order_id))
+    return render_template("sales/orders/new_order.html", order_form=order_form, title=title)
+
+@sales.route('/delete_order/<int:order_id>', methods=["GET", "POST"])
+def delete_order(order_id):
+    order = Order.query.get_or_404(order_id)
+
+    # Delete corresponding order details
+    for order_detail in order.order_details:
+        db.session.delete(order_detail)
+
+    db.session.delete(order)
+    db.session.commit()
+    return redirect(url_for("sales.view_orders"))
