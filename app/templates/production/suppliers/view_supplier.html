@@ -23,16 +23,6 @@
                 <td>{{ supplier.email }}</td>
                 <td>{{ moment(supplier.created_at).format('L') }}</td>
             </tr>
-            <thead>
-                <th>Ingredient Name</th>
-                <th>Unit Cost</th>
-            </thead>
-            {% for ingredient, unit_cost in supplier_ingredients %}
-            <tr>
-                <td>{{ ingredient.name }}</td>
-                <td>{{ unit_cost }}</td>
-            </tr>
-            {% endfor %}
             <tr>
                 <td><a href="{{ url_for('production.update_supplier', id=supplier.id)}}">Update</a></td>
                 <td><a href="{{ url_for('production.delete_supplier', id=supplier.id)}}">Delete</a></td>

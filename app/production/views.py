@@ -3,7 +3,7 @@ from flask_login import login_required
 from . import production
 from .forms import AddNewProductForm, AddNewProductionRunForm, AddNewIngredient, AddNewSupplier, RecipeForm
 from .. import db
-from ..models import Product, ProductionRun, Ingredient, Supplier, SupplierIngredient, Recipe, RecipeIngredient, Permission
+from ..models import Product, ProductionRun, Ingredient, Supplier, Recipe, RecipeIngredient, Permission
 from ..decorators import admin_required, permission_required
 from datetime import datetime
 
@@ -154,7 +154,8 @@ def new_ingredient():
     if ingredient_form.validate_on_submit():
         ingredient = Ingredient(
             name=ingredient_form.name.data, 
-            unit_of_measurement=ingredient_form.measurement.data
+            unit_of_measurement=ingredient_form.measurement.data,
+            unit_cost=ingredient_form.unit_cost.data
             )
         db.session.add(ingredient)
         db.session.commit()
@@ -172,11 +173,7 @@ def view_ingredients():
 @permission_required(Permission.MANAGE_RECIPE_DETAILS)
 def view_ingredient(id):
     ingredient = Ingredient.query.get_or_404(id)
-    suppliers = Supplier.query.join(Supplier.supplier_ingredients)\
-                                .join(Ingredient, SupplierIngredient.ingredient)\
-                                .filter(Ingredient.name == ingredient.name)\
-                                .all()
-    return render_template("production/ingredients/view_ingredient.html", ingredient=ingredient, suppliers=suppliers)
+    return render_template("production/ingredients/view_ingredient.html", ingredient=ingredient)
 
 @production.route('/update_ingredient/<int:id>', methods=["GET", "POST"])
 @permission_required(Permission.MANAGE_RECIPE_DETAILS)
@@ -187,12 +184,14 @@ def update_ingredient(id):
     if ingredient_form.validate_on_submit():
         ingredient.name = ingredient_form.name.data
         ingredient.unit_of_measurement = ingredient_form.measurement.data
+        ingredient.unit_cost = ingredient_form.unit_cost.data
         db.session.add(ingredient)
         db.session.commit()
         flash("Ingredient updated successfully", category="success")
         return redirect(url_for("production.view_ingredient", id=ingredient.id))
     ingredient_form.name.data = ingredient.name
     ingredient_form.measurement.data = ingredient.unit_of_measurement
+    ingredient_form.unit_cost.data = ingredient.unit_cost
     return render_template("production/ingredients/create_ingredient.html", ingredient_form=ingredient_form, title=title)
 
 @production.route('/delete_ingredient/<int:id>', methods=["GET", "POST"])
@@ -209,28 +208,15 @@ def new_supplier():
     title="New Supplier"
     supplier_form = AddNewSupplier()
     if supplier_form.validate_on_submit():
-        if 'add_ingredient' in request.form:
-            supplier_form.add_empty_ingredient()
-        elif 'submit' in request.form:
-            supplier = Supplier(
-                name=supplier_form.name.data, 
-                phone_no=supplier_form.phone_no.data, 
-                email=supplier_form.email.data
-                )
-            db.session.add(supplier)
-            db.session.commit()
-
-            for ingredient_form in supplier_form.ingredients:
-                if ingredient_form.ingredient_id != 0:
-                    supplier_ingredient = SupplierIngredient(
-                        supplier_id = supplier.id,
-                        ingredient_id = ingredient_form.ingredient_id.data,
-                        unit_cost = ingredient_form.unit_cost.data,
-                    )
-                    db.session.add(supplier_ingredient)
-            db.session.commit()
-            flash("Supplier added successfully", category="success")
-            return redirect(url_for("production.view_suppliers"))
+        supplier = Supplier(
+            name=supplier_form.name.data, 
+            phone_no=supplier_form.phone_no.data, 
+            email=supplier_form.email.data
+            )
+        db.session.add(supplier)
+        db.session.commit()
+        flash("Supplier added successfully", category="success")
+        return redirect(url_for("production.view_suppliers"))
     return render_template("production/suppliers/create_supplier.html", supplier_form=supplier_form, title=title)
 
 @production.route('/view_suppliers')
@@ -243,11 +229,7 @@ def view_suppliers():
 @permission_required(Permission.MANAGER)
 def view_supplier(id):
     supplier = Supplier.query.get_or_404(id)
-    supplier_ingredients = db.session.query(Ingredient, SupplierIngredient.unit_cost).\
-                            join(SupplierIngredient).\
-                            filter(SupplierIngredient.supplier_id == supplier.id).\
-                            all()
-    return render_template("production/suppliers/view_supplier.html", supplier=supplier, supplier_ingredients=supplier_ingredients)
+    return render_template("production/suppliers/view_supplier.html", supplier=supplier)
 
 @production.route('/update_supplier/<int:id>', methods=["GET", "POST"])
 @permission_required(Permission.MANAGER)
@@ -265,19 +247,11 @@ def update_supplier(id):
         supplier.email = supplier_form.email.data
         # Call the update_timestamp method to update the updated_at
         supplier.update_timestamp()
-
-        for ingredient_form in supplier_form.ingredients:
-            ingredient_id = ingredient_form.ingredient_id.data
-            ingredient = Ingredient.query.get(ingredient_id)
-
-            if ingredient:
-                supplier_ingredient = SupplierIngredient.query.filter_by(supplier_id=supplier.id, ingredient_id=ingredient.id).first()
-                supplier_ingredient.unit_cost = ingredient_form.unit_cost.data
-    
+        db.session.add(supplier)
         db.session.commit()
         flash("Supplier updated successfully", category="success")
-        return redirect(url_for("production.view_suppliers"))
-    return render_template("production/suppliers/create_supplier.html", supplier_form=supplier_form, title=title)
+        return redirect(url_for("production.view_supplier", id=supplier.id))
+    return render_template("production/suppliers/update_supplier.html", supplier_form=supplier_form, title=title)
 
 @production.route('/delete_supplier/<int:id>', methods=["GET", "POST"])
 @permission_required(Permission.MANAGER)
@@ -314,7 +288,7 @@ def create_recipe():
                     )
                     db.session.add(ingredient)
             db.session.commit()
-            return redirect(url_for("production.view_recipe"))
+            return redirect(url_for("production.view_recipe", recipe_id=recipe.id))
     return render_template("production/recipes/create_recipe.html", recipe_form=recipe_form)
 
 

@@ -33,7 +33,7 @@
                         <tbody>
                             {% for detail in recipe.recipe_ingredients %}
                             <tr>
-                                <td>{{ detail.ingredient_id }}</td>
+                                <td>{{ detail.recipe_ingredients.name }}</td>
                                 <td>{{ detail.quantity }}</td>
                                 <td>{{ detail.unit_of_measurement }}</td>
                             </tr>

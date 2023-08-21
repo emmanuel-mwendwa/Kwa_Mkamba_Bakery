@@ -11,8 +11,10 @@
 
 <label for="">Ingredient Name: </label> <span>{{ ingredient.name }} </span>
 <br>
+<label for="">Price</label> <span>{{ ingredient.unit_cost }} </span>
+<br>
 
-<table>
+<!-- <table>
     <thead>
         <th>Supplier Name</th>
         <th>Unit Cost</th>
@@ -21,11 +23,10 @@
         {% for supplier in suppliers %}
         <tr>
             <td>{{ supplier.name }}</td>
-            <td>{{ supplier.supplier_ingredients[0].unit_cost }}</td>
         </tr>
         {% endfor %}
     </tbody>
-</table>
+</table> -->
 
 
 

@@ -38,6 +38,18 @@
         {% endif %}
     </div>
 
+    <div class="form-group">
+        {{ ingredient_form.unit_cost.label(class="form-label") }}
+        {{ ingredient_form.unit_cost(class="form-control") }}
+        {% if ingredient_form.unit_cost.errors %}
+            <ul class="errors">
+                {% for error in ingredient_form.unit_cost.errors %}
+                    <li>{{ errror }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
     <div>
         {{ ingredient_form.submit() }}
     </div>

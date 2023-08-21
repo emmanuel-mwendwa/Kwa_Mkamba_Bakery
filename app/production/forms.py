@@ -28,30 +28,30 @@ class AddNewProductionRunForm(FlaskForm):
 class AddNewIngredient(FlaskForm):
     name = StringField("Ingredient Name", validators=[DataRequired()])
     measurement = StringField("Unit of Measurement")
+    unit_cost = FloatField('Unit Cost')
     submit = SubmitField("Submit")
 
-class AddSupplierIngredientForm(FlaskForm):
-    ingredient_id = SelectField('Ingredient', coerce=int)
-    unit_cost = FloatField('Unit Cost')
+# class AddSupplierIngredientForm(FlaskForm):
+#     ingredient_id = SelectField('Ingredient', coerce=int)
 
-    # adding choices to the related fields
-    def __init__(self, *args,**kwargs):
-        super(AddSupplierIngredientForm, self).__init__(*args, **kwargs)
+#     # adding choices to the related fields
+#     def __init__(self, *args,**kwargs):
+#         super(AddSupplierIngredientForm, self).__init__(*args, **kwargs)
 
-        self.ingredient_id.choices = [(ingredient.id, ingredient.name)
-                                     for ingredient in Ingredient.query.order_by(Ingredient.name).all()]
+#         self.ingredient_id.choices = [(ingredient.id, ingredient.name)
+#                                      for ingredient in Ingredient.query.order_by(Ingredient.name).all()]
         
 
 class AddNewSupplier(FlaskForm):
     name = StringField("Supplier Name", validators=[DataRequired()])
     phone_no = StringField("Phone Number", validators=[DataRequired()])
     email = StringField("Email")
-    ingredients = FieldList(FormField(AddSupplierIngredientForm), min_entries=1)
+    # ingredients = FieldList(FormField(AddSupplierIngredientForm), min_entries=1)
     submit = SubmitField("Submit")
 
-    def add_empty_ingredient(self):
-        empty_ingredient = AddSupplierIngredientForm()
-        self.ingredients.append_entry(empty_ingredient)
+    # def add_empty_ingredient(self):
+    #     empty_ingredient = AddSupplierIngredientForm()
+    #     self.ingredients.append_entry(empty_ingredient)
      
 
 class RecipeIngredientForm(FlaskForm):
