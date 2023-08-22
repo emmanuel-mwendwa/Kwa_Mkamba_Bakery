@@ -243,6 +243,7 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     production_runs = db.relationship('ProductionRun', backref='production', lazy='dynamic')
+    recipe = db.relationship('Recipe', backref='product_recipe')
 
 
 class ProductionRun(db.Model):
@@ -304,14 +305,11 @@ class Ingredient(db.Model):
     def insert_ingredients():
         ingredients = {
             "Flour": ["Kilograms", 2260],
-            "Saccharin": ["grams", 1750],
             "Yeast": ["grams", 350],
             "Salt": ["grams", 60],
             "Baking Powder": ["grams", 1750],
             "Cooking Oil": ["Litres", 4500],
-            "Water": ["litres", 20],
-            "Electricity": ["KiloWatts", 22],
-            "Packing Papers": ["Packets", 180]
+            "Water": ["litres", 20]
         }
         try:
             # iterate over the dictionary to add the ingredients
@@ -336,7 +334,7 @@ class Recipe(db.Model):
     __tablename__ = "recipes"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True, nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     description = db.Column(db.Text)
     yield_amount = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())

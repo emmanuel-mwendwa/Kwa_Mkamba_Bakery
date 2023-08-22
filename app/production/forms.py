@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.form import _Auto
 from wtforms import StringField, SelectField, SubmitField, TextAreaField, IntegerField, FloatField, SelectMultipleField, widgets, FormField, FieldList
 from wtforms.validators import DataRequired, Length, NumberRange
 from wtforms import ValidationError
@@ -66,11 +67,17 @@ class RecipeIngredientForm(FlaskForm):
 
 
 class RecipeForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    product_id = SelectField('Product Name', validators=[DataRequired()])
     description = TextAreaField('Description')
     yield_amount = IntegerField('Yield Amount', validators=[DataRequired()])
     recipe_ingredients = FieldList(FormField(RecipeIngredientForm), min_entries=1)
     submit = SubmitField("Submit")
+
+    def __init__(self, *args, **kwargs):
+        super(RecipeForm, self).__init__(*args, **kwargs)
+
+        self.product_id.choices = [(0, 'Select a product')] + [(product.id, product.name)
+                                                               for product in Product.query.order_by(Product.name).all()]
 
     def add_empty_ingredient(self):
         empty_ingredient = RecipeIngredientForm()

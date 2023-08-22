@@ -15,11 +15,11 @@
     {{ recipe_form.hidden_tag() }}
     
     <div class="form-group">
-      {{ recipe_form.name.label(class="form-label") }}
-      {{ recipe_form.name(class="form-control") }}
-      {% if recipe_form.name.errors %}
+      {{ recipe_form.product_id.label(class="form-label") }}
+      {{ recipe_form.product_id(class="form-control") }}
+      {% if recipe_form.product_id.errors %}
         <ul class="errors">
-          {% for error in recipe_form.name.errors %}
+          {% for error in recipe_form.product_id.errors %}
             <li>{{ error }}</li>
           {% endfor %}
         </ul>

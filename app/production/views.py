@@ -271,7 +271,7 @@ def create_recipe():
             recipe_form.add_empty_ingredient()
         elif 'submit_recipe' in request.form:
             recipe = Recipe(
-                name = recipe_form.name.data,
+                product_id = recipe_form.product_id.data,
                 description = recipe_form.description.data,
                 yield_amount = recipe_form.yield_amount.data
             )
@@ -320,7 +320,7 @@ def update_recipe(recipe_id):
         recipe_form.populate_obj(recipe)
           # Update recipe data
         recipe.created_at = datetime.utcnow()
-        recipe.name = recipe_form.name.data
+        recipe.product_id = recipe_form.product_id.data
         recipe.description = recipe_form.description.data
         recipe.yield_amount = recipe_form.yield_amount.data
 

@@ -11,14 +11,14 @@
     
     <table>
         <thead>
-            <th>Recipe Name</th>
+            <th>Product Name</th>
             <th>Description</th>
             <th>Yield Amount</th>
         </thead>
         <tbody>
             {% for recipe in recipes %}
             <tr>
-                <td><a href="{{ url_for('production.view_recipe', recipe_id=recipe.id)}}">{{ recipe.name }}</a></td>
+                <td><a href="{{ url_for('production.view_recipe', recipe_id=recipe.id)}}">{{ recipe.product_recipe.name }}</a></td>
                 <td>{{ recipe.description }}</td>
                 <td>{{ recipe.yield_amount }}</td>
                 <td>
