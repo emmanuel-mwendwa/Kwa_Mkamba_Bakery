@@ -18,9 +18,9 @@ class AddNewCustomerForm(FlaskForm):
         self.route_id.choices = [(route.route_id, route.route_name)
                                  for route in Route.query.all()]
 
-    def validate_cust_email(self, field):
-        if Customer.query.filter_by(cust_email=field.data).first():
-            raise ValidationError('Email already registered.')
+    # def validate_cust_email(self, field):
+    #     if Customer.query.filter_by(cust_email=field.data).first():
+    #         raise ValidationError('Email already registered.')
 
     def validate_phone_no(self, field):
         if field.data:

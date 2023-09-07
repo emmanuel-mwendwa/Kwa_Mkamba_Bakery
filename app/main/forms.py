@@ -5,8 +5,14 @@ from wtforms import ValidationError
 from ..models import Role, User
 
 class EditProfileForm(FlaskForm):
-    name = StringField('Full Name', validators=[Length(0, 64), Regexp('^[A-Za-z ]*$',0, 'Names can only contain letters and spaces')])
-    phone_no = StringField('Phone Number', validators=[Length(0, 13), Regexp('^[0-9+]*$',0, 'Phone number can only contain numbers')])
+    name = StringField('Full Name',
+                       render_kw={'placeholder': 'Full Name'},
+                       validators=[Length(0, 64), Regexp('^[A-Za-z ]*$',0, 'Names can only contain letters and spaces')]
+                       )
+    phone_no = StringField('Phone Number',
+                        render_kw={'placeholder': 'Phone Number'},
+                        validators=[Length(0, 13), Regexp('^[0-9+]*$',0, 'Phone number can only contain numbers')]
+                        )
     submit = SubmitField('Submit')
 
     def validate_phone_no(self, field):

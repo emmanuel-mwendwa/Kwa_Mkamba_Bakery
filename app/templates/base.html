@@ -11,7 +11,7 @@
 
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
+      href="{{ url_for('static', filename='css/layout.css') }}"
     />
 
     {% endblock %}
@@ -68,22 +68,32 @@
 
     <footer class="main-navigation-bar__footer--details">
       <nav class="main-navigation-bar__nav--details">
-        <ul class="main-navigation-bar__unordered-list--details">
-          <li>
-            <a href="{{ url_for('main.index') }}"> <i></i>Home</a>
-          </li>
-          <li>
+        <div class="main-navigation-bar--details">
+          <div>
+            <a href="{{ url_for('main.index') }}"> 
+              <img src="{{ url_for('static', filename='icons/home.png')}}" alt="">
+              Home
+            </a>
+          </div>
+          <div>
             <a href="{{ url_for('production.production_home')}}">
-              <i></i>Production</a
-            >
-          </li>
-          <li>
-            <a href="{{ url_for('sales.sales_page')}}"> <i></i>Sales</a>
-          </li>
-          <li>
-            <a href="#"> <i></i>Staff</a>
-          </li>
-        </ul>
+              <img src="{{ url_for('static', filename='icons/production.png')}}" alt="">
+              Production
+            </a>
+          </div>
+          <div>
+            <a href="{{ url_for('sales.sales_page')}}">
+              <img src="{{ url_for('static', filename='icons/sales.png')}}" alt=""">
+              Sales
+            </a>
+          </div>
+          <div>
+            <a href="#">
+              <img src="{{ url_for('static', filename='icons/home.png')}}" alt="">
+              Staff
+            </a>
+          </div>
+        </div>
       </nav>
     </footer>
 

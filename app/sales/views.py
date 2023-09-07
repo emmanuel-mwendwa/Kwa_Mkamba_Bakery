@@ -98,6 +98,7 @@ def update_customer(id):
         customer.cust_email = customer_form.cust_email.data
         customer.cust_phone_no = customer_form.cust_phone_no.data
         customer.cust_mpesa_agent_name = customer_form.cust_mpesa_agent_name.data
+        customer.route_id = customer_form.route_id.data
 
         db.session.add(customer)
         db.session.commit()
@@ -107,6 +108,7 @@ def update_customer(id):
     customer_form.cust_email.data = customer.cust_email
     customer_form.cust_phone_no.data = customer.cust_phone_no
     customer_form.cust_mpesa_agent_name.data = customer.cust_mpesa_agent_name
+    customer_form.route_id.data = customer.route_id
     return render_template("sales/customer/new_customer.html", customer_form=customer_form, title=title)
 
 @sales.route('/delete_customer/<int:id>', methods=["GET", "POST"])
