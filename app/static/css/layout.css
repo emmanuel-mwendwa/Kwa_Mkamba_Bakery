@@ -68,6 +68,11 @@ body {
 
 .main-navigation-bar__nav--details {
     background-color: var(--backgroud-lighter-orange-color);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 65px;
 }
 
 .main-navigation-bar--details {

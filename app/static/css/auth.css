@@ -83,4 +83,10 @@
 
 .important-links a {
     text-decoration: none;
+    color: white;
+}
+
+.submit {
+    color: white;
+    cursor: pointer;
 }

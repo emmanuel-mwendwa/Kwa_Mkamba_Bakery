@@ -102,6 +102,16 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     sales_assoc = db.relationship("Route", backref="sales_assoc", lazy="dynamic")
 
+    def to_json(self):
+        json_user = {
+            "name": self.name,
+            "username": self.username,
+            "email": self.email,
+            "phone_no": self.phone_no,
+        }
+
+        return json_user
+
     @property
     def password(self):
         raise AttributeError('Password is not a readable attribute')
@@ -167,7 +177,6 @@ class User(UserMixin, db.Model):
         user.password = new_password
         db.session.add(user)
         return True
-
 
     def generate_email_change_token(self, new_email, expiration=3600):
         change_email_token = jwt.encode({
@@ -245,6 +254,13 @@ class Product(db.Model):
     production_runs = db.relationship('ProductionRun', backref='production', lazy='dynamic')
     recipe = db.relationship('Recipe', backref='product_recipe')
 
+    def to_json(self):
+        json_product = {
+            "name": self.name,
+            "price": self.price,
+            "description": self.description,
+        }
+        return json_product
 
 class ProductionRun(db.Model):
     __tablename__ = "production_runs"
@@ -257,6 +273,14 @@ class ProductionRun(db.Model):
     created_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
     updated_at = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
 
+    def to_json(self):
+        json_production_run = {
+            "flour_kneaded": self.flour_kneaded,
+            "oil_used": self.oil_used,
+            "quantity": self.quantity,
+            "date": self.created_at
+        }
+        return json_production_run
 
 # class SupplierIngredient(db.Model):
 #     __tablename__ = "supplier_ingredients"

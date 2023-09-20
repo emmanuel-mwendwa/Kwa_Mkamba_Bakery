@@ -1,0 +1,11 @@
+Sales tracking: The system allows bakery owners to track their daily sales and view reports on their sales performance over time. This can help them identify trends and make informed decisions about their pricing and product offerings.
+
+Inventory management: The system enables bakery owners to track their inventory levels in real-time, helping them avoid stockouts and waste. It can also generate alerts when inventory levels fall below a certain threshold.
+
+Recipe management: The system can store and organize recipes, allowing bakery owners to easily adjust ingredient quantities and calculate the cost of each recipe.
+
+Employee management: The system can track employee hours and wages, generate pay stubs, and calculate payroll taxes.
+
+Financial reporting: The system can generate financial reports, such as profit and loss statements and balance sheets, providing bakery owners with valuable insights into their business's financial health.
+
+Customer management: The system can store customer information, allowing bakery owners to track customer orders and preferences.
