@@ -44,6 +44,13 @@ body {
     font-size: 0.8rem;
 }
 
+.settings-side-form__items--details a:link,
+.settings-side-form__items--details a:visited,
+.settings-side-form__items--details a:active{
+    color: white;
+    text-decoration: none;
+}
+
 .settings-side-form__items--details .logo-container img {
     width: 40px;
     height: 40px;
@@ -68,8 +75,31 @@ body {
     object-fit: cover;
 }
 
+.flashed-messages__section--pop-up {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flashed-messages__div--error,
+.flashed-messages__div--success {
+    padding: 5px 12px;
+    height: 40px;
+    width: 100%;
+    margin-bottom: 12px;
+
+    text-align: center;
+}
+
+.flashed-messages__section--pop-up .flashed-messages__div--error {
+    background-color: #e49bb2;
+}
+
+.flashed-messages__section--pop-up .flashed-messages__div--success {
+    background-color: #5da472;
+}
+
 .dropbtn {
-    /* background-color: red; */
     color: white;
     border: none;
     cursor: pointer;

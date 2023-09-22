@@ -24,8 +24,10 @@
         <!-- a header with the users profile pic or initials and a notifications bell and pie chart for graphs -->
         <div class="settings-side-form__items--details">
           <div class="logo-container">
-            <img src="../static/images/Kwa_Mkamba_Bakery_Sample_Logo.png" alt="">
+            <a class="logo-container" href="{{ url_for('main.index')}}">
+              <img src="{{ url_for('static', filename='images/Kwa_Mkamba_Bakery_Sample_Logo.png')}}" alt="">
             Kwa Mkamba Bakery
+            </a>
           </div>
           <div class="notifications">
             <a href="#"><img src="{{ url_for('static', filename='icons/bell.png')}}" alt="bell" width="24" height="24"></a>
