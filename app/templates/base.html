@@ -23,11 +23,23 @@
       <nav class="settings-side-form__navigation--details">
         <!-- a header with the users profile pic or initials and a notifications bell and pie chart for graphs -->
         <div class="settings-side-form__items--details">
-          <button class="dropbtn" id="dropbtn"
+          <div class="logo-container">
+            <img src="../static/images/Kwa_Mkamba_Bakery_Sample_Logo.png" alt="">
+            Kwa Mkamba Bakery
+          </div>
+          <div class="notifications">
+            <a href="#"><img src="{{ url_for('static', filename='icons/bell.png')}}" alt="bell" width="24" height="24"></a>
+          </div>
+          <div class="growth">
+            <a href="#"><img src="{{ url_for('static', filename='icons/growth.png')}}" alt="pie" width="24" height="24"></a>
+          </div>
+          <div class="my-account">
+            <button class="dropbtn" id="dropbtn"
           onclick="document.getElementsByClassName('dropdown-content').style.display = 'block' "
           >
-            <img src="../static/images/" alt="Initials" />
+            <img class="profile" src="{{ url_for('static', filename='icons/user.png')}}" alt="Initials"/>
           </button>
+
           <div class="dropdown-content">
             {% if current_user.is_authenticated %}
               <a
@@ -66,30 +78,30 @@
 
     <br /><br />
 
-    <footer class="main-navigation-bar__footer--details">
-      <nav class="main-navigation-bar__nav--details">
-        <div class="main-navigation-bar--details">
-          <div>
+    <footer>
+      <nav>
+        <div class="main-navigation-bar">
+          <div class="main-navigation-bar--link">
             <a href="{{ url_for('main.index') }}"> 
               <img src="{{ url_for('static', filename='icons/home.png')}}" alt="">
               Home
             </a>
           </div>
-          <div>
+          <div class="main-navigation-bar--link">
             <a href="{{ url_for('production.production_home')}}">
               <img src="{{ url_for('static', filename='icons/production.png')}}" alt="">
               Production
             </a>
           </div>
-          <div>
+          <div class="main-navigation-bar--link">
             <a href="{{ url_for('sales.sales_page')}}">
               <img src="{{ url_for('static', filename='icons/sales.png')}}" alt=""">
               Sales
             </a>
           </div>
-          <div>
+          <div class="main-navigation-bar--link">
             <a href="#">
-              <img src="{{ url_for('static', filename='icons/home.png')}}" alt="">
+              <img src="{{ url_for('static', filename='icons/people.png')}}" alt="">
               Staff
             </a>
           </div>

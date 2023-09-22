@@ -1,7 +1,7 @@
 from . import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
-from flask import current_app
+from flask import current_app, url_for
 from sqlalchemy import event
 from sqlalchemy.ext.declarative import declarative_base
 import jwt
@@ -259,6 +259,7 @@ class Product(db.Model):
             "name": self.name,
             "price": self.price,
             "description": self.description,
+            "view_product": url_for('api.view_product', id=self.id)
         }
         return json_product
 
