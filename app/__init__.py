@@ -39,7 +39,7 @@ def create_app(config_name):
     from .sales import sales as sales_blueprint
     app.register_blueprint(sales_blueprint, url_prefix="/sales")
 
-    from .api.v1 import api as api_blueprint
-    app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    from .api import api as api_blueprint
+    app.register_blueprint(api_blueprint, url_prefix='/api')
 
     return app

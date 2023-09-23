@@ -20,6 +20,8 @@ body {
     background-color: var(--background-orange-color);
     color: var(--text-color);
     padding-top: 30px;
+    padding-left: 10px;
+    padding-bottom: 65px;
 }
 
 .settings-side-form__items--details {

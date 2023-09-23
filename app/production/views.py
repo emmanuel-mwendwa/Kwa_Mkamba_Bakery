@@ -9,6 +9,7 @@ from datetime import datetime
 
 
 @production.route('/')
+@login_required
 def production_home():
     return render_template("production/production.html")
 
@@ -251,7 +252,7 @@ def update_supplier(id):
         db.session.commit()
         flash("Supplier updated successfully", category="success")
         return redirect(url_for("production.view_supplier", id=supplier.id))
-    return render_template("production/suppliers/update_supplier.html", supplier_form=supplier_form, title=title)
+    return render_template("production/suppliers/create_supplier.html", supplier_form=supplier_form, title=title)
 
 @production.route('/delete_supplier/<int:id>', methods=["GET", "POST"])
 @permission_required(Permission.MANAGER)

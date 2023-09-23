@@ -209,6 +209,31 @@ class User(UserMixin, db.Model):
         self.email = new_email
         db.session.add(self)
         return True
+    
+        
+    def generate_auth_token(self, exipration=3600):
+        auth_token = jwt.encode({
+            "auth_token": self.id,
+            "exp": datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(seconds=exipration)
+        },
+        current_app.config['SECRET_KEY'],
+        algorithm="HS256"
+        )
+
+        return auth_token
+    
+    @staticmethod
+    def verify_auth_token(token):
+        try:
+            data = jwt.decode(
+                token,
+                current_app.config['SECRET_KEY'],
+                leeway=datetime.timedelta(seconds=10),
+                algorithms=["HS256"]
+            )
+        except:
+            return False
+        return User.query.get(data['id'])
 
     # assigning roles to users
     def __init__(self, **kwargs):
