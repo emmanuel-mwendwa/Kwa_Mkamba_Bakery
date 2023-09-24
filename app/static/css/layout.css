@@ -2,6 +2,7 @@
     --background-orange-color: #a8610f;
     --backgroud-lighter-orange-color: #e2820c;
     --text-color: #ffffff;
+    --content-background-color: #D9D9D9;
 }
 
 *,
@@ -17,11 +18,10 @@ html {
 }
 
 body {
-    background-color: var(--background-orange-color);
+    background-color: var(--content-background-color);
     color: var(--text-color);
-    padding-top: 30px;
-    padding-left: 10px;
-    padding-bottom: 65px;
+    padding-top: 50px;
+    padding-left: 220px;
 }
 
 .settings-side-form__items--details {
@@ -33,9 +33,9 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 65px;
+    height: 75px;
 
-    background-color: var(--backgroud-lighter-orange-color);
+    background-color: var(--background-orange-color);
 }
 
 .settings-side-form__items--details .logo-container {
@@ -54,11 +54,18 @@ body {
 }
 
 .settings-side-form__items--details .logo-container img {
-    width: 40px;
-    height: 40px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
 
-    margin-right: 10px;
+    margin-right: -10px;
+}
+
+.settings-side-form__items--details .logo-container .logo-name {
+    width: 170px;
+    font-size: 22px;
+    text-wrap: wrap;
+    text-align: center;
 }
 
 .settings-side-form__items--details .notifications {
@@ -150,9 +157,9 @@ body {
 
     position: fixed;
     bottom: 0;
-    right: 0;
+    top: 75px;
     left: 0;
-    height: 65px;
+    width: 200px;
     
     background-color: var(--backgroud-lighter-orange-color);
 }
