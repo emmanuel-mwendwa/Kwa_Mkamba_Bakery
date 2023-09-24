@@ -108,6 +108,8 @@ class User(UserMixin, db.Model):
             "username": self.username,
             "email": self.email,
             "phone_no": self.phone_no,
+            "role": self.role.name,
+            "user_profile": url_for("api.view_user", user_id=self.id)
         }
 
         return json_user

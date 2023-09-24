@@ -16,6 +16,6 @@ def forbidden(message):
     response.status_code = 403
     return response
 
-@api.errorhandler()
+@api.errorhandler
 def validation_error(e):
     return bad_request(e.args[0])
