@@ -8,7 +8,7 @@ import json
 class User_Routes():
     @api.route("/new_user", methods=["POST"])
     def new_user():
-        req_json = request.json
+        req_json = request.get_json()
         new_user = User(
             username = req_json["username"],
             email  = req_json["email"],

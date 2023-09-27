@@ -8,24 +8,25 @@
 
 {% block content %}
 {{ super() }}
-
-    <table>
-        <thead>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Date</th>
-        </thead>
-        <tbody>
-            {% for product in products %}
-            <tr>
-                <td><a href="{{ url_for('production.view_product', id=product.id) }}">{{ product.name }}</a></td>
-                <td><a href="{{ url_for('production.view_product', id=product.id) }}">{{ product.price }}</a></td>
-                <td>{{ moment(product.created_at).format('L') }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Date</th>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td><a href="{{ url_for('production.view_product', id=product.id) }}">{{ product.name }}</a></td>
+                    <td><a href="{{ url_for('production.view_product', id=product.id) }}">{{ product.price }}</a></td>
+                    <td>{{ moment(product.created_at).format('L') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
     {% endblock %}
 
     {% block footer %} {{ super() }} {% endblock %}

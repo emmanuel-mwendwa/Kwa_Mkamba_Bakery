@@ -17,7 +17,7 @@
 <p>Contant: <a href="mailto: {{ user.email }}"> {{ user.email }}</a></p>
 {% endif %}
 
-{% if user == current_user %}
+{% if user == current_user or current_user.is_administrator() %}
 <a href="{{ url_for('main.edit_profile') }}">Edit Profile</a>
 <p><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></p>
 <p><a href="{{ url_for('auth.change_password') }}">Change Password</a></p>
@@ -26,7 +26,6 @@
 <a href="{{ url_for('main.edit_profile_admin', id=user.id) }}">Edit Profile [Admin]</a>
 {% endif %}
 
-<p><a href="{{ url_for('auth.logout') }}">Log Out</a></p>
 
 {% endblock %}
 

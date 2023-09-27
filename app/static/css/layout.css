@@ -27,7 +27,7 @@ body {
 .settings-side-form__items--details {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     position: fixed;
     top: 0;
@@ -40,7 +40,6 @@ body {
 
 .settings-side-form__items--details .logo-container {
     display: flex;
-    flex: 1;
     align-items: center;
     margin-left: 5px;
     font-size: 0.8rem;
@@ -68,8 +67,29 @@ body {
     text-align: center;
 }
 
+.settings-side-form__items--details .search-bar_container  {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    max-width: 423px;
+}
+
+.settings-side-form__items--details .search-bar_container .search-bar {
+    display: flex;
+    flex: 1;
+    padding: 8px 15px;
+    border-radius: 26px;
+    border: none;
+    font-size: 1rem;
+}
+
+.settings-side-form__items--details .important-links {
+    display: flex;
+    align-items: center;
+}
+
 .settings-side-form__items--details .notifications {
-    margin: 0px 12px;
+    margin: 0px 16px;
 }
 
 .settings-side-form__items--details .my-account {

@@ -1,0 +1,37 @@
+:root {
+    --header-color: rgb(57, 80, 35);
+    --alternating-color: rgb(189, 189, 233);
+    --hover-color: orange;
+}
+
+table {
+    width: 100%;
+}
+
+table th {
+    width: 200px;
+    height: 60px;
+    padding-left: 12px;
+    text-align: left;
+    background-color: var(--header-color);
+}
+
+table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid black;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: var(--alternating-color);
+}
+
+table tbody tr:hover {
+    background-color: var(--hover-color);
+}
+
+table tbody td a {
+    display: block;
+    width: 100%;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
