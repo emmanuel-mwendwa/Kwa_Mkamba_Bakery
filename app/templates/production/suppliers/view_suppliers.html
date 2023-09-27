@@ -8,25 +8,26 @@
 
 {% block content %}
     {{ super() }}
-    
-    <table>
-        <thead>
-            <th>Name</th>
-            <th>Phone No</th>
-            <th>Email</th>
-            <th>Date Added</th>
-        </thead>
-        <tbody>
-            {% for supplier in suppliers %}
-            <tr>
-                <td><a href="{{ url_for('production.view_supplier', id=supplier.id)}}">{{ supplier.name }}</a></td>
-                <td>{{ supplier.phone_no }}</td>
-                <td>{{ supplier.email }}</td>
-                <td>{{ moment(supplier.created_at).format('L') }}</td>
-            </tr>      
-            {% endfor %}
-        </tbody>
-    </table>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Phone No</th>
+                <th>Email</th>
+                <th>Date Added</th>
+            </thead>
+            <tbody>
+                {% for supplier in suppliers %}
+                <tr>
+                    <td><a href="{{ url_for('production.view_supplier', id=supplier.id)}}">{{ supplier.name }}</a></td>
+                    <td>{{ supplier.phone_no }}</td>
+                    <td>{{ supplier.email }}</td>
+                    <td>{{ moment(supplier.created_at).format('L') }}</td>
+                </tr>      
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {% endblock %}
 

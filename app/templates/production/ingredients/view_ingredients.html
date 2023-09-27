@@ -9,24 +9,27 @@
 {% block content %}
 {{ super() }}
 
-    <table>
-        <thead>
-            <th>Ingredient</th>
-            <th>Measurement</th>
-            <th>Price</th>
-            <th>Date Added</th>
-        </thead>
-        <tbody>
-            {% for ingredient in ingredients %}
-            <tr>
-                <td><a href="{{ url_for("production.view_ingredient", id=ingredient.id )}}">{{ ingredient.name }}</a></td>
-                <td>{{ ingredient.unit_of_measurement }}</td>
-                <td>{{ ingredient.unit_cost }}</td>
-                <td>{{ moment(ingredient.created_at).format('L') }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <th>Ingredient</th>
+                <th>Measurement</th>
+                <th>Price</th>
+                <th>Date Added</th>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                <tr>
+                    <td><a href="{{ url_for("production.view_ingredient", id=ingredient.id )}}">{{ ingredient.name }}</a></td>
+                    <td>{{ ingredient.unit_of_measurement }}</td>
+                    <td>{{ ingredient.unit_cost }}</td>
+                    <td>{{ moment(ingredient.created_at).format('L') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
 
     {% endblock %}
 

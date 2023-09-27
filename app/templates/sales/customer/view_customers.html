@@ -8,27 +8,28 @@
 
 {% block content %}
 {{ super() }}
-
-    <table>
-        <thead>
-            <th>Customer Name</th>
-            <th>Email</th>
-            <th>Phone No.</th>
-            <th>M-Pesa Agent</th>
-            <th>Route</th>
-        </thead>
-        <tbody>
-            {% for customer in customers %}
-            <tr>
-                <td><a href="{{ url_for('sales.view_customer', id=customer.cust_id) }}">{{ customer.cust_name }}</a></td>
-                <td>{{ customer.cust_email }}</td>
-                <td>{{ customer.cust_phone_no }}</td>
-                <td>{{ customer.cust_mpesa_agent_name }}</td>
-                <td>{{ customer.cust_route.route_name }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <th>Customer Name</th>
+                <th>Email</th>
+                <th>Phone No.</th>
+                <th>M-Pesa Agent</th>
+                <th>Route</th>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td><a href="{{ url_for('sales.view_customer', id=customer.cust_id) }}">{{ customer.cust_name }}</a></td>
+                    <td>{{ customer.cust_email }}</td>
+                    <td>{{ customer.cust_phone_no }}</td>
+                    <td>{{ customer.cust_mpesa_agent_name }}</td>
+                    <td>{{ customer.cust_route.route_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {% endblock %}
 

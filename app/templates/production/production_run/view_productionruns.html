@@ -10,26 +10,28 @@
 {% block content %}
 {{ super() }}
 
-    <table>
-        <thead>
-            <th>Product</th>
-            <th>Flour Kneaded</th>
-            <th>Oil Used</th>
-            <th>Packets</th>
-            <th>Date</th>
-        </thead>
-        <tbody>
-            {% for productionrun, product_name in productionruns %}
-            <tr>
-                <td><a href="{{ url_for('production.view_productionrun', id=productionrun.id) }}">{{ product_name }}</a></td>
-                <td>{{ productionrun.flour_kneaded}}</td>
-                <td>{{ productionrun.oil_used }}</td>
-                <td>{{ productionrun.quantity }}</td>
-                <td>{{ moment(productionrun.created_at).format('L') }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <th>Product</th>
+                <th>Flour Kneaded</th>
+                <th>Oil Used</th>
+                <th>Packets</th>
+                <th>Date</th>
+            </thead>
+            <tbody>
+                {% for productionrun, product_name in productionruns %}
+                <tr>
+                    <td><a href="{{ url_for('production.view_productionrun', id=productionrun.id) }}">{{ product_name }}</a></td>
+                    <td>{{ productionrun.flour_kneaded}}</td>
+                    <td>{{ productionrun.oil_used }}</td>
+                    <td>{{ productionrun.quantity }}</td>
+                    <td>{{ moment(productionrun.created_at).format('L') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {% if pagination %}
         {{ macros.pagination_widget(pagination, "production.view_productionruns", fragment='')}}

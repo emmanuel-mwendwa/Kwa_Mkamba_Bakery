@@ -8,45 +8,46 @@
 
 {% block content %}
     {{ super() }}
-    
-    <table>
-        <thead>
-            <th>Order ID</th>
-            <th>Order Date</th>
-            <th>Customer</th>
-            <th>Payment</th>
-            <th>Served By</th>
-        </thead>
-        <tbody>
-            {% for order in orders %}
-            <tr>
-                <td><a href="{{ url_for('sales.view_order', order_id=order.order_id)}}">{{ order.order_id }}</a></td>
-                <td>{{ moment(order.order_date).format('L') }}</td>
-                <td>{{ order.customer.cust_name }}</td>
-                <td>{{ order.payment.method_name }}</td>
-                <td>{{ order.customer.cust_route.sales_assoc.name }}</td>
-                <td>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for detail in order.order_details %}
-                            <tr>
-                                <td>{{ detail.product.name }}</td>
-                                <td>{{ detail.quantity }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Customer</th>
+                <th>Payment</th>
+                <th>Served By</th>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td><a href="{{ url_for('sales.view_order', order_id=order.order_id)}}">{{ order.order_id }}</a></td>
+                    <td>{{ moment(order.order_date).format('L') }}</td>
+                    <td>{{ order.customer.cust_name }}</td>
+                    <td>{{ order.payment.method_name }}</td>
+                    <td>{{ order.customer.cust_route.sales_assoc.name }}</td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in order.order_details %}
+                                <tr>
+                                    <td>{{ detail.product.name }}</td>
+                                    <td>{{ detail.quantity }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {% endblock %}
 

@@ -1,7 +1,7 @@
 :root {
-    --header-color: rgb(57, 80, 35);
+    --header-color: #e2820c;
     --alternating-color: rgb(189, 189, 233);
-    --hover-color: orange;
+    --hover-color: rgb(243, 214, 160);
 }
 
 table {
@@ -19,6 +19,7 @@ table th {
 table td {
     padding: 8px 12px;
     border-bottom: 1px solid black;
+    color: black;
 }
 
 table tbody tr:nth-child(even) {
@@ -34,4 +35,12 @@ table tbody td a {
     width: 100%;
     font-size: 1.2rem;
     text-decoration: none;
+}
+
+table tbody td a:link,
+table tbody td a:visited,
+table tbody td a:hover,
+table tbody td a:active {
+    text-decoration: none;
+    color: black;
 }
