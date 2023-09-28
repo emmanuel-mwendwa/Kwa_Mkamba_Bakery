@@ -58,7 +58,7 @@ class AddNewSupplier(FlaskForm):
 class RecipeIngredientForm(FlaskForm):
     ingredient_id = SelectField('Ingredient', coerce=int, validators=[DataRequired()])
     quantity = FloatField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
-    unit_of_measurement = StringField('Unit of Measurement', validators=[DataRequired()])
+    unit_of_measurement = StringField('Measurement', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
         super(RecipeIngredientForm, self).__init__(*args, **kwargs)
@@ -70,7 +70,7 @@ class RecipeForm(FlaskForm):
     product_id = SelectField('Product Name', validators=[DataRequired()])
     description = TextAreaField('Description')
     yield_amount = IntegerField('Yield Amount', validators=[DataRequired()])
-    recipe_ingredients = FieldList(FormField(RecipeIngredientForm), min_entries=1)
+    recipe_ingredients = FieldList(FormField(RecipeIngredientForm), min_entries=2)
     submit = SubmitField("Submit")
 
     def __init__(self, *args, **kwargs):
@@ -80,5 +80,5 @@ class RecipeForm(FlaskForm):
                                                                for product in Product.query.order_by(Product.name).all()]
 
     def add_empty_ingredient(self):
-        empty_ingredient = RecipeIngredientForm()
+        empty_ingredient = RecipeIngredientForm
         self.recipe_ingredients.append_entry(empty_ingredient)

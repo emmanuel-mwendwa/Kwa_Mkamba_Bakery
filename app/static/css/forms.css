@@ -10,7 +10,7 @@
 
 form {
     background-color: var(--form-background-color);
-    width: 400px;
+    max-width: 450px;
 }
 
 form .form-group {
@@ -38,4 +38,14 @@ form input[type='submit'] {
     cursor: pointer;
     margin-top: 45px;
     font-size: 1.2rem;
+}
+
+.recipe-ingredient {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.recipe-ingredient .form-group {
+    margin: 0 5px;
 }

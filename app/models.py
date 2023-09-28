@@ -1,4 +1,5 @@
 from . import db, login_manager
+from app.exceptions import ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from flask import current_app, url_for
@@ -113,6 +114,13 @@ class User(UserMixin, db.Model):
         }
 
         return json_user
+    
+    @staticmethod
+    def from_json(json_user):
+        email = json_user.get('email')
+        if email is None or email == '':
+            raise ValidationError('Email is required for adding users')
+        return User(email=email)
 
     @property
     def password(self):
@@ -289,6 +297,13 @@ class Product(db.Model):
             "view_product": url_for('api.view_product', id=self.id)
         }
         return json_product
+    
+    @staticmethod
+    def from_json(json_product):
+        name = json_product.get('name')
+        if name is None or name == '':
+            raise ValidationError('name is required for adding product')
+        return Product(name=name)
 
 class ProductionRun(db.Model):
     __tablename__ = "production_runs"

@@ -8,15 +8,8 @@ import json
 class User_Routes():
     @api.route("/new_user", methods=["POST"])
     def new_user():
-        req_json = request.get_json()
-        new_user = User(
-            username = req_json["username"],
-            email  = req_json["email"],
-            password = req_json["password"],
-            name = req_json["name"],
-            phone_no = req_json["phone_no"]
-        )
-        db.session.add(new_user)
+        user = User.from_json(request.json)
+        db.session.add(user)
         db.session.commit()
 
         return {"message": "New user created successfully"}
